@@ -6,26 +6,21 @@
 
     <meta charset="utf-8" />
     
-    <!-- GENERAL -->
     <link rel="icon" type="image/png" href="src/images/favicons/favicon-32x32.png" />
-    <link rel="stylesheet" href="node_modules/line-awesome/dist/font-awesome-line-awesome/css/all.css" />
-    <link rel="stylesheet" href="node_modules/line-awesome/dist/line-awesome/css/line-awesome.css" />
-    <!-- LEAFLET AND PLUGINS -->
-    <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css" />
-    <link rel="stylesheet" href="node_modules/leaflet-groupedlayercontrol/dist/leaflet.groupedlayercontrol.min.css" />
-    <link rel="stylesheet" href="node_modules/leaflet-betterscale/L.Control.BetterScale.css" />
-    <!-- OTHER LIBS -->
-    <link rel="stylesheet" href="node_modules/apexcharts/dist/apexcharts.css" />
-    <!-- OSCARS GIP -->
     <link rel="stylesheet" href="dist/app.css" />
 </head>
 
 <body data-client="oscars">
 
-    <div id="map"></div>
-    <div id="wire"></div>
+    <div id="map" class="tile"></div>
+    <div id="wire" class="tile"></div>
+    <div id="flightboard-arrival" class="tile"></div>
+    <div id="flightboard-departure" class="tile"></div>
+    <div id="parking-usage" class="tile"></div>
+    <div id="forecast-arrival" class="tile"></div>
+    <div id="forecast-departure" class="tile"></div>
+    <div id="turnaround-gantts" class="tile"></div>
 
-    <!-- OSCARS GIP -->
     <script src="dist/app.js"></script>
 </body>
 

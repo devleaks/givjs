@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
+    "babel-eslint": "^10.1.0",
     "eslint-config-mourner": "^3.0.0",
     "rollup": "^2.7.3",
     "rollup-plugin-commonjs": "^10.1.0",

@@ -5,10 +5,9 @@
  *
  * Starts main viewer application.
  */
-// import '../css/dashboard.css'
+// import "../css/dashboard.css"
 
-import { deepExtend } from './Utilities'
-import { Dispatcher } from './Dispatcher'
+import { Dispatcher } from "./Dispatcher"
 
 export class Dashboard {
 
@@ -29,7 +28,7 @@ export class Dashboard {
 
 
     changeTheme(theme) {
-
+        this.theme = theme
     }
 
 

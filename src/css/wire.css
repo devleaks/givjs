@@ -1,37 +1,3 @@
-/*app.css v. 2.3.0*/
-:root {
-    --primary-color: #302AE6;
-    --secondary-color: #536390;
-    --font-color: #424242;
-    --bg-color: #fff;
-    --heading-color: #222222;
-    --sidebar-background: rgba(220, 220, 220, 0.6);
-    --sidebar-contour: "#fff";
-}
-
-[data-theme="dark"] {
-    --primary-color: #9A97F3;
-    --secondary-color: #818cab;
-    --font-color: #dddddd;
-    --bg-color: #111;
-    --heading-color: #dddddd;
-    --sidebar-background: rgba(40, 40, 40, 0.6);
-    --sidebar-contour: "#000";
-}
-
-body {
-    padding: 0;
-    margin: 0;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
-#map {
-    height: 800px;
-    width: 60%;
-    border: 1px solid lightgrey;
-}
-
 #wire {
     width: 35%;
-    border: 1px solid lightgrey;
 }

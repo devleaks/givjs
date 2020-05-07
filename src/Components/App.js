@@ -5,13 +5,16 @@
  *
  * GIP Viewer Application. Initiates a dashboard and registers Tile in it.
  */
-import '../css/app.css'
+import "../../node_modules/line-awesome/dist/font-awesome-line-awesome/css/all.css"
+import "../../node_modules/line-awesome/dist/line-awesome/css/line-awesome.css"
 
-import { Dashboard } from './Dashboard'
+import "../css/app.css"
+import { Dashboard } from "./Dashboard"
 
 // Tiles
-import { Omap } from './Omap'
-import { Wire } from './Wire'
+import { Omap } from "./Omap"
+import { Wire } from "./Wire"
+import { Flightboard } from "./Flightboard"
 
 
 export class App {
@@ -23,7 +26,7 @@ export class App {
 
 
     run() {
-        console.log('app is running...')
+        console.log("app is running...")
     }
 
 
@@ -33,7 +36,7 @@ export class App {
             dispatcher: {
                 channels: {
                     websocket: {
-                        websocket: 'ws://localhost:8051',
+                        websocket: "ws://localhost:8051",
                         reconnect_retry: 300, // seconds
                         debug: false
                     }
@@ -49,10 +52,12 @@ export class App {
 
         this.dashboard.register("wire", new Wire("wire", "wire", {}))
 
+        this.dashboard.register("flightboard", new Flightboard("flightboard-arrival", "flightboard", "arrival", {}))
+        this.dashboard.register("flightboard", new Flightboard("flightboard-departure", "flightboard", "departure", {}))
     }
 
 
     changeTheme(theme) {
-        console.log('theme changed', theme)
+        console.log("theme changed", theme)
     }
 }

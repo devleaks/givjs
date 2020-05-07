@@ -5,7 +5,7 @@
  *
  * Starts main viewer application.
  */
-import { App } from './Components/App'
+import { App } from "./Components/App"
 
 let app = new App({})
 

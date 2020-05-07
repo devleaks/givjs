@@ -5,8 +5,8 @@
  *
  * GIP Viewer Application. Initiates a dashboard and registers Tile in it.
  */
-import { deepExtend } from './Utilities'
-import { Channel } from './Channel'
+import { deepExtend } from "./Utilities"
+import { Channel } from "./Channel"
 
 const DEFAULTS = {
     reconnect_retry: 30 // tries to reconnect every x seconds

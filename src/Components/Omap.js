@@ -5,19 +5,22 @@
  *
  * Install map in div
  */
-const VERSION = "1.0.0"
-const MODULE_NAME = "Omap"
+import "../css/map.css"
 
-import '../css/map.css'
-
-import L from 'leaflet'
+import L from "leaflet"
+import "../../node_modules/leaflet/dist/leaflet.css"
 
 // these just "load" js and hook to L.control
-import * as groupedLayers from 'leaflet-groupedlayercontrol'
-import * as betterScale from 'leaflet-betterscale/L.Control.BetterScale.js'
+import "leaflet-groupedlayercontrol"
+import "../../node_modules/leaflet-groupedlayercontrol/dist/leaflet.groupedlayercontrol.min.css"
 
-import { deepExtend } from './Utilities'
-import { Tile } from './Tile'
+import "leaflet-betterscale/L.Control.BetterScale.js"
+import "../../node_modules/leaflet-betterscale/L.Control.BetterScale.css"
+
+import antPath from "leaflet-ant-path"
+
+import { deepExtend } from "./Utilities"
+import { Tile } from "./Tile"
 
 /**
  *  DEFAULT VALUES
@@ -55,33 +58,28 @@ export class Omap extends Tile {
     /*  installs the HTML code in the document
      */
     install() {
-        let OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        });
-
-        let OpenStreetMap_France = L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+        let OpenStreetMap_France = L.tileLayer("https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png", {
             maxZoom: 20,
-            attribution: '&copy; Openstreetmap France | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            attribution: "&copy; Openstreetmap France | &copy; <a href='https://www.openstreetmap.org/copyright0'>OpenStreetMap</a> contributors"
         });
 
-        let OpenTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+        let OpenTopoMap = L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", {
             maxZoom: 17,
-            attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+            attribution: "Map data: &copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors, <a href='http://viewfinderpanoramas.org'>SRTM</a> | Map style: &copy; <a href='https://opentopomap.org'>OpenTopoMap</a> (<a href='https://creativecommons.org/licenses/by-sa/3.0/'>CC-BY-SA</a>)"
         });
 
-        let Stadia_AlidadeSmoothDark = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
+        let Stadia_AlidadeSmoothDark = L.tileLayer("https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png", {
             maxZoom: 20,
-            attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+            attribution: "&copy; <a href='https://stadiamaps.com/''>Stadia Maps</a>, &copy; <a href='https://openmaptiles.org/''>OpenMapTiles</a> &copy; <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors"
         });
 
-        let Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+        let Esri_WorldImagery = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
+            attribution: "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
         });
 
-        let CartoDB_DarkMatterNoLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-            subdomains: 'abcd',
+        let CartoDB_DarkMatterNoLabels = L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png", {
+            attribution: "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors &copy; <a href='https://carto.com/attributions'>CARTO</a>",
+            subdomains: "abcd",
             maxZoom: 19
         });
 
@@ -107,7 +105,7 @@ export class Omap extends Tile {
             opacity: 1
         });
 
-        /*    const rabbit = {
+            const rabbit = {
                 "delay": 15,
                 "dashArray": [
                     2,
@@ -121,20 +119,19 @@ export class Omap extends Tile {
                 "hardwareAccelerated": true
             }
 
-            var r1 = antPath([
+            var r1 = antPath.antPath([
                 [50.65367800515634, 5.469925403594971],
                 [50.645977340713586, 5.457737445831299]
             ], rabbit)
-            var r2 = antPath([
+            var r2 = antPath.antPath([
                 [50.62299029225287, 5.421152114868163],
                 [50.63156581667872, 5.434885025024414]
             ], rabbit)
-            var r3 = antPath([
+            var r3 = antPath.antPath([
                 [50.651766562235494, 5.462635159492493],
                 [50.64411320922499, 5.450441837310791]
             ], rabbit)
-        */
-        var night = L.layerGroup([airportNightOverlay /*, r1, r2, r3*/ ])
+        var night = L.layerGroup([airportNightOverlay , r1 , r2 , r3 ])
         var day = airportOverlay
 
         this.options.layers = [OpenStreetMap_France]
@@ -142,9 +139,9 @@ export class Omap extends Tile {
         this.options.layerControl = {
             baseLayers: baseLayers,
             overlays: {
-                "<span style='color: #0C64AF;'><img src='src/i/liegeairport-14.png'>&nbsp;Liège Airport</span>": {
-                    "<span style='color: #EE850A;'>Day</span>": day,
-                    "<span style='color: #EE850A;'>Night</span>": night
+                "<span style='color: #0C64AF;''><img src='src/i/liegeairport-14.png'>&nbsp;Liège Airport</span>": {
+                    "<span style='color: #EE850A;''>Day</span>": day,
+                    "<span style='color: #EE850A;''>Night</span>": night
                 }
             },
             options: { groupCheckboxes: true, collapsed: false }
@@ -173,8 +170,15 @@ export class Omap extends Tile {
             this.options.layerControl.options ? this.options.layerControl.options : this.options.layerControlOptions).addTo(this.map)
         L.control.betterscale({ metric: true, imperial: false, position: "bottomleft" }).addTo(this.map) // either one or the other but not both
 
-        console.log(MODULE_NAME, "installed")
+        this.listen(this.listener)
+
+        console.log("Map", "installed")
     }
+
+    listener(msg, data) {
+        console.log("Map::listener", msg, data);
+    }
+
 
 
     /*  update/insert HTML code on event

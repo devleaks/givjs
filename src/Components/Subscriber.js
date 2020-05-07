@@ -1,18 +1,17 @@
 /*  Base class for subscriber to Dispatcher messages
  */
 
-import PubSub from 'pubsub-js'
+import PubSub from "pubsub-js"
 
 
 export class Subscriber {
 
-  constructor(message_type) {
-    this.message_type = message_type
-    PubSub.subscribe(this.message_type, this.listener);
-  }
+    constructor(message_type) {
+        this.message_type = message_type
+    }
 
-  listener(message, data) {
-    console.log(this.message_type, message, data)
-  }
+    listen(f) {
+      PubSub.subscribe(this.message_type, f)
+    }
 
 }

@@ -9,19 +9,30 @@
  *  Elements first need to register with the dispatcher to receive messages.
  *  Messages with no receving element are reported on console and discarded.
  */
-import PubSub from 'pubsub-js'
-import { deepExtend } from './Utilities'
+import PubSub from "pubsub-js"
+import { deepExtend } from "./Utilities"
 
 
-import { ChannelWebsocket } from './ChannelWebsocket'
+import { ChannelWebsocket } from "./ChannelWebsocket"
 
 /**
  *  DEFAULT VALUES
+
+expected message format: {
+    type: "map",            // <== destination of message
+    payload: {              // <== payload sent to destination
+        type: "Feature",
+        geometry: {},
+        properties: {},
+        id: "-=id=-"    
+    }
+}
+
  */
 const DEFAULTS = {
     debug: false,
-    msgTYPE: "type",
-    msgPAYLOAD: "payload",
+    TYPE: "type",
+    PAYLOAD: "payload",
     channels: {}
 }
 
@@ -69,15 +80,16 @@ export class Dispatcher {
             msg = data
         }
 
-        if (msg.hasOwnProperty(this.options.msgTYPE) && msg.hasOwnProperty(this.options.msgPAYLOAD)) {
-            const msgtype = msg[this.options.msgTYPE]
+        if (msg.hasOwnProperty(this.options.TYPE) && msg.hasOwnProperty(this.options.PAYLOAD)) {
+            const msgtype = msg[this.options.TYPE]
             try {
-                PubSub.publish(msgtype, msg[this.options.msgPAYLOAD])
+                PubSub.publish(msgtype, msg[this.options.PAYLOAD])
+                // console.log("Dispatcher::published", msgtype, msg[this.options.PAYLOAD])
             } catch (e) {
-                console.log("dispatch: problem during broadcast", msg[this.options.msgPAYLOAD], e)
+                console.log("dispatch: problem during broadcast", msg[this.options.PAYLOAD], e)
             }
         } else {
-            console.log("dispatch: message has no type or no payload", this.options.msgTYPE, this.options.msgPAYLOAD, data)
+            console.log("dispatch: message has no type or no payload", this.options.TYPE, this.options.PAYLOAD, data)
         }
     }
 

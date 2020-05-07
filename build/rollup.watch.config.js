@@ -13,7 +13,10 @@ export default {
             extract: true
         }),
         eslint({
-            include: 'dist/app.js'
+            include: [
+                'src/app.js',
+                'src/Components/*.js'
+            ]
         })
     ],
     input: 'src/app.js',

@@ -1,6 +1,15 @@
 {
+  "parser": "babel-eslint",
     "rules":
     {
-        "quotes": ["error", "double"]
+        "quotes": ["error", "double"],
+        "no-unused-vars": ["error", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }]
+    },
+    "parserOptions":
+    {
+        "ecmaFeatures":
+        {
+            "modules": true
+        }
     }
 }

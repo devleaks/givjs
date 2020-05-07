@@ -24,3 +24,7 @@ body {
     margin: 0;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+
+.tile {
+    border: 1px solid lightgrey;
+}

@@ -5,10 +5,10 @@
  *
  * Install map in div
  */
-import '../css/wire.css'
+import "../css/wire.css"
 
-import { deepExtend } from './Utilities'
-import { Tile } from './Tile'
+import { deepExtend } from "./Utilities"
+import { Tile } from "./Tile"
 
 /**
  *  DEFAULT VALUES
@@ -19,34 +19,34 @@ const DEFAULTS = {
     voice: false,
     wire_container: "ul",
     "icon-set": "la-",
-    size: 'medium',
+    size: "medium",
     speed: 500,
     dateReminder: 3, // minutes
     // More
     numWords: 50,
-    ellipsestext: '<i class="fa la-ellipsis-h"></i>',
-    moretext: '<i class="fa la-angle-double-right"></i>',
-    lesstext: '<i class="fa la-angle-double-left"></i>',
+    ellipsestext: "<i class='fa la-ellipsis-h'></i>",
+    moretext: "<i class='fa la-angle-double-right'></i>",
+    lesstext: "<i class='fa la-angle-double-left'></i>",
     //
-    ignoreTags: ['default', 'unknown'],
+    ignoreTags: ["default", "unknown"],
     filterNewMessage: false
 }
 
 const BOOTSTRAP_COLORS = [
-    'primary',
-    'secondary',
-    'success',
-    'danger',
-    'warning',
-    'info',
-    'accent',
-    'default'
+    "primary",
+    "secondary",
+    "success",
+    "danger",
+    "warning",
+    "info",
+    "accent",
+    "default"
 ]
 const BOOTSTRAP_COLOR_VARIANTS = [
-    'bright',
-    'light',
-    'normal',
-    'dark'
+    "bright",
+    "light",
+    "normal",
+    "dark"
 ]
 
 export class Wire extends Tile {
@@ -54,21 +54,24 @@ export class Wire extends Tile {
     constructor(elemid, message_type, options) {
         super(elemid, message_type)
         this.options = deepExtend(DEFAULTS, options)
+        this.install()
     }
 
     /*  installs the HTML code in the document
      */
     install() {
+        this.listen(this.listener)
+    }
 
+    listener(msg, data) {
+        console.log("Wire::listener", msg, data);
     }
 
     /*  update/insert HTML code on event
      */
     update() {
-
+        this.cb = BOOTSTRAP_COLORS[0]
+        this.cv = BOOTSTRAP_COLOR_VARIANTS[0]
     }
 
 }
-
-
-
