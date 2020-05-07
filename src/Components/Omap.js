@@ -105,36 +105,37 @@ export class Omap extends Tile {
             opacity: 1
         });
 
-            const rabbit = {
-                "delay": 15,
-                "dashArray": [
-                    2,
-                    1500
-                ],
-                "weight": 3,
-                "color": "rgba(30,30,30,1)",
-                "pulseColor": "rgba(255,255,255,1)",
-                "paused": false,
-                "reverse": false,
-                "hardwareAccelerated": true
-            }
+        const rabbit = {
+            "delay": 15,
+            "dashArray": [
+                2,
+                1500
+            ],
+            "weight": 3,
+            "color": "rgba(30,30,30,1)",
+            "pulseColor": "rgba(255,255,255,1)",
+            "paused": false,
+            "reverse": false,
+            "hardwareAccelerated": true
+        }
 
-            var r1 = antPath.antPath([
-                [50.65367800515634, 5.469925403594971],
-                [50.645977340713586, 5.457737445831299]
-            ], rabbit)
-            var r2 = antPath.antPath([
-                [50.62299029225287, 5.421152114868163],
-                [50.63156581667872, 5.434885025024414]
-            ], rabbit)
-            var r3 = antPath.antPath([
-                [50.651766562235494, 5.462635159492493],
-                [50.64411320922499, 5.450441837310791]
-            ], rabbit)
-        var night = L.layerGroup([airportNightOverlay , r1 , r2 , r3 ])
-        var day = airportOverlay
+        let r1 = antPath.antPath([
+            [50.65367800515634, 5.469925403594971],
+            [50.645977340713586, 5.457737445831299]
+        ], rabbit),
+            r2 = antPath.antPath([
+            [50.62299029225287, 5.421152114868163],
+            [50.63156581667872, 5.434885025024414]
+        ], rabbit),
+            r3 = antPath.antPath([
+            [50.651766562235494, 5.462635159492493],
+            [50.64411320922499, 5.450441837310791]
+        ], rabbit)
 
-        this.options.layers = [OpenStreetMap_France]
+        let night = L.layerGroup([airportNightOverlay, r1, r2, r3]),
+            day = airportOverlay
+
+        this.options.layers = [ OpenStreetMap_France ]
 
         this.options.layerControl = {
             baseLayers: baseLayers,
@@ -148,8 +149,8 @@ export class Omap extends Tile {
         }
 
         this.options.themes = {
-            dark: [night, CartoDB_DarkMatterNoLabels],
-            light: [day, OpenStreetMap_France]
+            dark:  [night, CartoDB_DarkMatterNoLabels],
+            light: [day,   OpenStreetMap_France]
         }
 
 

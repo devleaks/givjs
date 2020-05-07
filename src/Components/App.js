@@ -16,6 +16,8 @@ import { Omap } from "./Omap"
 import { Wire } from "./Wire"
 import { Flightboard } from "./Flightboard"
 
+import { FeatureCollection } from "./FeatureCollection"
+
 
 export class App {
 
@@ -54,6 +56,10 @@ export class App {
 
         this.dashboard.register("flightboard", new Flightboard("flightboard-arrival", "flightboard", "arrival", {}))
         this.dashboard.register("flightboard", new Flightboard("flightboard-departure", "flightboard", "departure", {}))
+
+        this.parkings = new FeatureCollection("src/data/eblg-parking-boxes.geojson")
+        this.taxiways = new FeatureCollection("src/data/eblg-taxiways.geojson")
+        console.log(this.parkings.find("name","29D"))
     }
 
 

@@ -9,6 +9,7 @@ import "../css/wire.css"
 
 import { deepExtend } from "./Utilities"
 import { Tile } from "./Tile"
+import JSONFormatter from "json-formatter-js"
 
 /**
  *  DEFAULT VALUES
@@ -60,11 +61,24 @@ export class Wire extends Tile {
     /*  installs the HTML code in the document
      */
     install() {
+        // prepare wire element
+        let hook = document.querySelector("#wire")
+        let newel = document.createElement("ul")
+        hook.appendChild(newel)
         this.listen(this.listener)
     }
 
     listener(msg, data) {
-        console.log("Wire::listener", msg, data);
+        console.log("Wire::listener", msg, data)
+        // add wire
+        let hook = document.querySelector("#wire ul")
+        let newel = document.createElement("li")
+        newel.innerHTML = data.subject
+        hook.appendChild(newel)
+
+        const formatter = new JSONFormatter(data);
+        newel.appendChild(formatter.render());
+
     }
 
     /*  update/insert HTML code on event
