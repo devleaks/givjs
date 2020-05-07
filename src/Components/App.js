@@ -3,81 +3,56 @@
  * 2017-2020 Pierre M
  * License: MIT
  *
- * Starts main viewer application.
+ * GIP Viewer Application. Initiates a dashboard and registers Tile in it.
  */
-const VERSION = "5.0.0"
-const MODULE_NAME = "App"
+import '../css/app.css'
 
-import L from 'leaflet'
-import { deepExtend } from './Utilities'
-import * as Dispatcher from './Dispatcher'
-import * as Omap from './Omap'
+import { Dashboard } from './Dashboard'
+
+// Tiles
+import { Omap } from './Omap'
+import { Wire } from './Wire'
 
 
-/**
- *  DEFAULT VALUES
- */
-const DEFAULTS = {
-}
+export class App {
 
-/**
- *  PRIVATE letIABLES
- */
-let _options = false
-
-function init(options) {
-    if (_options)
-        return _options
-
-    _options = deepExtend(DEFAULTS, options)
-
-//    install()
-
-    if (_options.debug) {
-        console.log(MODULE_NAME, "inited")
+    constructor(options) {
+        this.options = options
+        this.install()
     }
 
-    return _options
-}
 
-function run(options) {
-    /*
-     *  D I S P A T C H E R
-     */
-    Dispatcher.init({
-        elemprefix: "",
-        msgprefix: "GIP-",
-        websocket: 'ws://localhost:8051',
-        reconnect_retry: 300, // seconds
-        debug: false
-    })
+    run() {
+        console.log('app is running...')
+    }
 
-    /*  M A P
-     */
-    Omap.init({
-        elemid: "map",
-        msgtype: "map",
 
-        center: [50.64, 5.445],
-        zoom: 14,
-        zoom_overview: 8
-    })
+    install() {
 
-}
+        this.dashboard = new Dashboard({
+            dispatcher: {
+                channels: {
+                    websocket: {
+                        websocket: 'ws://localhost:8051',
+                        reconnect_retry: 300, // seconds
+                        debug: false
+                    }
+                }
+            }
+        })
 
-function changeTheme(theme) {
-    ;
-}
+        this.dashboard.register("map", new Omap("map", "map", {
+            center: [50.64, 5.445],
+            zoom: 14,
+            zoom_overview: 8
+        }))
 
-/**
- *  MODULE EXPORTS
- */
-function version() {
-    console.log(MODULE_NAME, VERSION);
-}
+        this.dashboard.register("wire", new Wire("wire", "wire", {}))
 
-export {
-    version,
-    init,
-    run
+    }
+
+
+    changeTheme(theme) {
+        console.log('theme changed', theme)
+    }
 }

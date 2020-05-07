@@ -5,25 +5,8 @@
 
  *  Helper functions.
  */
-const VERSION = "5.0.0"
+const VERSION = "1.0.0"
 const MODULE_NAME = "Utilities"
-
-
-
-
-/**
- *  DEFAULT VALUES
- */
-var DEFAULT = {};
-
-
-/**
- *  PRIVATE VARIABLES
- */
-// new defaults
-var _options = false;
-
-
 
 /*
  * deepExtend({}, objA, objB)

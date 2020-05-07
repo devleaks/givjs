@@ -9,174 +9,76 @@
  *  Elements first need to register with the dispatcher to receive messages.
  *  Messages with no receving element are reported on console and discarded.
  */
-const VERSION = "5.0.0"
-const MODULE_NAME = "Dispatcher"
-
 import PubSub from 'pubsub-js'
 import { deepExtend } from './Utilities'
+
+
+import { ChannelWebsocket } from './ChannelWebsocket'
 
 /**
  *  DEFAULT VALUES
  */
 const DEFAULTS = {
     debug: false,
-    elemprefix: "",
-    // message prefix, to avoid message name collision
-    msgprefix: "GIP-",
-    // field names
     msgTYPE: "type",
     msgPAYLOAD: "payload",
-
-    // Websocket feeds
-    websocket: null, // 'ws://localhost:8051', 'ws://hostname.local:8051', null means no conncetion
-    reconnect_retry: 10 // seconds
-}
-
-/**
- *  PRIVATE letIABLES
- */
-let _listeners = new Map()
-let _options = false
-
-
-/**
- *  PRIVATE FUNCTIONS
- */
-
-// Start ws connection
-function wsStart() {
-    let ws = new WebSocket(_options.websocket)
-
-    ws.onopen = function() {
-        console.log(MODULE_NAME, "wsStart::onopen: Socket is opened", new Date())
-    }
-    ws.onclose = function(e) {
-        console.log(MODULE_NAME, "wsStart::onclose: Socket is closed. Reconnect will be attempted in " + _options.reconnect_retry + " second.", e.reason)
-        setTimeout(function() {
-            wsStart()
-        }, _options.reconnect_retry * 1000)
-
-    }
-    ws.onmessage = function(evt) {
-        try {
-            broadcast(evt.data)
-        } catch (e) {
-            console.log(MODULE_NAME, 'wsStart::onmessage: cannot send message', e)
-        }
-    }
+    channels: {}
 }
 
 
-/**
- *  PUBLIC FUNCTIONS
- */
+export class Dispatcher {
 
-// Internal initialisation of Dashboard
-function init(options) {
-    if (_options)
-        return _options
-
-    _options = deepExtend(DEFAULTS, options)
-
-    // install()
-    if (_options.websocket !== null) {
-        wsStart()
+    constructor(options) {
+        this.options = deepExtend(DEFAULTS, options)
+        this.channels = new Map()
+        this.install()
     }
 
-    if (_options.debug) {
-        console.log(MODULE_NAME, "inited")
-    }
 
-    return _options
-}
-
-
-function register(elemid, msgtype) {
-    if (!_listeners.has(msgtype)) {
-        _listeners.set(msgtype, [])
-    }
-    let msglisteners = _listeners.get(msgtype)
-    if (msglisteners.indexOf(elemid) < 0) {
-        msglisteners.push(elemid)
-    }
-    if (_options.debug)
-        console.log(MODULE_NAME, "register", elemid, msgtype)
-}
-
-
-function unregister(elemid, msgtype) {
-    if (_listeners.has(msgtype)) {
-        let msglisteners = _listeners.get(msgtype)
-        const i = msglisteners.indexOf(elemid)
-        if (i >= 0) {
-            msglisteners.splice(i, 1)
-        }
-        if(msglisteners.length == 0) {
-            _listeners.delete(msgtype)
-        }
-    }
-}
-
-
-// data = {type: "string", payload: "string"}
-function broadcast(data) {
-    let msg = null
-    if (typeof data == "string") {
-        try {
-            msg = JSON.parse(data)
-        } catch (e) {
-            console.log(MODULE_NAME, "broadcast: cannot decode message", data, e)
-        }
-    } else {
-        msg = data
-    }
-
-    if (msg.hasOwnProperty(_options.msgTYPE) && msg.hasOwnProperty(_options.msgPAYLOAD)) {
-        const msgtype = msg[_options.msgTYPE]
-
-        if (_listeners.has(msgtype)) { // if array of listener is 0, we remove the map element
-             _listeners.get(msgtype).forEach(function(dst, idx) {
-                if (_options.debug)
-                    console.log(MODULE_NAME, "broadcast", "#" + _options.elemprefix + dst, _options.msgprefix + msgtype)
-                try {
-                    PubSub.publish(_options.msgprefix + msgtype, msg[PAYLOAD])
-                } catch (e) {
-                    console.log(MODULE_NAME, "broadcast: problem during broadcast", msg[_options.msgPAYLOAD], e)
+    install() {
+        for (var channel in this.options.channels) {
+            if (this.options.channels.hasOwnProperty(channel)) {
+               let channelOptions = this.options.channels[channel]
+                let channelConnector = false
+                switch (channel) {
+                    case "websocket":
+                        console.log("Dispatcher", channel, channelOptions)
+                        channelConnector = new ChannelWebsocket(this, channelOptions)
+                        break
+                    default:
+                        channelConnector = false
                 }
-            })
+                if (channelConnector !== false) {
+                    this.channels.set(channel, channelConnector)
+                }
+            }
+        }
+    }
+
+
+    dispatch(data) {
+        let msg = null
+
+        if (typeof data == "string") {
+            try {
+                msg = JSON.parse(data)
+            } catch (e) {
+                console.log("dispatch: cannot decode message", data, e)
+            }
         } else {
-            console.log(MODULE_NAME, "broadcast: no listener for message type", msgtype, msg[_options.msgPAYLOAD], _listeners)
+            msg = data
         }
 
-    } else {
-        console.log(MODULE_NAME, "broadcast: message has no type or no payload", data)
+        if (msg.hasOwnProperty(this.options.msgTYPE) && msg.hasOwnProperty(this.options.msgPAYLOAD)) {
+            const msgtype = msg[this.options.msgTYPE]
+            try {
+                PubSub.publish(msgtype, msg[this.options.msgPAYLOAD])
+            } catch (e) {
+                console.log("dispatch: problem during broadcast", msg[this.options.msgPAYLOAD], e)
+            }
+        } else {
+            console.log("dispatch: message has no type or no payload", this.options.msgTYPE, this.options.msgPAYLOAD, data)
+        }
     }
-}
 
-
-function getElemPrefix() {
-    return _options.elemprefix
-}
-
-
-function getMessagePrefix() {
-    return _options.msgprefix
-}
-
-
-/**
- *  MODULE EXPORTS
- */
-function version() {
-    console.log(MODULE_NAME, VERSION);
-}
-
-export {
-    version,
-    init,
-    getElemPrefix,
-    getMessagePrefix,
-    register,
-    unregister,
-    broadcast
 }

@@ -5,8 +5,8 @@
  *
  * Starts main viewer application.
  */
-import * as App from './Components/App'
+import { App } from './Components/App'
 
-App.init({})
+let app = new App({})
 
-App.run()
+app.run()
