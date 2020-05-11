@@ -11,7 +11,10 @@ import { deepExtend } from "./Utilities"
 import { Tile } from "./Tile"
 import moment from "moment"
 
+import { SCHEDULED, PLANNED, ACTUAL, DEPARTURE } from "./Constant"
+
 import { flipper } from "../js/flipper.js"
+
 /**
  *  DEFAULT VALUES
  */
@@ -22,16 +25,8 @@ const DEFAULTS = {
     solari: true
 }
 
-const SOLARI = "solari" // name of css class
-
-const SCHEDULED = "scheduled",
-    PLANNED = "planned",
-    ACTUAL = "actual"
-
-const DEPARTURE = "departure"/*,
-    ARRIVAL = "arrival"*/
-
-const Mdefault = "<span class='left off'></span><span class='right off'></span>",
+const SOLARI = "solari",
+    Mdefault = "<span class='left off'></span><span class='right off'></span>",
     Msuccess = "<span class='left green'></span><span class='right off'></span>",
     Mdanger = "<span class='left off'></span><span class='right red'></span>",
     Mboarding = "<span class='left off boarding-left'></span><span class='right off boarding-right'></span>"
@@ -122,7 +117,6 @@ export class Flightboard extends Tile {
 
         flights.forEach(f => {
             let flight = that.flights.get(f.name)
-            console.log("Flightboard::updateBoard",flight)
             let showflight = true
             if (flight.hasOwnProperty("removeAt")) {
                 if (flight.removeAt.isBefore(ts)) {
@@ -275,7 +269,7 @@ export class Flightboard extends Tile {
         // sugar flipper
         if (this.options.solari) {
             let els = document.getElementsByClassName(SOLARI)
-            for(let i = 0; i < els.length; i++) {
+            for (let i = 0; i < els.length; i++) {
                 let el = els[i]
                 el.classList.remove(SOLARI)
                 let s = new flipper(el);

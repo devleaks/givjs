@@ -12,6 +12,8 @@ import { Tile } from "../Tile"
 import { Transport } from "../Transport"
 import moment from "moment"
 
+import { ACTUAL } from "../Constant"
+
 import ApexCharts from "apexcharts"
 
 /**
@@ -22,8 +24,6 @@ const DEFAULTS = {
     msgtype: "flightboard",
     maxcount: 6
 }
-
-const ACTUAL = "actual"
 
 export class MovementForecastChart extends Tile {
 
@@ -74,7 +74,7 @@ export class MovementForecastChart extends Tile {
 
         let that = this
         let locallistener = function(msgtype, data) {
-            console.log("MovementForecastChart::listener", msgtype, data, that.move)
+            //console.log("MovementForecastChart::listener", msgtype, data, that.move)
             if (that.move == data.move) {
                 that.updateChart()
             }
@@ -109,13 +109,9 @@ export class MovementForecastChart extends Tile {
         var hourNow = ts.hours()
         hours = hours.concat(hours) // cycle for across midnight runs
         var forecast = hours.slice(hourNow, hourNow + this.options.maxcount)
-        console.log("MovementForecastChart::updateChart", forecast)
         this.chart.updateSeries([{
             name: this.move,
             data: forecast
         }])
-
-        console.log("MovementForecastChart::updateChart", forecast)
-
     }
 }

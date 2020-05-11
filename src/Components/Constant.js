@@ -1,12 +1,12 @@
-export DEPARTURE = "departure"
-export ARRIVAL = "arrival"
+export const  DEPARTURE = "departure"
+export const  ARRIVAL = "arrival"
 
-export SCHEDULED = "scheduled"
-export PLANNED = "planned"
-export ACTUAL = "actual"
+export const  SCHEDULED = "scheduled"
+export const  PLANNED = "planned"
+export const  ACTUAL = "actual"
 
-export TO = "to"
-export FROM = "from"
+export const  TO = "to"
+export const  FROM = "from"
 
-export HOME = "LGG"
-export HOME_IATA = "EBLG"
+export const  HOME = "LGG"
+export const  HOME_IATA = "EBLG"

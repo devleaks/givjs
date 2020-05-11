@@ -10,6 +10,7 @@ import "../../node_modules/line-awesome/dist/line-awesome/css/line-awesome.css"
 
 import "../css/app.css"
 import { Dashboard } from "./Dashboard"
+import L from "leaflet"
 
 // Tiles
 import { Omap } from "./Omap"
@@ -17,8 +18,42 @@ import { Wire } from "./Wire"
 import { Transport } from "./Transport"
 import { Flightboard } from "./Flightboard"
 import { MovementForecastChart } from "./Charts/MovementForecastChart"
+import { ParkingOccupancyChart } from "./Charts/ParkingOccupancyChart"
 
 import { FeatureCollection } from "./FeatureCollection"
+
+import { style, onEachFeature } from "./Style"
+import { update } from "./Update"
+
+
+
+const parkingStyle = {
+    available: {
+        markerSymbol: "map-marker",
+        markerSize: 24, // px
+        markerColor: "rgb(0,128,256)", // lighter blue
+        color: "#E6E04F", // stroke color
+        opacity: 0.6, // stroke opacity 0 = transparent
+        weight: 1, // stroke width
+        fillColor: "green", // fill color
+        fillOpacity: 0.2, // fill opacity 1 = opaque
+        fillPattern: "solid", // fill pattern (currently unused)
+        inactiveMarkerColor: "darkgrey"
+    },
+    busy: {
+        markerSymbol: "map-marker",
+        markerSize: 24, // px
+        markerColor: "rgb(0,128,256)", // lighter blue
+        color: "red", // stroke color
+        opacity: 0.6, // stroke opacity 0 = transparent
+        weight: 1, // stroke width
+        fillColor: "red", // fill color
+        fillOpacity: 0.2, // fill opacity 1 = opaque
+        fillPattern: "solid", // fill pattern (currently unused)
+        inactiveMarkerColor: "darkgrey"
+    }
+}
+
 
 
 export class App {
@@ -36,6 +71,10 @@ export class App {
 
     install() {
 
+        this.parkings = new FeatureCollection("src/data/eblg-parking-boxes.geojson")
+        let parking_busy = this.parkings.find("name", "28")
+        //this.taxiways = new FeatureCollection("src/data/eblg-taxiways.geojson")
+
         this.dashboard = new Dashboard({
             dispatcher: {
                 channels: {
@@ -48,11 +87,23 @@ export class App {
             }
         })
 
-        this.dashboard.register("map", new Omap("map", "map", {
+        this.omap = new Omap("map", "map", {
             center: [50.64, 5.445],
             zoom: 14,
             zoom_overview: 8
-        }))
+        })
+
+        this.dashboard.register("map", this.omap)
+
+
+        this.parkingLayer = new L.geoJSON(this.parkings, {
+            style: style,
+            onEachFeature: onEachFeature
+        }).addTo(this.omap.getMap())
+
+        // testing...
+        parking_busy.properties._style = parkingStyle.busy
+        update(this.parkingLayer, parking_busy)
 
         this.dashboard.register("wire", new Wire("wire", "wire", {}))
 
@@ -65,10 +116,9 @@ export class App {
 
         this.dashboard.register("flightboard", new MovementForecastChart("forecast-arrival", "flightboard", "arrival", transport, {}))
         this.dashboard.register("flightboard", new MovementForecastChart("forecast-departure", "flightboard", "departure", transport, {}))
+        //                                                                                                                            1   2   3   4   5   6
+        this.dashboard.register("parking", new ParkingOccupancyChart("parking-occupancy", "parking", this.parkings, { aprons_max: [0, 29, 24, 22, 0, 5, 5] }))
 
-        this.parkings = new FeatureCollection("src/data/eblg-parking-boxes.geojson")
-        this.taxiways = new FeatureCollection("src/data/eblg-taxiways.geojson")
-        console.log(this.parkings.find("name","29D"))
     }
 
 

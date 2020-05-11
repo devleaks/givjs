@@ -8,9 +8,11 @@
 import { Subscriber } from "./Subscriber"
 import moment from "moment"
 
+import { SCHEDULED, PLANNED, ACTUAL, DEPARTURE, ARRIVAL } from "./Constant"
 /**
  *  DEFAULT VALUES
 
+Transport record:
 "SN123-2020-05-10T12:34:56.789+02:00": {
     name: "SN123",
     from: "EBBR",       // either is === this.base
@@ -19,15 +21,7 @@ import moment from "moment"
     planned: moment(),
     actual: moment()
 }
-
 */
-const SCHEDULED = "scheduled",
-    PLANNED = "planned",
-    ACTUAL = "actual"
-
-const DEPARTURE = "departure",
-    ARRIVAL = "arrival"
-
 
 export function mkTransfortId(transport) {
     return transport.name + "-" + transport.scheduled.toISOString()
@@ -47,7 +41,7 @@ export class Transport extends Subscriber {
     install() {
         let that = this
         this.listen((msgtype, data) => {
-            console.log("Transport::listen", msgtype, data)
+            //console.log("Transport::listen", msgtype, data)
             switch (msgtype) {
                 case "flightboard":
                     that.updateFlight(data)
@@ -93,7 +87,6 @@ export class Transport extends Subscriber {
             f.removeAt = moment(time).add(data.move == ARRIVAL ? 30 : 10, "minutes")
         }
         this.transports.set(data.flight, f)
-        console.log("Transport::updateFlight", this.transports)
     }
 
     /*

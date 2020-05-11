@@ -74,7 +74,17 @@ export class Wire extends Tile {
         let hook = document.querySelector("#wire ul")
         let newel = document.createElement("li")
         newel.innerHTML = data.subject
-        hook.appendChild(newel)
+
+        let first = document.querySelector("#wire ul li:first-child")
+
+        console.log("Wire::listener first", first)
+
+        if(!first) { // we insert the first elem
+            hook.appendChild(newel)
+        } else {
+            hook.insertBefore(newel, first)
+        }
+
 
         const formatter = new JSONFormatter(data);
         newel.appendChild(formatter.render());
