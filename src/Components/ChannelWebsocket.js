@@ -28,7 +28,7 @@ export class ChannelWebsocket extends Channel {
             console.log("ChannelWebsocket: Socket is opened", new Date())
         }
         ws.onclose = function(e) {
-            console.log("ChannelWebsocket: Socket is closed. Reconnect will be attempted in " + this.options.reconnect_retry + " second.", e.reason)
+            console.log("ChannelWebsocket: Socket is closed. Reconnect will be attempted in " + that.options.reconnect_retry + " second.", e.reason)
             setTimeout(function() {
                 that.install()
             }, that.options.reconnect_retry * 1000)

@@ -100,3 +100,5 @@ function flipper2(obj) { // splits start one after the other
     }
 
 }
+
+export { flipper , flipper2 }

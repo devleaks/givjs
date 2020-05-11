@@ -4,7 +4,6 @@ import json from 'rollup-plugin-json';
 import { eslint } from 'rollup-plugin-eslint';
 import postcss from 'rollup-plugin-postcss'
 
-
 export default {
     plugins: [
         resolve(),

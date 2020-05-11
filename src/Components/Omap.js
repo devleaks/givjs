@@ -177,7 +177,7 @@ export class Omap extends Tile {
     }
 
     listener(msg, data) {
-        console.log("Map::listener", msg, data);
+        // console.log("Map::listener", msg, data);
     }
 
 
