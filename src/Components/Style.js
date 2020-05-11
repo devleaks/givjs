@@ -51,6 +51,17 @@ export function getLayerFeatureId(layer) {
     return layer.hasOwnProperty(HIDE_FEATURE) ? getFeatureId(layer[HIDE_FEATURE]) : false
 }
 
+export function getLayerForFeatureId(layerGroup, id) {
+    let layers = layerGroup.getLayers()
+    let layer = false
+    layers.forEach(l => {
+        if(!layer && (getLayerFeatureId(l) == id)) {
+            layer = l
+        }
+    })
+    return layer
+}
+
 
 function touch(feature) {
     feature.properties._touched = moment()
