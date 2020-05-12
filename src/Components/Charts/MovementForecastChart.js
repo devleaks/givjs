@@ -8,7 +8,7 @@
 //import "../css/flightboard.css"
 
 import { deepExtend } from "../Utilities"
-import { Tile } from "../Tile"
+import { ApexTile } from "../ApexTile"
 import { Transport } from "../Transport"
 import moment from "moment"
 
@@ -25,7 +25,7 @@ const DEFAULTS = {
     maxcount: 6
 }
 
-export class MovementForecastChart extends Tile {
+export class MovementForecastChart extends ApexTile {
 
     constructor(elemid, message_type, move, transport, options) {
         super(elemid, message_type)
@@ -45,14 +45,14 @@ export class MovementForecastChart extends Tile {
                 data: [0, 0, 0, 0, 0, 0]
             }],
             chart: {
-                type: 'bar',
+                type: "bar",
                 height: 200
             },
             plotOptions: {
                 bar: {
                     horizontal: false,
-                    columnWidth: '55%',
-                    endingShape: 'rounded'
+                    columnWidth: "55%",
+                    endingShape: "rounded"
                 },
             },
             dataLabels: {
@@ -61,7 +61,7 @@ export class MovementForecastChart extends Tile {
             stroke: {
                 show: true,
                 width: 2,
-                colors: ['transparent']
+                colors: ["transparent"]
             },
             xaxis: {
                 categories: [0, 1, 2, 3, 4, 5],
@@ -85,7 +85,6 @@ export class MovementForecastChart extends Tile {
 
     // update display (html table)
     updateChart(datetime = false) {
-
         let ts = datetime ? datetime : moment() // default to now
 
         // sort flights to show most maxcount relevant flights for move
@@ -94,21 +93,21 @@ export class MovementForecastChart extends Tile {
         // 3. Arriving later
         // Remove landed more than 30min earlier
         let that = this
-        var hours = Array(24).fill(0)
+        let hours = Array(24).fill(0)
         let flights = this.flights.getScheduledTransports(this.move, datetime)
 
         flights.forEach(f => {
             if (!f.hasOwnProperty(ACTUAL)) { // if not arrived/departed
-                var t = Transport.getTime(f)
+                let t = Transport.getTime(f)
                 hours[t.hours()]++
             }
         })
 
 
         //update simple graph
-        var hourNow = ts.hours()
+        let hourNow = ts.hours()
         hours = hours.concat(hours) // cycle for across midnight runs
-        var forecast = hours.slice(hourNow, hourNow + this.options.maxcount)
+        let forecast = hours.slice(hourNow, hourNow + this.options.maxcount)
         this.chart.updateSeries([{
             name: this.move,
             data: forecast

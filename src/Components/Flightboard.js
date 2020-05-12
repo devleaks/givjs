@@ -5,7 +5,7 @@
  *
  * Install map in div
  */
-//import "../css/flightboard.css"
+import "../css/flightboard.css"
 
 import { deepExtend } from "./Utilities"
 import { Tile } from "./Tile"

@@ -18,9 +18,16 @@ import "leaflet-betterscale/L.Control.BetterScale.js"
 import "../../node_modules/leaflet-betterscale/L.Control.BetterScale.css"
 
 import antPath from "leaflet-ant-path"
+import "@ansur/leaflet-pulse-icon"
+import "../../node_modules/@ansur/leaflet-pulse-icon/dist/L.Icon.Pulse.css"
+
+import "leaflet-rotatedmarker"
 
 import { deepExtend } from "./Utilities"
 import { Tile } from "./Tile"
+
+import { getFeatureId } from "./GeoJSON"
+import { style, onEachFeature, pointToLayer, getLayerForFeatureId } from "./Style"
 
 /**
  *  DEFAULT VALUES
@@ -52,7 +59,12 @@ export class Omap extends Tile {
     constructor(elemid, message_type, options) {
         super(elemid, message_type)
         this.options = deepExtend(DEFAULTS, options)
+        this.layers = new Map()
         this.install()
+    }
+
+    getMap() {
+        return this.map
     }
 
     /*  installs the HTML code in the document
@@ -120,22 +132,22 @@ export class Omap extends Tile {
         }
 
         let r1 = antPath.antPath([
-            [50.65367800515634, 5.469925403594971],
-            [50.645977340713586, 5.457737445831299]
-        ], rabbit),
+                [50.65367800515634, 5.469925403594971],
+                [50.645977340713586, 5.457737445831299]
+            ], rabbit),
             r2 = antPath.antPath([
-            [50.62299029225287, 5.421152114868163],
-            [50.63156581667872, 5.434885025024414]
-        ], rabbit),
+                [50.62299029225287, 5.421152114868163],
+                [50.63156581667872, 5.434885025024414]
+            ], rabbit),
             r3 = antPath.antPath([
-            [50.651766562235494, 5.462635159492493],
-            [50.64411320922499, 5.450441837310791]
-        ], rabbit)
+                [50.651766562235494, 5.462635159492493],
+                [50.64411320922499, 5.450441837310791]
+            ], rabbit)
 
         let night = L.layerGroup([airportNightOverlay, r1, r2, r3]),
             day = airportOverlay
 
-        this.options.layers = [ OpenStreetMap_France ]
+        this.options.layers = [OpenStreetMap_France]
 
         this.options.layerControl = {
             baseLayers: baseLayers,
@@ -149,8 +161,8 @@ export class Omap extends Tile {
         }
 
         this.options.themes = {
-            dark:  [night, CartoDB_DarkMatterNoLabels],
-            light: [day,   OpenStreetMap_France]
+            dark: [night, CartoDB_DarkMatterNoLabels],
+            light: [day, OpenStreetMap_France]
         }
 
 
@@ -164,32 +176,79 @@ export class Omap extends Tile {
 
         this.map.setView(this.options.center, this.options.zoom)
 
+        L.control.betterscale({ metric: true, imperial: false, position: "bottomleft" }).addTo(this.map) // either one or the other but not both
 
         this.layerControl = L.control.groupedLayers(
             this.options.layerControl.baseLayers,
             this.options.layerControl.overlays,
             this.options.layerControl.options ? this.options.layerControl.options : this.options.layerControlOptions).addTo(this.map)
-        L.control.betterscale({ metric: true, imperial: false, position: "bottomleft" }).addTo(this.map) // either one or the other but not both
 
-        this.listen(this.listener)
+
+        // decoration
+        const tower = [50.63725474594362, 5.453993082046508]
+        let radar = L.layerGroup().addTo(this.map)
+        L.circle(tower, { radius: 80000, color: "red", opacity: 0.3, weight: 1, fill: false }).addTo(radar)
+        L.circle(tower, { radius: 160000, color: "blue", opacity: 0.3, weight: 1, fill: false }).addTo(radar)
+        L.marker(tower, { icon: L.icon.pulse({ iconSize: [10, 10], color: "red" }) }).addTo(radar);
+
+
+        // test
+        L.marker([50.6442, 5.4586], {
+            icon: L.divIcon({
+                className: "gip-marker",
+                html: "<i class='la la-plane' style='color: green; font-size:18px;'></i>"
+            }),
+            rotationAngle: 135
+        }).addTo(radar);
+
+
+        this.listen(this.listener.bind(this))
 
         console.log("Map", "installed")
     }
 
-    getMap() {
-        return this.map
-    }
-
     listener(msg, data) {
-        // console.log("Map::listener", msg, data);
+        // console.log("Map::listener", msg, data)
+        this.update(data)
     }
 
 
+    // Add empty but styled GeoJSON layer to map
+    addLayer(layerName, groupName) {
+        let layer = L.geoJSON(undefined, {
+            pointToLayer: pointToLayer,
+            style: style,
+            onEachFeature: onEachFeature
+        }).addTo(this.map)
+        this.layers.set(layerName, layer)
+        this.layerControl.addOverlay(layer, layerName, groupName)
+    }
 
-    /*  update/insert HTML code on event
+    /*  addData on geojson
      */
-    update() {
+    add(layerName, geojson) {
+        let layer = this.layers.get(layerName)
+        if (layer) {
+            layer.addData(geojson)
+        } else {
+            console.log("Omap::add", "layer not found", layerName, layer)
+        }
+    }
 
+    /*  update single GeoJSON feature
+     */
+    update(feature, ln = false) {
+        let layerName = ln ? ln : feature.properties.group_name
+        let layer = this.layers.get(layerName)
+        if (layer) {
+            let featureLayer = getLayerForFeatureId(layer, getFeatureId(feature))
+            layer.addData(feature)
+            if (featureLayer) {
+                layer.removeLayer(featureLayer)
+            }
+        } else {
+            console.log("OMap::update", "layer not found", layerName)
+        }
     }
 
 }

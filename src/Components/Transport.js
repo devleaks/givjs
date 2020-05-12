@@ -139,7 +139,7 @@ export class Transport extends Subscriber {
     }
 
     static getTime(flight) { // returns the most recent known time for flight
-        var t = false
+        let t = false
         if(!t && flight.hasOwnProperty(ACTUAL)) {
             t = flight[ACTUAL]
         }

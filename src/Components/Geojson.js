@@ -22,7 +22,7 @@ export function getFeatureIds(geojson) {
     let ids = []
     if (geojson.type == "FeatureCollection") {
         geojson.features.forEach(function(f) {
-            let fid = getFeatureId(feature)
+            let fid = getFeatureId(f)
             if (fid) {
                 ids.push(fid)
             }

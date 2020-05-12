@@ -77,8 +77,6 @@ export class Wire extends Tile {
 
         let first = document.querySelector("#wire ul li:first-child")
 
-        console.log("Wire::listener first", first)
-
         if(!first) { // we insert the first elem
             hook.appendChild(newel)
         } else {

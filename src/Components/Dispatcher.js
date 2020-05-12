@@ -47,7 +47,7 @@ export class Dispatcher {
 
 
     install() {
-        for (var channel in this.options.channels) {
+        for (let channel in this.options.channels) {
             if (this.options.channels.hasOwnProperty(channel)) {
                let channelOptions = this.options.channels[channel]
                 let channelConnector = false

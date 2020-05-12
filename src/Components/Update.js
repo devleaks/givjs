@@ -1,3 +1,7 @@
+/*  Module dedicated to the update of feature and visuals.
+ *
+ */
+
 import { getFeatureId } from "./GeoJSON"
 import { getLayerForFeatureId } from "./Style"
 

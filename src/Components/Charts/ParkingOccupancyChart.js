@@ -5,12 +5,12 @@
  *
  * Install map in div
  */
-//import "../css/flightboard.css"
-
 import { deepExtend } from "../Utilities"
-import { Tile } from "../Tile"
+import { ApexTile } from "../ApexTile"
 import { Transport } from "../Transport"
 import moment from "moment"
+
+import { BUSY } from "../Constant"
 
 import ApexCharts from "apexcharts"
 
@@ -20,10 +20,11 @@ import ApexCharts from "apexcharts"
 const DEFAULTS = {
     elemid: "ParkingOccupancyChart",
     msgtype: "flightboard",
+    parking_id: "name",
     aprons_max: []
 }
 
-export class ParkingOccupancyChart extends Tile {
+export class ParkingOccupancyChart extends ApexTile {
 
     constructor(elemid, message_type, parkings, options) {
         super(elemid, message_type)
@@ -70,7 +71,7 @@ export class ParkingOccupancyChart extends Tile {
 
         let that = this
         let locallistener = function(msgtype, data) {
-            // console.log("ParkingOccupancyChart::listener", msgtype, data)
+            //console.log("ParkingOccupancyChart::listener", msgtype, data)
             if (that.move == data.move) {
                 that.updateParking(data)
             }
@@ -80,9 +81,9 @@ export class ParkingOccupancyChart extends Tile {
 
 
     updateParking(parking) {
-        const box = this.parkings.find("name", parking.name)
+        const box = this.parkings.find(this.options.parking_id, parking.name)
         if (box) {
-            if (parking.available == "busy") {
+            if (parking.available == BUSY) {
                 this.aprons[box.properties.apron]++
             } else {
                 this.aprons[box.properties.apron] = this.aprons[box.properties.apron] == 0 ? 0 : this.aprons[box.properties.apron] - 1
@@ -113,6 +114,5 @@ export class ParkingOccupancyChart extends Tile {
                 }
             }
         })
-        console.log("ParkingOccupancyChart::updateChart", this.options.aprons_max, data, pcts, total)
     }
 }

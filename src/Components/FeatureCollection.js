@@ -44,6 +44,21 @@ export class FeatureCollection {
         return this.fc.features.filter(f => f.properties[n] == k)
     }
 
+    count(n, k) {
+        let r = this.filter(n, k)
+        return r.length
+    }
+
+    distinct(n) { // note: find all values of a property
+        let ret = []
+        this.fc.features.forEach( (f) => {
+            if(ret.indexOf(f.properties[n]) == -1) {
+                ret.push(f.properties[n])
+            }
+        })
+        return ret
+    }
+
     filterAndSort(n, k, s, rev = false) { // note: find returns all matches (array of Features)
         let a = this.fc.features.filter(f => f.properties[n] == k)
         a = a.sort( (a,b) => (a[s] > b[s]))
