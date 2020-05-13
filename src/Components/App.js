@@ -69,8 +69,8 @@ export class App {
         this.omap.addLayer("APRONS", "Airport")
         this.omap.add("APRONS", this.parkings)
 
-        this.omap.addLayer("SERVICES", "Airport")
-        this.omap.addLayer("AIRCRAFTS", "Aircrafts")
+        //this.omap.addLayer("SERVICES", "Airport")
+        //this.omap.addLayer("AIRCRAFTS", "Aircrafts")
 
         this.dashboard.register("wire", new Wire("wire", "wire", {}))
 

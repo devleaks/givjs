@@ -115,6 +115,7 @@ export class Transport extends Subscriber {
         if (arrival) {
             let here = this.base
             departing = this.transports.filter((f) => ((f.parking == arrival.parking) && (f.from = here) && (f.scheduled.isBefore(arrival.scheduled))))
+            console.log("Transport::getNextTransport", transport, departing)
             departing = departing.sort((a, b) => a.scheduled.isBefore(b.scheduled))
         }
         return departing[0]

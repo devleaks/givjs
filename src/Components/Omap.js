@@ -17,11 +17,12 @@ import "../../node_modules/leaflet-groupedlayercontrol/dist/leaflet.groupedlayer
 import "leaflet-betterscale/L.Control.BetterScale.js"
 import "../../node_modules/leaflet-betterscale/L.Control.BetterScale.css"
 
-import antPath from "leaflet-ant-path"
 import "@ansur/leaflet-pulse-icon"
 import "../../node_modules/@ansur/leaflet-pulse-icon/dist/L.Icon.Pulse.css"
 
 import "leaflet-rotatedmarker"
+
+import antPath from "leaflet-ant-path"
 
 import { deepExtend } from "./Utilities"
 import { Tile } from "./Tile"
@@ -63,9 +64,6 @@ export class Omap extends Tile {
         this.install()
     }
 
-    getMap() {
-        return this.map
-    }
 
     /*  installs the HTML code in the document
      */
@@ -193,6 +191,10 @@ export class Omap extends Tile {
 
         this.listen(this.listener.bind(this))
 
+        r1.resume()
+        r2.resume()
+        r3.resume()
+
         console.log("Map", "installed")
     }
 
@@ -211,6 +213,8 @@ export class Omap extends Tile {
         }).addTo(this.map)
         this.layers.set(layerName, layer)
         this.layerControl.addOverlay(layer, layerName, groupName)
+        console.log("OMap::addLayer", "added", layerName, groupName)
+        return layer
     }
 
     /*  addData on geojson
@@ -227,8 +231,11 @@ export class Omap extends Tile {
     /*  update single GeoJSON feature
      */
     update(feature, ln = false) {
-        let layerName = ln || getFeatureLayerName(feature)
+        let layerName = ln || getFeatureLayerName(feature)
         let layer = this.layers.get(layerName)
+        if (!layer) { // we create a new layer for these things
+            layer = this.addLayer(layerName, "Other")
+        }
         if (layer) {
             let featureLayer = getFeatureLayer(feature)
             layer.addData(feature)

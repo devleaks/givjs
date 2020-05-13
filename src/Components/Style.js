@@ -134,7 +134,6 @@ function getIcon(feature) {
             color = feature.properties[HIDE_STYLE]["markerColor"]
             if (color.charAt(0) == "#") {
                 color = "rgb(" + chroma(color).rgb().join(",") + ")"
-                console.log("getIcon::chroma", color)
             }
         }
         if (feature.properties[HIDE_STYLE]["markerSize"]) {
@@ -144,7 +143,6 @@ function getIcon(feature) {
     // eslint-disable-next-line quotes
     // let html = "<i class='la la-" + icon + "' style='color: " + '"' + color + '"' + "; font-size:" + size + "px;'></i>"
     let html = `<i class='la la-${ icon }' style='color: ${ color }; font-size:${ size }px;'></i>`
-    console.log("getIcon", html)
     return L.divIcon({
         className: "gip-marker",
         html: html

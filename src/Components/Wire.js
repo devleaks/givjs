@@ -22,6 +22,7 @@ const DEFAULTS = {
     "icon-set": "la-",
     size: "medium",
     speed: 500,
+    maxentries: 20,
     dateReminder: 3, // minutes
     // More
     numWords: 50,
@@ -65,7 +66,7 @@ export class Wire extends Tile {
         let hook = document.querySelector("#wire")
         let newel = document.createElement("ul")
         hook.appendChild(newel)
-        this.listen(this.listener)
+        this.listen(this.listener.bind(this))
     }
 
     listener(msg, data) {
@@ -77,11 +78,20 @@ export class Wire extends Tile {
 
         let first = document.querySelector("#wire ul li:first-child")
 
-        if(!first) { // we insert the first elem
+        if (!first) { // we insert the first elem
             hook.appendChild(newel)
         } else {
             hook.insertBefore(newel, first)
         }
+
+        let allwires = document.querySelectorAll("#wire ul li")
+        while (allwires.length > this.options.maxentries) {
+            let last = document.querySelector("#wire ul li:last-child")
+            hook.removeChild(last)
+            allwires = document.querySelector("#wire ul li")
+            console.log("Wire::listener", "removed last")
+        }
+
 
 
         const formatter = new JSONFormatter(data);
