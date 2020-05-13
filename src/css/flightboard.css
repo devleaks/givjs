@@ -34,11 +34,12 @@
 .flightboard th {
     color: #FFD200;
     padding: 2px;
+    font-weight: normal;
 }
 
 .flightboard td {
     font-family: Solari, Helvetica, Arial, sans-serif;
-    font-size: 1.2em;
+    font-size: 1em;
     text-align: center;
     padding: 0px;
     color: #CECACB;

@@ -108,6 +108,7 @@ export class MovementForecastChart extends ApexTile {
         let hourNow = ts.hours()
         hours = hours.concat(hours) // cycle for across midnight runs
         let forecast = hours.slice(hourNow, hourNow + this.options.maxcount)
+        console.log("MovementForecastChart::updateChart", this.move, forecast)
         this.chart.updateSeries([{
             name: this.move,
             data: forecast

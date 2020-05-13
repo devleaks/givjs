@@ -23,7 +23,9 @@ import { ParkingOccupancy } from "./ParkingOccupancy"
 
 import { FeatureCollection } from "./FeatureCollection"
 
-import { APRONS_MAXCOUNT, HOME } from "./Constant"
+import { APRONS_MAXCOUNT } from "./Constant"
+import { HOME, PARKINGS } from "./Config"
+
 
 export class App {
 
@@ -63,7 +65,7 @@ export class App {
 
         // Add layers of information on map
         //this.taxiways = new FeatureCollection("src/data/eblg-taxiways.geojson")
-        this.parkings = new FeatureCollection("src/data/eblg-parking-boxes.geojson")
+        this.parkings = new FeatureCollection(PARKINGS)
         this.omap.addLayer("APRONS", "Airport")
         this.omap.add("APRONS", this.parkings)
 
@@ -88,36 +90,7 @@ export class App {
 
 
     test() {
-        const parkingStyle = {
-            available: {
-                markerSymbol: "map-marker",
-                markerSize: 24, // px
-                markerColor: "rgb(0,128,256)", // lighter blue
-                color: "#E6E04F", // stroke color
-                opacity: 0.6, // stroke opacity 0 = transparent
-                weight: 1, // stroke width
-                fillColor: "green", // fill color
-                fillOpacity: 0.2, // fill opacity 1 = opaque
-                fillPattern: "solid", // fill pattern (currently unused)
-                inactiveMarkerColor: "darkgrey"
-            },
-            busy: {
-                markerSymbol: "map-marker",
-                markerSize: 24, // px
-                markerColor: "rgb(0,128,256)", // lighter blue
-                color: "red", // stroke color
-                opacity: 0.6, // stroke opacity 0 = transparent
-                weight: 1, // stroke width
-                fillColor: "red", // fill color
-                fillOpacity: 0.2, // fill opacity 1 = opaque
-                fillPattern: "solid", // fill pattern (currently unused)
-                inactiveMarkerColor: "darkgrey"
-            }
-        }
-
-        let parking_busy = this.parkings.find("name", "42")
-        parking_busy.properties._style = parkingStyle.busy
-        this.omap.update(parking_busy, "APRONS")
+        ;
     }
 
 

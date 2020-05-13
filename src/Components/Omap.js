@@ -26,8 +26,8 @@ import "leaflet-rotatedmarker"
 import { deepExtend } from "./Utilities"
 import { Tile } from "./Tile"
 
-import { getFeatureId } from "./GeoJSON"
-import { style, onEachFeature, pointToLayer, getLayerForFeatureId } from "./Style"
+import { getFeatureLayerName } from "./GeoJSON"
+import { style, onEachFeature, pointToLayer, getFeatureLayer } from "./Style"
 
 /**
  *  DEFAULT VALUES
@@ -191,17 +191,6 @@ export class Omap extends Tile {
         L.circle(tower, { radius: 160000, color: "blue", opacity: 0.3, weight: 1, fill: false }).addTo(radar)
         L.marker(tower, { icon: L.icon.pulse({ iconSize: [10, 10], color: "red" }) }).addTo(radar);
 
-
-        // test
-        L.marker([50.6442, 5.4586], {
-            icon: L.divIcon({
-                className: "gip-marker",
-                html: "<i class='la la-plane' style='color: green; font-size:18px;'></i>"
-            }),
-            rotationAngle: 135
-        }).addTo(radar);
-
-
         this.listen(this.listener.bind(this))
 
         console.log("Map", "installed")
@@ -238,10 +227,10 @@ export class Omap extends Tile {
     /*  update single GeoJSON feature
      */
     update(feature, ln = false) {
-        let layerName = ln ? ln : feature.properties.group_name
+        let layerName = ln || getFeatureLayerName(feature)
         let layer = this.layers.get(layerName)
         if (layer) {
-            let featureLayer = getLayerForFeatureId(layer, getFeatureId(feature))
+            let featureLayer = getFeatureLayer(feature)
             layer.addData(feature)
             if (featureLayer) {
                 layer.removeLayer(featureLayer)

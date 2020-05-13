@@ -3,25 +3,34 @@
 
 <head>
     <title>Geo Intelligent Viewer JS 2020</title>
-
     <meta charset="utf-8" />
-    
     <link rel="icon" type="image/png" href="src/i/favicons/favicon-32x32.png" />
     <link rel="stylesheet" href="dist/app.css" />
 </head>
 
 <body data-client="oscars">
-
-    <div id="map" class="tile"></div>
-    <div id="wire" class="tile"></div>
-    <div id="flightboard-arrival" class="tile"></div>
-    <div id="flightboard-departure" class="tile"></div>
-    <div id="parking-occupancy" class="tile chart"></div>
-    <div id="forecast-arrival" class="tile chart"></div>
-    <div id="forecast-departure" class="tile chart"></div>
-    <div id="turnaround-gantts" class="tile chart"></div>
+    
+    <div class="page-wrap">
+        <header></header>
+        <section class="main-content" role="main">
+            <div id="map" class="tile"></div>
+        </section>
+        <nav class="main-nav" role="navigation">
+        </nav>
+        <aside class="main-sidebar" role="complementary">
+            <div id="wire" class="tile"></div>
+            <div id="flightboard-arrival" class="tile"></div>
+            <div id="flightboard-departure" class="tile"></div>
+            <div id="parking-occupancy" class="tile chart"></div>
+            <div id="forecast-arrival" class="tile chart"></div>
+            <div id="forecast-departure" class="tile chart"></div>
+            <div id="turnaround-gantts" class="tile chart"></div>
+        </aside>
+        <footer>&copy; 2020 Oscars s.a. • by <a href="https://github.com/devleaks" alt="Devleaks' github">devleaks</a></footer>
+    </div>
 
     <script src="dist/app.js"></script>
+
 </body>
 
 </html>

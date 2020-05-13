@@ -8,7 +8,7 @@
 import { deepExtend } from "./Utilities"
 import { Subscriber } from "./Subscriber"
 
-import { BUSY } from "./Constant"
+import { BUSY, APRONS_COLORS } from "./Constant"
 
 /**
  *  DEFAULT VALUES
@@ -18,34 +18,6 @@ const DEFAULTS = {
     parking_id: "name",
     aprons_max: []
 }
-
-const PARKING_AVAILABLE = {
-        markerSymbol: "map-marker",
-        markerSize: 24, // px
-        markerColor: "rgb(0,128,256)", // lighter blue
-        color: "#E6E04F", // stroke color
-        opacity: 0.6, // stroke opacity 0 = transparent
-        weight: 1, // stroke width
-        fillColor: "green", // fill color
-        fillOpacity: 0.2, // fill opacity 1 = opaque
-        fillPattern: "solid", // fill pattern (currently unused)
-        inactiveMarkerColor: "darkgrey"
-    },
-    PARKING_BUSY = {
-        markerSymbol: "map-marker",
-        markerSize: 24, // px
-        markerColor: "rgb(0,128,256)", // lighter blue
-        color: "red", // stroke color
-        opacity: 0.6, // stroke opacity 0 = transparent
-        weight: 1, // stroke width
-        fillColor: "red", // fill color
-        fillOpacity: 0.2, // fill opacity 1 = opaque
-        fillPattern: "solid", // fill pattern (currently unused)
-        inactiveMarkerColor: "darkgrey"
-    }
-
-
-
 
 export class ParkingOccupancy extends Subscriber {
 
@@ -69,12 +41,18 @@ export class ParkingOccupancy extends Subscriber {
     updateParking(msgtype, parking) {
         const box = this.parkings.find(this.options.parking_id, parking.name)
         if (box) {
+            box.properties._style = {
+                color: APRONS_COLORS[box.properties.apron], // stroke color
+                opacity: 0.4, // stroke opacity 0 = transparent
+                weight: 1, // stroke width
+                fillColor: "green", // fill color
+                fillOpacity: 0.4 // fill opacity 1 = opaque
+            }
             if (parking.available == BUSY) {
                 this.aprons[box.properties.apron]++
-                box.properties._style = PARKING_BUSY
+                box.properties._style.fillColor = "red"
             } else {
                 this.aprons[box.properties.apron] = this.aprons[box.properties.apron] == 0 ? 0 : this.aprons[box.properties.apron] - 1
-                box.properties._style = PARKING_AVAILABLE
             }
         }
         this.map.update(box, "APRONS")

@@ -10,7 +10,7 @@ import { ApexTile } from "../ApexTile"
 import { Transport } from "../Transport"
 import moment from "moment"
 
-import { BUSY } from "../Constant"
+import { BUSY, APRONS_COLORS } from "../Constant"
 
 import ApexCharts from "apexcharts"
 
@@ -41,6 +41,7 @@ export class ParkingOccupancyChart extends ApexTile {
         let data = this.aprons.slice(1, this.aprons.length)
         this.chart = new ApexCharts(document.querySelector("#" + this.elemid), {
             series: data,
+            colors: APRONS_COLORS.slice(1, APRONS_COLORS.length),
             chart: {
                 height: 300,
                 type: "radialBar",
@@ -97,7 +98,7 @@ export class ParkingOccupancyChart extends ApexTile {
     updateChart() {
         let aprons_max = this.options.aprons_max
         let data = this.aprons
-        let pcts = data.map( (x, i) => (aprons_max[i] > 0 ? Math.round(100 * x / aprons_max[i]) : 0) )
+        let pcts = data.map((x, i) => (aprons_max[i] > 0 ? Math.round(100 * x / aprons_max[i]) : 0))
         let total = data.reduce((a, v) => a + v)
 
         this.chart.updateSeries(pcts.slice(1, this.aprons.length))

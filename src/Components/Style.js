@@ -4,87 +4,68 @@
 
 import L from "leaflet"
 import moment from "moment"
+import chroma from "chroma-js"
 import { getFeatureId } from "./GeoJSON"
-import { HIDE_FEATURE, HIDE_STYLE, HIDE_TOUCHED } from "./Constant"
-// import BeautifyIcon from "leaflet-beautify-icon"
-
-let featureLayerIds = new Map()
+import { HIDE_FEATURE, HIDE_STYLE, HIDE_TOUCHED, APRONS_COLORS } from "./Constant"
 
 // possible property names for rotation. Must be a number
 const ROATION_PROPERTIES = ["heading", "bearing", "orientation", "orient"]
 
+let featureLayerIds = new Map()
+
+
 /*  LEAFLET SPECIFIC STYLING FUNCTIONS
  *
  */
-// Spawn layer from feature
+// Spawn layer from feature, mainly for point
 export function pointToLayer(feature, latlng) {
     touch(feature)
     return getMarker(feature, latlng)
 }
 
+
+// Opportunity to bind feature' stuff to layer
+// We store link between feature(id) and layer
 export function onEachFeature(feature, layer) {
     featureLayerIds.set(getFeatureId(feature), layer)
     layer[HIDE_FEATURE] = feature
 }
 
-export function getFeatureLayerId(feature) {
+
+// returns the layer associated with this feature
+export function getFeatureLayer(feature) {
     return featureLayerIds.get(getFeatureId(feature))
 }
 
-// Style feature, mainly for polygons
+
+// style feature, mainly for polygons
 export function style(feature) {
     touch(feature)
     if (feature.hasOwnProperty("properties") && feature.properties.hasOwnProperty(HIDE_STYLE)) {
         return feature.properties[HIDE_STYLE]
     }
-    const opacity = [0.0, 0.2, 0.6, 0.2, 0.0, 0.6, 0.4]
+    if (feature.properties.hasOwnProperty("apron")) {
+        return {
+            color: APRONS_COLORS[feature.properties.apron], // stroke color
+            opacity: 0.4, // stroke opacity 0 = transparent
+            weight: 1, // stroke width
+            fillColor: "darkgrey", // fill color
+            fillOpacity: 0.2 // fill opacity 1 = opaque
+        }
+    }
     return {
         color: "darkgrey", // stroke color
         opacity: 0.6, // stroke opacity 0 = transparent
         weight: 1, // stroke width
         fillColor: "darkgrey", // fill color
-        fillOpacity: (feature.properties.apron ? opacity[feature.properties.apron] : 0.2) // fill opacity 1 = opaque
+        fillOpacity: 0.2 // fill opacity 1 = opaque
     }
-}
-
-
-export function getLayerFeatureId(layer) {
-    return layer.hasOwnProperty(HIDE_FEATURE) ? getFeatureId(layer[HIDE_FEATURE]) : false
-}
-
-
-export function getLayerForFeatureId(layerGroup, id) {
-    let layers = layerGroup.getLayers()
-    let layer = false
-    layers.forEach(l => {
-        if (!layer && (getLayerFeatureId(l) == id)) {
-            layer = l
-        }
-    })
-    return layer
 }
 
 
 function touch(feature) {
     feature.properties[HIDE_TOUCHED] = moment()
 }
-
-/*
-
-STYLE: {
-    markerSymbol: "map-marker",
-    markerSize: 24, // px
-    markerColor: "rgb(0,128,256)", // lighter blue
-    color: "darkgrey", // stroke color
-    opacity: 0.6, // stroke opacity 0 = transparent
-    weight: 1, // stroke width
-    fillColor: "darkgrey", // fill color
-    fillOpacity: 0.2, // fill opacity 1 = opaque
-    fillPattern: "solid", // fill pattern (currently unused)
-    inactiveMarkerColor: "darkgrey"
-}
-
- */
 
 // Get rotation of feature if supplied. Add rotation offset for tilted icon
 function getRotation(feature) {
@@ -125,13 +106,47 @@ function getMarker(feature, latlng) {
 }
 
 
+/*
+
+STYLE: {
+    markerSymbol: "map-marker",
+    markerSize: 24, // px
+    markerColor: "rgb(0,128,256)", // lighter blue
+    color: "darkgrey", // stroke color
+    opacity: 0.6, // stroke opacity 0 = transparent
+    weight: 1, // stroke width
+    fillColor: "darkgrey", // fill color
+    fillOpacity: 0.2, // fill opacity 1 = opaque
+    fillPattern: "solid", // fill pattern (currently unused)
+    inactiveMarkerColor: "darkgrey"
+}
+
+ */
 function getIcon(feature) {
-    let icon = "plane"
-    if(feature.properties.hasOwnProperty(HIDE_STYLE) && feature.properties[HIDE_STYLE]["markerSymbol"]) {
-        icon = feature.properties[HIDE_STYLE]["markerSymbol"]
+    let icon = "map-marker",
+        color = "#999999",
+        size = 14 // px
+    if (feature.properties.hasOwnProperty(HIDE_STYLE)) {
+        if (feature.properties[HIDE_STYLE]["markerSymbol"]) {
+            icon = feature.properties[HIDE_STYLE]["markerSymbol"]
+        }
+        if (feature.properties[HIDE_STYLE]["markerColor"]) {
+            color = feature.properties[HIDE_STYLE]["markerColor"]
+            if (color.charAt(0) == "#") {
+                color = "rgb(" + chroma(color).rgb().join(",") + ")"
+                console.log("getIcon::chroma", color)
+            }
+        }
+        if (feature.properties[HIDE_STYLE]["markerSize"]) {
+            size = feature.properties[HIDE_STYLE]["markerSize"]
+        }
     }
+    // eslint-disable-next-line quotes
+    // let html = "<i class='la la-" + icon + "' style='color: " + '"' + color + '"' + "; font-size:" + size + "px;'></i>"
+    let html = `<i class='la la-${ icon }' style='color: ${ color }; font-size:${ size }px;'></i>`
+    console.log("getIcon", html)
     return L.divIcon({
         className: "gip-marker",
-        html: "<i class='la la-" + icon + "' style='color: green; font-size:18px;'></i>"
+        html: html
     })
 }

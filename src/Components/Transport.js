@@ -125,6 +125,7 @@ export class Transport extends Subscriber {
         let local = (move == ARRIVAL) ? "to" : "from"
         let here = this.base
         let transports = []
+        // eslint-disable-next-line no-unused-vars
         this.transports.forEach((value, key, map) => {
             if (value[local] == here) {
                 if (datefrom && value.scheduled.isBefore(datefrom)) {
