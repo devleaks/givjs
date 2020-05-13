@@ -8,6 +8,8 @@ import { getFeatureId } from "./GeoJSON"
 import { HIDE_FEATURE, HIDE_STYLE, HIDE_TOUCHED } from "./Constant"
 // import BeautifyIcon from "leaflet-beautify-icon"
 
+let featureLayerIds = new Map()
+
 // possible property names for rotation. Must be a number
 const ROATION_PROPERTIES = ["heading", "bearing", "orientation", "orient"]
 
@@ -21,9 +23,13 @@ export function pointToLayer(feature, latlng) {
 }
 
 export function onEachFeature(feature, layer) {
+    featureLayerIds.set(getFeatureId(feature), layer)
     layer[HIDE_FEATURE] = feature
 }
 
+export function getFeatureLayerId(feature) {
+    return featureLayerIds.get(getFeatureId(feature))
+}
 
 // Style feature, mainly for polygons
 export function style(feature) {

@@ -69,7 +69,7 @@ export class Wire extends Tile {
     }
 
     listener(msg, data) {
-        console.log("Wire::listener", msg, data)
+        //console.log("Wire::listener", msg, data)
         // add wire
         let hook = document.querySelector("#wire ul")
         let newel = document.createElement("li")

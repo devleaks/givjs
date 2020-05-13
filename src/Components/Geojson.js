@@ -1,6 +1,7 @@
 /*  GeoJSON Utility Functions
  *
  */
+const LAYERNAME_PROPERTIES = ["layer", "layerName", "GROUP_NAME"]
 
 // assumed of type Feature, returns Feature's id or null
 export function getFeatureId(feature) {
@@ -14,6 +15,20 @@ export function getFeatureId(feature) {
         }
     }
     return null
+}
+
+
+export function getFeatureLayerName(feature, dflt = "Things") {
+    let layerName = false
+    if (feature.hasOwnProperty("properties")) {
+        let notdone = true
+        LAYERNAME_PROPERTIES.forEach(function(prop) {
+            if (feature.properties.hasOwnProperty(prop) && notdone) { // has name
+                layerName = feature.properties[prop]
+            }
+        })
+    }
+    return layerName ? layerName : dflt
 }
 
 

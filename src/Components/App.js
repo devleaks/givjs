@@ -19,9 +19,11 @@ import { Transport } from "./Transport"
 import { Flightboard } from "./Flightboard"
 import { MovementForecastChart } from "./Charts/MovementForecastChart"
 import { ParkingOccupancyChart } from "./Charts/ParkingOccupancyChart"
+import { ParkingOccupancy } from "./ParkingOccupancy"
 
 import { FeatureCollection } from "./FeatureCollection"
 
+import { APRONS_MAXCOUNT, HOME } from "./Constant"
 
 export class App {
 
@@ -70,7 +72,7 @@ export class App {
 
         this.dashboard.register("wire", new Wire("wire", "wire", {}))
 
-        let transport = new Transport("LGG", "flightboard")
+        let transport = new Transport(HOME, "flightboard")
 
         this.dashboard.register("flightboard", transport)
 
@@ -80,8 +82,8 @@ export class App {
         this.dashboard.register("flightboard", new MovementForecastChart("forecast-arrival", "flightboard", "arrival", transport, {}))
         this.dashboard.register("flightboard", new MovementForecastChart("forecast-departure", "flightboard", "departure", transport, {}))
         //                                                                                                                            1   2   3   4   5   6
-        this.dashboard.register("parking", new ParkingOccupancyChart("parking-occupancy", "parking", this.parkings, { aprons_max: [0, 29, 24, 22, 0, 5, 5] }))
-
+        this.dashboard.register("parking", new ParkingOccupancy("parking", this.parkings, this.omap, { aprons_max: APRONS_MAXCOUNT }))
+        this.dashboard.register("parking", new ParkingOccupancyChart("parking-occupancy", "parking", this.parkings, { aprons_max: APRONS_MAXCOUNT }))
     }
 
 
@@ -113,7 +115,7 @@ export class App {
             }
         }
 
-        let parking_busy = this.parkings.find("name", "27")
+        let parking_busy = this.parkings.find("name", "42")
         parking_busy.properties._style = parkingStyle.busy
         this.omap.update(parking_busy, "APRONS")
     }
