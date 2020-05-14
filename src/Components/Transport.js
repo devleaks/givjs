@@ -76,6 +76,7 @@ export class Transport extends Subscriber {
             f["from"] = data.airport
             f["to"] = this.base
         }
+        f["move"] = data.move
 
         if ([SCHEDULED, PLANNED, ACTUAL].indexOf(data.info) > -1) {
             f[data.info] = time // data.info must be SCHEDULED, PLANNED, or ACTUAL

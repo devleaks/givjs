@@ -30,6 +30,7 @@ import { Tile } from "./Tile"
 import { getFeatureLayerName } from "./GeoJSON"
 import { style, onEachFeature, pointToLayer, getFeatureLayer } from "./Style"
 
+import { randomSparklineDemo } from "./Charts/sparkline"
 /**
  *  DEFAULT VALUES
  */
@@ -189,11 +190,16 @@ export class Omap extends Tile {
         L.circle(tower, { radius: 160000, color: "blue", opacity: 0.3, weight: 1, fill: false }).addTo(radar)
         L.marker(tower, { icon: L.icon.pulse({ iconSize: [10, 10], color: "red" }) }).addTo(radar);
 
-        this.listen(this.listener.bind(this))
+        // test
+        L.marker([50.64, 5.47], {
+            icon: L.divIcon({
+                className: "gip-marker",
+                html: "<div id='apexsparkline'></div>"
+            })
+        }).addTo(this.map)
+        randomSparklineDemo("apexsparkline","line")
 
-        r1.resume()
-        r2.resume()
-        r3.resume()
+        this.listen(this.listener.bind(this))
 
         console.log("Map", "installed")
     }

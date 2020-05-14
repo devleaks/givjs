@@ -81,5 +81,4 @@ typings/
 # Nuxt.js build / generate output
 .nuxt
 dist
-
-fonts
+assets

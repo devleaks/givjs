@@ -42,13 +42,10 @@ const BOOTSTRAP_COLORS = [
     "warning",
     "info",
     "accent",
-    "default"
-]
-const BOOTSTRAP_COLOR_VARIANTS = [
-    "bright",
+    "muted",
     "light",
-    "normal",
-    "dark"
+    "dark",
+    "default"
 ]
 
 export class Wire extends Tile {
@@ -63,7 +60,7 @@ export class Wire extends Tile {
      */
     install() {
         // prepare wire element
-        let hook = document.querySelector("#wire")
+        let hook = document.querySelector("#"+this.elemid)
         let newel = document.createElement("ul")
         hook.appendChild(newel)
         this.listen(this.listener.bind(this))
@@ -89,7 +86,6 @@ export class Wire extends Tile {
             let last = document.querySelector("#wire ul li:last-child")
             hook.removeChild(last)
             allwires = document.querySelector("#wire ul li")
-            console.log("Wire::listener", "removed last")
         }
 
 
@@ -103,7 +99,6 @@ export class Wire extends Tile {
      */
     update() {
         this.cb = BOOTSTRAP_COLORS[0]
-        this.cv = BOOTSTRAP_COLOR_VARIANTS[0]
     }
 
 }

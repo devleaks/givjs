@@ -1,6 +1,7 @@
 /*  Base class for subscriber to Dispatcher messages
  */
 import { booleanPointInPolygon, booleanWithin } from "@turf/turf"
+import { deepExtend } from "./Utilities"
 
 
 export class FeatureCollection {
@@ -76,6 +77,12 @@ export class FeatureCollection {
     inside(bbox) {
         this.fc.features.filter(f => 
             booleanWithin(f, bbox))
+    }
+
+    addProperties(props) {
+        this.fc.features.forEach( (f) => {
+            f.properties = deepExtend(f.properties, props)
+        })
     }
 
 }

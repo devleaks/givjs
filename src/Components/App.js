@@ -23,8 +23,7 @@ import { ParkingOccupancy } from "./ParkingOccupancy"
 
 import { FeatureCollection } from "./FeatureCollection"
 
-import { APRONS_MAXCOUNT } from "./Constant"
-import { HOME, PARKINGS } from "./Config"
+import { HOME, PARKINGS, APRONS_MAXCOUNT } from "./Config"
 
 
 export class App {
@@ -66,10 +65,18 @@ export class App {
         // Add layers of information on map
         //this.taxiways = new FeatureCollection("src/data/eblg-taxiways.geojson")
         this.parkings = new FeatureCollection(PARKINGS)
+
+        this.parkings.addProperties({ // tooltip APRON / PARKING
+            "_templates": {
+                "show_label": true,
+                "tooltip": "{{feature.properties.apron}} / {{feature.properties.name}}"
+            }
+        })
+
         this.omap.addLayer("APRONS", "Airport")
         this.omap.add("APRONS", this.parkings)
 
-        //this.omap.addLayer("SERVICES", "Airport")
+        //this.omap.addLayer("SERVICES", "Airport") // now created antomagically
         //this.omap.addLayer("AIRCRAFTS", "Aircrafts")
 
         this.dashboard.register("wire", new Wire("wire", "wire", {}))
@@ -90,7 +97,6 @@ export class App {
 
 
     test() {
-        ;
     }
 
 

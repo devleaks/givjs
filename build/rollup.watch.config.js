@@ -4,7 +4,7 @@ import json from "rollup-plugin-json"
 import { eslint } from "rollup-plugin-eslint"
 import postcss from "rollup-plugin-postcss"
 import postcssImport from "postcss-import"
-import postcssUrl from "./plugins/postcssUrl"
+import postcssUrl from "./plugins/postcssUrl" // copied from https://github.com/pashaigood/bundlers-comparison
 
 import serve from "rollup-plugin-serve"
 import livereload from "rollup-plugin-livereload"
@@ -18,8 +18,8 @@ const Paths = {
   NODE_MODULES: `${CWD}/node_modules`
 }
 Object.assign(Paths, {
-  INPUT: Paths.SRC + "/index.js",
-  OUTPUT: Paths.DIST + "/index.js"
+  INPUT: Paths.SRC + "/app.js",
+  OUTPUT: Paths.DIST + "/app.js"
 })
 // `npm run build` -> `production` is true
 // `npm run dev` -> `production` is false
@@ -47,16 +47,16 @@ export default {
         }),
         eslint({
             include: [
-                "src/app.js",
-                "src/Components/**.js"
+                Paths.SRC+"/app.js",
+                Paths.SRC+"/Components/**.js"
             ]
         }),
         serve(),      // index.html should be in root of project
         livereload()
     ],
-    input: "src/app.js",
+    input: Paths.INPUT,
     output: {
-        file: "dist/app.js",
+        file: Paths.OUTPUT,
         format: "iife"
     }
 };

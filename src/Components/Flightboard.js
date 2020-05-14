@@ -40,6 +40,7 @@ export class Flightboard extends Tile {
         this.options = deepExtend(DEFAULTS, options)
         this.move = move
         this.flights = transport
+        this.lastLength = 0
         this.install()
     }
 
@@ -233,10 +234,11 @@ export class Flightboard extends Tile {
         if (farr.length < this.options.maxcount) {
             for (let i = farr.length; i < this.options.maxcount; i++) {
                 let tr = document.createElement("tr")
-                tr.appendChild(createTD(".".repeat(7), SOLARI))
-                tr.appendChild(createTD(".".repeat(3), SOLARI))
-                tr.appendChild(createTD(".".repeat(5), SOLARI))
-                tr.appendChild(createTD(".".repeat(5), SOLARI))
+                let clin = i < this.lastLength ? SOLARI : "" // simulate return to blank
+                tr.appendChild(createTD(".".repeat(7), clin))
+                tr.appendChild(createTD(".".repeat(3), clin))
+                tr.appendChild(createTD(".".repeat(5), clin))
+                tr.appendChild(createTD(".".repeat(5), clin))
                 tr.appendChild(createTD(""))
 
                 let td = document.createElement("td")
@@ -249,6 +251,9 @@ export class Flightboard extends Tile {
                 tbody.appendChild(tr)
             }
         }
+
+        this.lastLength = farr.length
+
 
         // Reset position of lines off the board...
         flights.forEach(f => {

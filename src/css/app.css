@@ -28,3 +28,16 @@ body {
 .tile {
     border: 1px solid lightgrey;
 }
+
+footer {
+    font-family: Helvetica, sans-serif;
+    font-size: 9px;
+    text-align: center;
+    padding: 4px;
+    color: #db2004;
+}
+
+footer a {
+    color: #db2004;
+    text-decoration: none;
+}
