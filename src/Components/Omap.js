@@ -31,6 +31,8 @@ import { getFeatureLayerName } from "./GeoJSON"
 import { style, onEachFeature, pointToLayer, getFeatureLayer } from "./Style"
 
 import { randomSparklineDemo } from "./Charts/sparkline"
+
+import { stopped } from "./Utils/stopped"
 /**
  *  DEFAULT VALUES
  */
@@ -197,16 +199,18 @@ export class Omap extends Tile {
                 html: "<div id='apexsparkline'></div>"
             })
         }).addTo(this.map)
-        randomSparklineDemo("apexsparkline","line")
+        randomSparklineDemo("apexsparkline", "line")
 
         this.listen(this.listener.bind(this))
 
         console.log("Map", "installed")
     }
 
+    // listener for PubSub
     listener(msg, data) {
         // console.log("Map::listener", msg, data)
         this.update(data)
+        stopped(data)
     }
 
 

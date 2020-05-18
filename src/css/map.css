@@ -1,6 +1,5 @@
 #map {
-    height: 800px;
-    width: 60%;
+  height: 700px;
 }
 
 .leaflet-control-layers-group label input.leaflet-control-layers-selector {

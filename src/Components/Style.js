@@ -3,7 +3,7 @@
  */
 import L from "leaflet"
 import moment from "moment"
-import chroma from "chroma-js"
+// import chroma from "chroma-js"
 import Mustache from "mustache"
 
 import { getFeatureId } from "./GeoJSON"
@@ -150,9 +150,10 @@ function getIcon(feature) {
         }
         if (feature.properties[HIDE_STYLE]["markerColor"]) {
             color = feature.properties[HIDE_STYLE]["markerColor"]
+            /*
             if (color.charAt(0) == "#") { // to avoid double quotes in html string...
                 color = "rgb(" + chroma(color).rgb().join(",") + ")"
-            }
+            }*/
         }
         if (feature.properties[HIDE_STYLE]["markerSize"]) {
             size = feature.properties[HIDE_STYLE]["markerSize"]
@@ -227,9 +228,10 @@ function bindTexts(feature, layer) {
                     case "sidebar":
                         if (DEFAULTS.info_content_id) {
                             layer.on("contextmenu", function() {
+                                console.log("Style::bindTexts: on context menu.")
                                 if (feature.properties._texts.hasOwnProperty("sidebar")) {
                                     let container = L.DomUtil.get(DEFAULTS.info_content_id)
-                                    container.innerHTML = content
+                                    container.innerHTML = feature.properties._texts["sidebar"]
                                 } else {
                                     console.log("Style::bindTexts: Warning - No sidebar text.", feature)
                                 }

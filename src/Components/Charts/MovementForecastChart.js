@@ -45,8 +45,7 @@ export class MovementForecastChart extends ApexTile {
                 data: [0, 0, 0, 0, 0, 0]
             }],
             chart: {
-                type: "bar",
-                height: 200
+                type: "bar"
             },
             plotOptions: {
                 bar: {

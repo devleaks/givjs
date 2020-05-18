@@ -43,8 +43,7 @@ export class ParkingOccupancyChart extends ApexTile {
             series: data,
             colors: APRONS_COLORS.slice(1, APRONS_COLORS.length),
             chart: {
-                height: 300,
-                type: "radialBar",
+                type: "radialBar"
             },
             plotOptions: {
                 radialBar: {

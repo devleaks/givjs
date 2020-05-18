@@ -10,13 +10,14 @@
 
 .flightboard {
     background-color: #222;
+    padding: 6px;
 }
 
 .flightboard table {
     border-spacing: 0px;
     border-collapse: collapse;
     background-color: #333;
-    margin: 10px;
+    width: 100%;
 }
 
 .flightboard th,

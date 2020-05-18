@@ -19,6 +19,6 @@ export class Tile extends Subscriber {
         let newel = document.createElement("div")
         newel.appendChild(formatter.render())
         hook.appendChild(newel)
-      }
-      
+    }
+
 }

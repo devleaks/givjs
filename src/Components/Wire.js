@@ -92,6 +92,7 @@ export class Wire extends Tile {
 
         const formatter = new JSONFormatter(data);
         newel.appendChild(formatter.render());
+        formatter.openAtDepth(0) // all closed. See https://github.com/mohsen1/json-formatter-js
 
     }
 

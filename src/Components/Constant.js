@@ -20,3 +20,9 @@ export const HIDE_TOUCHED = "_touched"
 export const HASDATA = "_data"
 
 export const APRONS_COLORS = ["#DDDDDD", "#008FFB", "#00E396", "#FEB019", "#DDDDDD", "#FF4560", "#775DD0"]
+
+// stopped messages
+export const STOPPED = "stopped"
+export const JUST_STOPPED = "just_stopped"
+export const JUST_STARTED = "just_started"
+export const MOVED = "moved"
