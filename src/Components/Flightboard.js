@@ -274,11 +274,15 @@ export class Flightboard extends Tile {
         // sugar flipper
         if (this.options.solari) {
             let els = document.getElementsByClassName(SOLARI)
-            for (let i = 0; i < els.length; i++) {
-                let el = els[i]
-                el.classList.remove(SOLARI)
-                let s = new flipper(el);
-                s.start();
+            if (els && els.length > 0) {
+                for (let i = 0; i < els.length; i++) {
+                    let el = els[i]
+                    el.classList.remove(SOLARI)
+                    let s = new flipper(el);
+                    s.start();
+                }
+            } else {
+                console.warn("Flightboard::updateBoard: no solari class")
             }
         }
     }

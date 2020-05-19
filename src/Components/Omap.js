@@ -210,6 +210,7 @@ export class Omap extends Tile {
     listener(msg, data) {
         // console.log("Map::listener", msg, data)
         this.update(data)
+        // experimental, generates extra events
         stopped(data)
     }
 

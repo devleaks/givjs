@@ -72,9 +72,7 @@ export class ParkingOccupancyChart extends ApexTile {
         let that = this
         let locallistener = function(msgtype, data) {
             //console.log("ParkingOccupancyChart::listener", msgtype, data)
-            if (that.move == data.move) {
-                that.updateParking(data)
-            }
+            that.updateParking(data)
         }
         this.listen(locallistener)
     }

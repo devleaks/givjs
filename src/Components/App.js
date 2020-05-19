@@ -20,7 +20,8 @@ import { Flightboard } from "./Flightboard"
 import { MovementForecastChart } from "./Charts/MovementForecastChart"
 import { ParkingOccupancyChart } from "./Charts/ParkingOccupancyChart"
 import { ParkingOccupancy } from "./ParkingOccupancy"
-
+import { TurnaroundGantt } from "./Charts/TurnaroundGantt"
+import { Clock } from "./Charts/Clock"
 import { FeatureCollection } from "./FeatureCollection"
 
 import { HOME, PARKINGS, APRONS_MAXCOUNT } from "./Config"
@@ -93,6 +94,11 @@ export class App {
         //                                                                                                                            1   2   3   4   5   6
         this.dashboard.register("parking", new ParkingOccupancy("parking", this.parkings, this.omap, { aprons_max: APRONS_MAXCOUNT }))
         this.dashboard.register("parking", new ParkingOccupancyChart("parking-occupancy", "parking", this.parkings, { aprons_max: APRONS_MAXCOUNT }))
+
+        this.dashboard.register("stopped", new TurnaroundGantt("turnaround-gantts", "stopped"))
+
+        this.dashboard.register("datetime", new Clock("clock", "datetime"))
+
     }
 
 

@@ -41,7 +41,7 @@ export class TurnaroundGantt extends ApexTile {
 
 
     listener(msg, data) {
-        console.log("TurnaroundGantt::listener", msg, data)
+        //console.log("TurnaroundGantt::listener", msg, data)
     }
 
 

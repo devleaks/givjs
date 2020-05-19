@@ -228,12 +228,16 @@ function bindTexts(feature, layer) {
                     case "sidebar":
                         if (DEFAULTS.info_content_id) {
                             layer.on("contextmenu", function() {
-                                console.log("Style::bindTexts: on context menu.")
                                 if (feature.properties._texts.hasOwnProperty("sidebar")) {
                                     let container = L.DomUtil.get(DEFAULTS.info_content_id)
-                                    container.innerHTML = feature.properties._texts["sidebar"]
+                                    if (container) {
+                                        container.innerHTML = feature.properties._texts["sidebar"]
+                                    } else {
+                                        console.log("Style::bindTexts: Sidebar text container not found", feature)
+
+                                    }
                                 } else {
-                                    console.log("Style::bindTexts: Warning - No sidebar text.", feature)
+                                    console.log("Style::bindTexts: Warning - No sidebar text", feature)
                                 }
                             })
                             bound.push(s)

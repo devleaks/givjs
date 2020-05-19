@@ -63,7 +63,10 @@ export class MovementForecastChart extends ApexTile {
                 colors: ["transparent"]
             },
             xaxis: {
-                categories: [0, 1, 2, 3, 4, 5],
+                categories: [0, 1, 2, 3, 4, 5]
+            },
+            yaxis: {
+                decimalsInFloat: 0
             },
             fill: {
                 opacity: 1
@@ -74,8 +77,12 @@ export class MovementForecastChart extends ApexTile {
         let that = this
         let locallistener = function(msgtype, data) {
             //console.log("MovementForecastChart::listener", msgtype, data, that.move)
-            if (that.move == data.move) {
-                that.updateChart()
+            if (data.hasOwnProperty("move")) {
+                if (that.move == data.move) {
+                    that.updateChart()
+                }
+            } else {
+                console.warn("MovementForecastChart::listener: data has no move info", data)
             }
         }
         this.listen(locallistener)
