@@ -8,6 +8,7 @@
 import { deepExtend } from "../Utilities"
 import { ApexTile } from "./ApexTile"
 
+import { booleanPointInPolygon } from "@turf/turf"
 import moment from "moment"
 
 /**
@@ -21,9 +22,10 @@ const DEFAULTS = {
 
 export class TurnaroundGantt extends ApexTile {
 
-    constructor(elemid, message_type, options) {
+    constructor(elemid, message_type, parkings, options) {
         super(elemid, message_type)
         this.options = deepExtend(DEFAULTS, options)
+        this.parkings = parkings
         this.charts = new Map()
         this.gantt =  new Map()
         this.install()
@@ -40,7 +42,17 @@ export class TurnaroundGantt extends ApexTile {
     }
 
 
-    listener(msg, data) {
+    listener(msg, feature) {
+        const parr = this.parkings.features.filter(f => booleanPointInPolygon(feature.geometry.coordinates, f))
+        if (parr.length > 0) {
+            const box = parr[0]
+            this.update({
+                parking: box.properties.name,
+                feature: feature
+            })
+        } else {
+            console.log("TurnaroundGantt::listener:stopped: not parked", feature)
+        }
         //console.log("TurnaroundGantt::listener", msg, data)
     }
 
@@ -220,7 +232,9 @@ export class TurnaroundGantt extends ApexTile {
 
     }
 
-    update() {
+    update(stopped) {
+        console.log("TurnaroundGantt::update", stopped)
+        return;
         if (stopped.feature.properties.type == "SERVICE") {
             const vehicle = stopped.feature.id
             const sarr = vehicle.split(':') // id = "catering:0"

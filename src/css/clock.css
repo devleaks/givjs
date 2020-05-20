@@ -17,10 +17,10 @@
 .minute,
 .hour {
   position: absolute;
-  height: 35px;
+  height: 32px;
   width: 6px;
   margin: auto;
-  top: -27%;
+  top: -32%;
   left: 0;
   bottom: 0;
   right: 0;
@@ -33,9 +33,9 @@
 
 .minute {
   position: absolute;
-  height: 40px;
+  height: 42px;
   width: 4px;
-  top: -40%;
+  top: -42%;
   left: 0;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.4);
   transform: rotate(90deg);
@@ -43,15 +43,15 @@
 
 .second {
   position: absolute;
-  height: 35px;
+  height: 40px;
   width: 2px;
   margin: auto;
-  top: -35%;
+  top: -40%;
   left: 0;
   bottom: 0;
   right: 0;
   border-radius: 4px;
-  background: #FF4B3E;
+  background: #db2004;
   transform-origin: bottom center;
   transform: rotate(180deg);
   z-index: 1;

@@ -50,6 +50,9 @@ export class Transport extends Subscriber {
                     console.log("Transport::no handler", msgtype)
                     break
             }
+            if(data.hasOwnProperty("timestamp")) {
+                PubSub.publish("datetime", data.timestamp)
+            }
         })
     }
 

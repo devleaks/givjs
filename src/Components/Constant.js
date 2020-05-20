@@ -26,3 +26,11 @@ export const STOPPED = "stopped"
 export const JUST_STOPPED = "just_stopped"
 export const JUST_STARTED = "just_started"
 export const MOVED = "moved"
+
+// other messages
+export const FLIGHTBOARD_MSG = "flightboard"
+export const PARKING_MSG = "parking"
+export const MAP_MSG = "map"
+export const WIRE_MSG = "wire"
+
+

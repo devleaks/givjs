@@ -8,7 +8,7 @@
     "eslint-config-mourner": "^3.0.0",
     "postcss-import": "^12.0.1",
     "postcss-url": "^8.0.0",
-    "rollup": "^2.10.2",
+    "rollup": "^2.10.5",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-eslint": "^7.0.0",
     "rollup-plugin-json": "^4.0.0",
@@ -20,7 +20,7 @@
   "dependencies": {
     "@ansur/leaflet-pulse-icon": "^0.1.1",
     "@turf/turf": "^5.1.6",
-    "apexcharts": "^3.19.0",
+    "apexcharts": "^3.19.2",
     "chroma-js": "^2.1.0",
     "grd": "^1.4.0",
     "json-formatter-js": "^2.3.4",
@@ -30,7 +30,7 @@
     "leaflet-groupedlayercontrol": "^0.6.1",
     "leaflet-rotatedmarker": "^0.2.0",
     "line-awesome": "^1.3.0",
-    "moment": "^2.25.3",
+    "moment": "^2.26.0",
     "mustache": "^4.0.1",
     "pubsub-js": "^1.8.0"
   },

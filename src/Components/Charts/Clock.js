@@ -8,7 +8,8 @@ import moment from "moment"
 import "../../css/clock.css"
 
 const DEFAULTS = {
-    inc: 1000
+    refresh: 1, //seconds
+    inc: 1 // seconds
 }
 
 export class Clock extends Subscriber {
@@ -17,28 +18,29 @@ export class Clock extends Subscriber {
         super(msgtype)
         this.options = deepExtend(DEFAULTS, options)
         this.elemid = elemid
+        this.date = moment()
         this.install()
         this.run()
     }
 
 
     run() {
-        let inc = this.options.inc;
+        let refresh = this.options.refresh * 1000;
         this.clock()
-        setInterval(this.clock.bind(this), inc)
+        if (this.running) {
+            clearInterval(this.running)
+            delete this.running
+        }
+        this.running = setInterval(this.clock.bind(this), refresh)
     }
 
 
-    clock(d = false) {
-        const date = d ? d : new Date();
+    clock() {
+        this.date.add(this.options.inc, "seconds")
 
-        const hours = ((date.getHours() + 11) % 12 + 1);
-        const minutes = date.getMinutes();
-        const seconds = date.getSeconds();
-
-        const hour = hours * 30;
-        const minute = minutes * 6;
-        const second = seconds * 6;
+        const hour = this.date.hours() * 30
+        const minute = this.date.minutes() * 6
+        const second = this.date.seconds() * 6
 
         document.querySelector('.hour').style.transform = `rotate(${hour}deg)`
         document.querySelector('.minute').style.transform = `rotate(${minute}deg)`
@@ -61,9 +63,33 @@ export class Clock extends Subscriber {
     }
 
 
+    setClock(d) {
+        this.date = d
+        this.run()
+    }
+
+
+    setInc(inc) {
+        this.options.inc = inc
+        this.run()
+    }
+
+    setRefresh(inc) {
+        this.options.refresh = refresh
+        this.run()
+    }
+
+
     // update display (html table)
-    updateClock(msgtype, date) {
-        let dt = moment(date)
-        clock(dt.toDate())
+    updateClock(msgtype, data) {
+        console.log("Clock::updateClock", msgtype, data)
+        switch(msgtype) {
+            case "datetime":
+            this.setClock(moment(data), moment.ISO_8601)
+            break
+            case "siminfo":
+            this.setClock(moment(data.timestamp), moment.ISO_8601)
+            this.setInc(data.speed)
+        }
     }
 }
