@@ -1,5 +1,5 @@
 /*
- *
+ *  Stolen here: https://codepen.io/dope/pen/KJYMZz
  */
 import { Subscriber } from "../Subscriber"
 import { deepExtend } from "../Utilities"

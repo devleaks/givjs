@@ -22,7 +22,7 @@ import "../../node_modules/@ansur/leaflet-pulse-icon/dist/L.Icon.Pulse.css"
 
 import "leaflet-rotatedmarker"
 
-import antPath from "leaflet-ant-path"
+import { AntPath } from "leaflet-ant-path"
 
 import { deepExtend } from "./Utilities"
 import { Tile } from "./Tile"
@@ -30,9 +30,10 @@ import { Tile } from "./Tile"
 import { getFeatureLayerName } from "./GeoJSON"
 import { style, onEachFeature, pointToLayer, getFeatureLayer } from "./Style"
 
-import { randomSparklineDemo } from "./Charts/sparkline"
+//import { randomSparklineDemo } from "./Charts/sparkline"
 
 import { stopped } from "./Utils/stopped"
+
 /**
  *  DEFAULT VALUES
  */
@@ -66,7 +67,6 @@ export class Omap extends Tile {
         this.layers = new Map()
         this.install()
     }
-
 
     /*  installs the HTML code in the document
      */
@@ -132,15 +132,15 @@ export class Omap extends Tile {
             "hardwareAccelerated": true
         }
 
-        let r1 = antPath.antPath([
+        let r1 = new AntPath([
                 [50.65367800515634, 5.469925403594971],
                 [50.645977340713586, 5.457737445831299]
             ], rabbit),
-            r2 = antPath.antPath([
+            r2 = new AntPath([
                 [50.62299029225287, 5.421152114868163],
                 [50.63156581667872, 5.434885025024414]
             ], rabbit),
-            r3 = antPath.antPath([
+            r3 = new AntPath([
                 [50.651766562235494, 5.462635159492493],
                 [50.64411320922499, 5.450441837310791]
             ], rabbit)
@@ -193,6 +193,7 @@ export class Omap extends Tile {
         L.marker(tower, { icon: L.icon.pulse({ iconSize: [10, 10], color: "red" }) }).addTo(radar);
 
         // test
+        /*
         L.marker([50.64, 5.47], {
             icon: L.divIcon({
                 className: "gip-marker",
@@ -200,7 +201,8 @@ export class Omap extends Tile {
             })
         }).addTo(this.map)
         randomSparklineDemo("apexsparkline", "line")
-
+        */
+        
         this.listen(this.listener.bind(this))
 
         console.log("Map", "installed")

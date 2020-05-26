@@ -1,6 +1,8 @@
-import resolve from "rollup-plugin-node-resolve"
-import commonjs from "rollup-plugin-commonjs"
-import json from "rollup-plugin-json"
+import resolve from "@rollup/plugin-node-resolve"
+import commonjs from "@rollup/plugin-commonjs"
+import json from "@rollup/plugin-json"
+import image from "@rollup/plugin-image"
+
 import { eslint } from "rollup-plugin-eslint"
 import postcss from "rollup-plugin-postcss"
 import postcssImport from "postcss-import"
@@ -29,6 +31,7 @@ export default {
         resolve(),
         commonjs(),
         json(),
+        image(),
         postcss({
             extract: true,
             plugins: [
