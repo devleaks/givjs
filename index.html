@@ -4,12 +4,13 @@
 <head>
     <title>Geo Intelligent Viewer JS 2020</title>
     <meta charset="utf-8" />
+    <meta name="description" content="Oscars' Geo Intelligent Viewer">
+    <meta name="keyword" content="oscars gip geo intelligent platform viewer">
+    <meta name="author" content="oscars">
     <link rel="icon" type="image/png" href="dist/favicon.png" />
     <!-- Structure of the page-->
+    <!-- App -->
     <link rel="stylesheet" href="dist/app.css" />
-    <style type="text/css">
-
-    </style>
 </head>
 
 <body data-client="oscars">
@@ -41,8 +42,10 @@
                 </div>
                 <div class="overview_card">
                     <div class="overview_card-info"><i class="las la-clock la-4x"></i></div>
-                    <div id="dark-toggle"></div>
-                    <div id="clock" class="overview_card-icon"></div>
+                    <div class="overview_card-icon">
+                        <div id="clock"></div>
+                        <div id="dark-toggle"></div>
+                    </div>
                 </div>
             </div>
             <div class="main_cards">
@@ -51,11 +54,36 @@
                 <div id="flightboard-departure" class="card"></div>
             </div>
         </main>
-        <footer class="footer">
-            <div class="footer_copyright">&copy; 2020 <a href="http://www.oscars-sa.eu/" title="Oscars s.a." alt="Oscars s.a.">Oscars s.a.</a></div>
-            <div class="footer_byline">designed by <a href="https://github.com/devleaks" title="Devleaks' github" alt="Devleaks' github">devleaks</a></div>
-        </footer>
+        <footer class="footer"></footer>
     </div>
+    <!--
+      --
+      --    TEMPLATES
+      --
+      -->
+    <template id="template-clock">
+        <div class="clock">
+            <div class="wrap">
+                <span class="hour"></span>
+                <span class="minute"></span>
+                <span class="second"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+    </template>
+    <template id="template-wire">
+        <ul class="wire">
+        </ul>
+    </template>
+    <template id="template-wire-el">
+        <li class="wire-el">
+        </li>
+    </template>
+    <!--
+      --
+      --    JAVASCRIPT (LAYOUT)
+      --
+      -->
     <script type="text/javascript">
     const menuIcon = document.querySelector('.menu-icon');
     const aside = document.querySelector('.aside');
@@ -77,6 +105,11 @@
         toggle(aside, 'active');
     });
     </script>
+    <!--
+      --
+      --    JAVASCRIPT (APP)
+      --
+      -->
     <script src="dist/app.js"></script>
 </body>
 

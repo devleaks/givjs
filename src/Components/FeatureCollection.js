@@ -16,17 +16,17 @@ export class FeatureCollection {
             if ((this.status >= 200 && this.status < 400) || (this.status == 0)) {
                 that.fc = JSON.parse(this.response)
             } else {
-                console.log("FeatureCollection::request.onload", this)
+                console.warn("FeatureCollection::request.onload", this)
             }
         }
 
         request.onerror = function() {
-            console.log("FeatureCollection::request.onerror")
+            console.error("FeatureCollection::request.onerror")
         }
 
         request.send()
 
-        console.log("FeatureCollection:loaded", this.fc)
+        console.log("FeatureCollection::constructor: loaded", url, this.fc)
     }
 
     get collection() {

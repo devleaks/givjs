@@ -1,3 +1,25 @@
+/* layout.css */
+
+
+/************************************
+    SUGGESTED LAYOUT
+  GRID:
+    +-------------------+
+    + A + HEADER        +
+    + S +---------------+
+    + I + MAIN          +
+    + D +---------------+
+    + E + FOOTER        + 
+    +-------------------+
+
+  Aside is a vertical flexbox, Header, Main, Footer are horizontal flexboxes.
+
+  Aside contains the wire, can potentially be equiped with TABS.
+  Header is a collection of highlighted widget.
+  Main is a collection of widgets. (The first one should be a map, that can stread as wide/high as necessary.)
+  Footer is a status line.
+
+ ************************************/
 body {
     margin: 0;
     padding: 0;

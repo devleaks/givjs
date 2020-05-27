@@ -1,27 +1,23 @@
-/**/
+/* dark.css: stolen from  */
 #light-dark-toggle-btn.toggle-btn {
     position: relative;
-    top: -30px;
     width: 36px;
     height: 19px;
     border-radius: 10px;
+    margin: 10px 35%;
 }
 
 #light-dark-toggle-btn input[type="checkbox"] {
     width: 100%;
     height: 100%;
     position: absolute;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
     margin: 0px;
     cursor: pointer;
     opacity: 0;
     z-index: 2;
 }
 
-/* First toggle btn */
+
 #light-dark-toggle-btn span {
     position: absolute;
     top: 0px;

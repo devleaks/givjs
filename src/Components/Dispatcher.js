@@ -53,7 +53,7 @@ export class Dispatcher {
                 let channelConnector = false
                 switch (channel) {
                     case "websocket":
-                        console.log("Dispatcher", channel, channelOptions)
+                        console.log("Dispatcher::install", channel, channelOptions)
                         channelConnector = new ChannelWebsocket(this, channelOptions)
                         break
                     default:
@@ -74,7 +74,7 @@ export class Dispatcher {
             try {
                 msg = JSON.parse(data)
             } catch (e) {
-                console.log("dispatch: cannot decode message", data, e)
+                console.error("Dispatcher::dispatch: cannot decode message", data, e)
             }
         } else {
             msg = data
@@ -86,10 +86,10 @@ export class Dispatcher {
                 PubSub.publish(msgtype, msg[this.options.PAYLOAD])
                 // console.log("Dispatcher::published", msgtype, msg[this.options.PAYLOAD])
             } catch (e) {
-                console.log("dispatch: problem during broadcast", msg[this.options.PAYLOAD], e)
+                console.warn("Dispatcher::dispatch: problem during broadcast", msg[this.options.PAYLOAD], e)
             }
         } else {
-            console.log("dispatch: message has no type or no payload", this.options.TYPE, this.options.PAYLOAD, data)
+            console.warn("Dispatcher::dispatch: message has no type or no payload", this.options.TYPE, this.options.PAYLOAD, data)
         }
     }
 

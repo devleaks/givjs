@@ -1,11 +1,11 @@
 /*
  *  Stolen here: https://codepen.io/dope/pen/KJYMZz
  */
-import { Subscriber } from "../Subscriber"
-import { deepExtend } from "../Utilities"
+import { Subscriber } from "./Subscriber"
+import { deepExtend } from "./Utilities"
 import moment from "moment"
 
-import "../../css/clock.css"
+import "../css/clock.css"
 
 const DEFAULTS = {
     refresh: 1, //seconds
@@ -37,15 +37,17 @@ export class Clock extends Subscriber {
 
     clock() {
         this.date.add(this.options.inc, "seconds")
+        this.date.local()
 
-        const hour = this.date.hours() * 30
-        const minute = this.date.minutes() * 6
-        const second = this.date.seconds() * 6
+        const seconds = this.date.seconds() * 6
+        const minutes = this.date.minutes() * 6
+        const hours = this.date.hours() * 30 + Math.floor( this.date.minutes() / 2 )
 
-        document.querySelector('.hour').style.transform = `rotate(${hour}deg)`
-        document.querySelector('.minute').style.transform = `rotate(${minute}deg)`
-        document.querySelector('.second').style.transform = `rotate(${second}deg)`
+        document.querySelector(".second").style.transform = `rotate(${seconds}deg)`
+        document.querySelector(".minute").style.transform = `rotate(${minutes}deg)`
+        document.querySelector(".hour").style.transform = `rotate(${hours}deg)`
     }
+
 
     install() {
         let el = document.getElementById(this.elemid)
@@ -74,7 +76,7 @@ export class Clock extends Subscriber {
         this.run()
     }
 
-    setRefresh(inc) {
+    setRefresh(refresh) {
         this.options.refresh = refresh
         this.run()
     }

@@ -1,3 +1,4 @@
+/* flightboard.css */
 @font-face {
     font-family: "Solari";
     src: url("fonts/Solari.woff") format("woff")
@@ -49,6 +50,7 @@
 
 .flightboard td:nth-last-child(2) {
     font-family: LED, Helvetica, Arial, sans-serif;
+    font-size: 0.80em;
     text-transform: capitalize;
     color: #FFD200;
     text-align: left;

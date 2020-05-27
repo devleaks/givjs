@@ -23,7 +23,6 @@ import "../../node_modules/@ansur/leaflet-pulse-icon/dist/L.Icon.Pulse.css"
 import "leaflet-rotatedmarker"
 
 import { AntPath } from "leaflet-ant-path"
-import "../css/leaflet-ant-path.css";
 
 import { deepExtend } from "./Utilities"
 import { Tile } from "./Tile"
@@ -36,7 +35,7 @@ import { style, onEachFeature, pointToLayer, getFeatureLayer } from "./Style"
 import { stopped } from "./Utils/stopped"
 
 
-import { MAP_MSG, DARK_MSG } from "./Constant"
+import { MAP_MSG, DARK_MSG, DARK, LIGHT } from "./Constant"
 
 /**
  *  DEFAULT VALUES
@@ -209,14 +208,14 @@ export class Omap extends Tile {
 
         this.listen(this.listener.bind(this))
 
-        console.log("Map::install", "installed")
+        console.log("Omap::install", "ready")
     }
 
     // listener for PubSub
     listener(msg, data) {
         switch (msg) {
             case MAP_MSG:
-                // console.log("Map::listener", msg, data)
+                // console.log("Omap::listener", msg, data)
                 this.update(data)
                 // experimental, generates extra events
                 stopped(data)
@@ -230,7 +229,7 @@ export class Omap extends Tile {
     // switch layers for day/night modes
     dark(mode) {
         const that = this
-        if (mode) {
+        if (mode == DARK) {
             document.documentElement.setAttribute("data-theme", "dark")
             document.documentElement.className = "theme-dark";
             this.options.themes.dark.forEach(function f(l) {
@@ -239,7 +238,7 @@ export class Omap extends Tile {
             this.options.themes.light.forEach(function f(l) {
                 that.map.removeLayer(l)
             })
-        } else {
+        } else if (mode == LIGHT) {
             document.documentElement.setAttribute("data-theme", "light")
             document.documentElement.className = "theme-light";
             this.options.themes.light.forEach(function f(l) {
@@ -248,6 +247,8 @@ export class Omap extends Tile {
             this.options.themes.dark.forEach(function f(l) {
                 that.map.removeLayer(l)
             })
+        } else {
+            console.warn("Omap::dark: invalid mode",mode)
         }
     }
 
@@ -261,7 +262,7 @@ export class Omap extends Tile {
         }).addTo(this.map)
         this.layers.set(layerName, layer)
         this.layerControl.addOverlay(layer, layerName, groupName)
-        console.log("OMap::addLayer", "added", layerName, groupName)
+        console.log("Omap::addLayer", "added", layerName, groupName)
         return layer
     }
 
@@ -291,7 +292,7 @@ export class Omap extends Tile {
                 layer.removeLayer(featureLayer)
             }
         } else {
-            console.log("OMap::update", "layer not found", layerName)
+            console.log("Omap::update", "layer not found", layerName)
         }
     }
 

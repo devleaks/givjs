@@ -26,10 +26,4 @@ export class Dashboard {
         this.tiles.set(name, tile)
     }
 
-
-    changeTheme(theme) {
-        this.theme = theme
-    }
-
-
 }

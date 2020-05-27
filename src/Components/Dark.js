@@ -7,9 +7,10 @@
  */
 
 import PubSub from "pubsub-js"
-import { DARK_MSG } from "./Constant"
+import { MAP_MSG, DARK_MSG, DARK, LIGHT, LOCALSTORAGE_DARK } from "./Constant"
 
 import "../css/dark.css"
+
 
 /**
  *  DEFAULT VALUES
@@ -20,12 +21,13 @@ export class Dark {
     constructor(elemid) {
         this.elemid = elemid
 
-        this.dark = localStorage.getItem("theme")
-        if (this.dark === null) {
-            this.dark = false
-            localStorage.setItem("theme", this.dark)
+        this.dark = localStorage.getItem(LOCALSTORAGE_DARK)
+        if (this.dark != LIGHT && this.dark != DARK) {
+            this.dark = LIGHT // can't localstore true or false
+            localStorage.setItem(LOCALSTORAGE_DARK, this.dark)
         }
         this.install()
+        PubSub.publish(DARK_MSG, this.dark)
     }
 
     /*  installs the HTML code in the document
@@ -38,14 +40,14 @@ export class Dark {
         let input = document.createElement("input")
         input.setAttribute("id", BUTTON_ID)
         input.setAttribute("type", "checkbox")
-        input.checked = this.dark
+        input.checked = (this.dark == DARK) // checked, true if DARK
 
         let span = document.createElement("span")
 
         const that = this
         input.addEventListener("change", function() {
-            that.dark = !that.dark
-            localStorage.setItem("theme", that.dark)
+            that.dark = (that.dark == DARK ? LIGHT : DARK)
+            localStorage.setItem(LOCALSTORAGE_DARK, that.dark)
             PubSub.publish(DARK_MSG, that.dark)
         })
 

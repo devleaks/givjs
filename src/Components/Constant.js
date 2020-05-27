@@ -33,5 +33,10 @@ export const FLIGHTBOARD_MSG = "flightboard"
 export const PARKING_MSG = "parking"
 export const MAP_MSG = "map"
 export const WIRE_MSG = "wire"
-export const DARK = "dark"
 export const DARK_MSG = "dark"
+export const FOOTER_MSG = "footer"
+
+//
+export const LOCALSTORAGE_DARK = "theme"
+export const DARK = "dark"
+export const LIGHT = "light"

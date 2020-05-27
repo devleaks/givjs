@@ -15,6 +15,7 @@ import { Dashboard } from "./Dashboard"
 
 // Tiles
 import { Dark } from "./Dark"
+import { Footer } from "./Footer"
 import { Omap } from "./Omap"
 import { Wire } from "./Wire"
 import { Transport } from "./Transport"
@@ -23,12 +24,13 @@ import { MovementForecastChart } from "./Charts/MovementForecastChart"
 import { ParkingOccupancyChart } from "./Charts/ParkingOccupancyChart"
 import { ParkingOccupancy } from "./ParkingOccupancy"
 import { TurnaroundGantt } from "./Charts/TurnaroundGantt"
-import { Clock } from "./Charts/Clock"
+import { Clock } from "./Clock"
 import { FeatureCollection } from "./FeatureCollection"
 
 import { WS_URL, HOME, PARKINGS, APRONS_MAXCOUNT } from "./Config"
+import { DEPARTURE, ARRIVAL } from "./Constant"
 import { STOPPED, JUST_STOPPED, JUST_STARTED, MOVED } from "./Constant"
-import { FLIGHTBOARD_MSG, WIRE_MSG, MAP_MSG, PARKING_MSG, DARK_MSG } from "./Constant"
+import { FOOTER_MSG, FLIGHTBOARD_MSG, WIRE_MSG, MAP_MSG, PARKING_MSG, DARK_MSG } from "./Constant"
 
 
 export class App {
@@ -41,7 +43,7 @@ export class App {
 
 
     run() {
-        console.log("app is running...")
+        console.log("App::run", "running...")
     }
 
 
@@ -57,8 +59,7 @@ export class App {
             }
         })
 
-        // eslint-disable-next-line no-unused-vars
-        let dark = new Dark("dark-toggle")  // just installs day/night toggle
+        let footer = new Footer(FOOTER_MSG, "Welcome") // just installs day/night toggle
 
         this.omap = new Omap("map", [MAP_MSG, DARK_MSG], {
             center: [50.64, 5.445],
@@ -91,27 +92,28 @@ export class App {
 
         this.dashboard.register("flightboard", transport)
 
-        this.dashboard.register("flightboard", new Flightboard("flightboard-arrival", FLIGHTBOARD_MSG, "arrival", transport, {}))
-        this.dashboard.register("flightboard", new Flightboard("flightboard-departure", FLIGHTBOARD_MSG, "departure", transport, {}))
+        this.dashboard.register("flightboard", new Flightboard("flightboard-arrival", FLIGHTBOARD_MSG, ARRIVAL, transport, {}))
+        this.dashboard.register("flightboard", new Flightboard("flightboard-departure", FLIGHTBOARD_MSG, DEPARTURE, transport, {}))
 
-        this.dashboard.register("flightboard", new MovementForecastChart("forecast-arrival", FLIGHTBOARD_MSG, "arrival", transport, {}))
-        this.dashboard.register("flightboard", new MovementForecastChart("forecast-departure", FLIGHTBOARD_MSG, "departure", transport, {}))
+        this.dashboard.register("flightboard", new MovementForecastChart("forecast-arrival", FLIGHTBOARD_MSG, ARRIVAL, transport, {}))
+        this.dashboard.register("flightboard", new MovementForecastChart("forecast-departure", FLIGHTBOARD_MSG, DEPARTURE, transport, {}))
         //                                                                                                                            1   2   3   4   5   6
         this.dashboard.register("parking", new ParkingOccupancy("parking", this.parkings, this.omap, { aprons_max: APRONS_MAXCOUNT }))
         this.dashboard.register("parking", new ParkingOccupancyChart("parking-occupancy", PARKING_MSG, this.parkings, { aprons_max: APRONS_MAXCOUNT }))
 
         this.dashboard.register("stopped", new TurnaroundGantt("turnaround-gantts", [STOPPED, JUST_STOPPED, JUST_STARTED, MOVED], this.parkings))
 
-        this.dashboard.register("datetime", new Clock("clock",["datetime","siminfo"]))
+        this.dashboard.register("datetime", new Clock("clock", ["datetime", "siminfo"]))
+
+
+        // eslint-disable-next-line no-unused-vars
+        let dark = new Dark("dark-toggle") // just installs day/night toggle
+        footer.say("Geo Intelligent Viewer ready")
 
     }
 
 
     test() {
-    }
 
-
-    changeTheme(theme) {
-        console.log("theme changed", theme)
     }
 }

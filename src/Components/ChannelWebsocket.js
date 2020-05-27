@@ -25,10 +25,10 @@ export class ChannelWebsocket extends Channel {
         let that = this
 
         ws.onopen = function() {
-            console.log("ChannelWebsocket: Socket is opened", new Date())
+            console.log("ChannelWebsocket::install: Socket is opened", new Date())
         }
         ws.onclose = function(e) {
-            console.log("ChannelWebsocket: Socket is closed. Reconnect will be attempted in " + that.options.reconnect_retry + " second.", e.reason)
+            console.log("ChannelWebsocket::install: Socket is closed. Reconnect will be attempted in " + that.options.reconnect_retry + " second.", e.reason)
             setTimeout(function() {
                 that.install()
             }, that.options.reconnect_retry * 1000)
@@ -38,7 +38,7 @@ export class ChannelWebsocket extends Channel {
             try {
                 that.dispatcher.dispatch(evt.data)
             } catch (e) {
-                console.log("ChannelWebsocket: cannot send message", e)
+                console.error("ChannelWebsocket::install cannot send message", e)
             }
         }
     }
