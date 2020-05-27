@@ -14,6 +14,7 @@ import { Dashboard } from "./Dashboard"
 //import L from "leaflet"
 
 // Tiles
+import { Dark } from "./Dark"
 import { Omap } from "./Omap"
 import { Wire } from "./Wire"
 import { Transport } from "./Transport"
@@ -27,7 +28,7 @@ import { FeatureCollection } from "./FeatureCollection"
 
 import { WS_URL, HOME, PARKINGS, APRONS_MAXCOUNT } from "./Config"
 import { STOPPED, JUST_STOPPED, JUST_STARTED, MOVED } from "./Constant"
-import { FLIGHTBOARD_MSG, WIRE_MSG, MAP_MSG, PARKING_MSG } from "./Constant"
+import { FLIGHTBOARD_MSG, WIRE_MSG, MAP_MSG, PARKING_MSG, DARK_MSG } from "./Constant"
 
 
 export class App {
@@ -56,7 +57,10 @@ export class App {
             }
         })
 
-        this.omap = new Omap("map", MAP_MSG, {
+        // eslint-disable-next-line no-unused-vars
+        let dark = new Dark("dark-toggle")  // just installs day/night toggle
+
+        this.omap = new Omap("map", [MAP_MSG, DARK_MSG], {
             center: [50.64, 5.445],
             zoom: 14,
             zoom_overview: 8

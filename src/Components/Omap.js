@@ -23,6 +23,7 @@ import "../../node_modules/@ansur/leaflet-pulse-icon/dist/L.Icon.Pulse.css"
 import "leaflet-rotatedmarker"
 
 import { AntPath } from "leaflet-ant-path"
+import "../css/leaflet-ant-path.css";
 
 import { deepExtend } from "./Utilities"
 import { Tile } from "./Tile"
@@ -33,6 +34,9 @@ import { style, onEachFeature, pointToLayer, getFeatureLayer } from "./Style"
 //import { randomSparklineDemo } from "./Charts/sparkline"
 
 import { stopped } from "./Utils/stopped"
+
+
+import { MAP_MSG, DARK_MSG } from "./Constant"
 
 /**
  *  DEFAULT VALUES
@@ -202,18 +206,49 @@ export class Omap extends Tile {
         }).addTo(this.map)
         randomSparklineDemo("apexsparkline", "line")
         */
-        
+
         this.listen(this.listener.bind(this))
 
-        console.log("Map", "installed")
+        console.log("Map::install", "installed")
     }
 
     // listener for PubSub
     listener(msg, data) {
-        // console.log("Map::listener", msg, data)
-        this.update(data)
-        // experimental, generates extra events
-        stopped(data)
+        switch (msg) {
+            case MAP_MSG:
+                // console.log("Map::listener", msg, data)
+                this.update(data)
+                // experimental, generates extra events
+                stopped(data)
+                break
+            case DARK_MSG:
+                this.dark(data)
+        }
+    }
+
+
+    // switch layers for day/night modes
+    dark(mode) {
+        const that = this
+        if (mode) {
+            document.documentElement.setAttribute("data-theme", "dark")
+            document.documentElement.className = "theme-dark";
+            this.options.themes.dark.forEach(function f(l) {
+                l.addTo(that.map)
+            })
+            this.options.themes.light.forEach(function f(l) {
+                that.map.removeLayer(l)
+            })
+        } else {
+            document.documentElement.setAttribute("data-theme", "light")
+            document.documentElement.className = "theme-light";
+            this.options.themes.light.forEach(function f(l) {
+                l.addTo(that.map)
+            })
+            this.options.themes.dark.forEach(function f(l) {
+                that.map.removeLayer(l)
+            })
+        }
     }
 
 

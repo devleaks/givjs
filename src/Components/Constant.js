@@ -12,6 +12,7 @@ export const ACTUAL = "actual"
 export const BUSY = "busy"
 export const AVAILABLE = "available"
 
+
 // Feature properties
 export const HIDE_FEATURE = "_feature"
 export const HIDE_LAYER = "_layer"
@@ -32,5 +33,5 @@ export const FLIGHTBOARD_MSG = "flightboard"
 export const PARKING_MSG = "parking"
 export const MAP_MSG = "map"
 export const WIRE_MSG = "wire"
-
-
+export const DARK = "dark"
+export const DARK_MSG = "dark"
