@@ -152,7 +152,7 @@ const SPARKLINES = {
 export function randomSparklineDemo(el, t = false) {
     let types = Object.keys(SPARKLINES)
     let type = t ? t : types[Math.floor(Math.random() * types.length)]
-    var chart = new ApexCharts(document.querySelector("#" + el), SPARKLINES[type]);
+    var chart = new ApexCharts(document.getElementById(el), SPARKLINES[type]);
     chart.render();
 }
 
@@ -171,5 +171,5 @@ export function sparkline(el, type, data, width = 40, height = 20) {
     options.chart.width = width
     options.chart.height = height
     // chart.render();
-    return new ApexCharts(document.querySelector("#" + el), options);
+    return new ApexCharts(document.getElementById(el), options);
 }

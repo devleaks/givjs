@@ -12,7 +12,8 @@ import { sparkline } from "./Charts/sparkline"
 import { HIDE_FEATURE, HIDE_STYLE, HIDE_TOUCHED, APRONS_COLORS, HASDATA } from "./Constant"
 
 // possible property names for rotation. Must be a number
-const ROATION_PROPERTIES = ["heading", "bearing", "orientation", "orient"]
+const ROTATION_PROPERTIES = ["heading", "bearing", "orientation", "orient"]
+const ROTATION_PROPERTY = "_rotation"
 
 const DEFAULTS = {
     markerSymbol: "map-marker",
@@ -85,7 +86,7 @@ function getRotation(feature) {
     let rotation = 0.0
     if (feature.hasOwnProperty("properties")) {
         let notdone = true
-        ROATION_PROPERTIES.forEach(function(prop) {
+        ROTATION_PROPERTIES.forEach(function(prop) {
             if (feature.properties.hasOwnProperty(prop) && notdone) { // has rotation
                 let r = parseFloat(feature.properties[prop])
                 if (!isNaN(r)) {
@@ -110,11 +111,11 @@ function getRotation(feature) {
 
 
 function getMarker(feature, latlng) {
-    feature._rotation = getRotation(feature)
+    feature.properties[ROTATION_PROPERTY] = getRotation(feature)
     //console.log("Style::getMarker", feature, latlng)
     return L.marker(latlng, {
         icon: getIcon(feature),
-        rotationAngle: feature._rotation
+        rotationAngle: feature.properties[ROTATION_PROPERTY]
     })
 }
 

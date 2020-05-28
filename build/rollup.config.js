@@ -18,7 +18,10 @@ import clean from "rollup-plugin-clean"
 
 import pkg from "../package.json"
 
-process.env.NODE_ENV = "development"
+const DEVELOPMENT = "development"
+const PRODUCTION  = "production"
+
+process.env.NODE_ENV = DEVELOPMENT
 
 const CWD = process.cwd()
 const Paths = {
@@ -71,7 +74,7 @@ export default {
                 }))
             }
         },
-        ...(process.env.NODE_ENV === "production" ? [
+        ...(process.env.NODE_ENV === PRODUCTION ? [
             terser()
         ] : [])
     ],

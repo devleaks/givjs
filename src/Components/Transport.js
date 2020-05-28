@@ -6,13 +6,19 @@
  * Install map in div
  */
 import { Subscriber } from "./Subscriber"
+
 import moment from "moment"
+import PubSub from "pubsub-js"
 
-import { SCHEDULED, PLANNED, ACTUAL, DEPARTURE, ARRIVAL, CLOCK_MSG } from "./Constant"
-/**
- *  DEFAULT VALUES
+import { FLIGHTBOARD_MSG, CLOCK_MSG, SCHEDULED, PLANNED, ACTUAL, DEPARTURE, ARRIVAL } from "./Constant"
 
-Transport record:
+
+export function mkTransfortId(transport) {
+    return transport.name + "-" + transport.scheduled.toISOString()
+}
+
+
+/** Transport record:
 "SN123-2020-05-10T12:34:56.789+02:00": {
     name: "SN123",
     from: "EBBR",       // either is === this.base
@@ -22,12 +28,6 @@ Transport record:
     actual: moment()
 }
 */
-
-export function mkTransfortId(transport) {
-    return transport.name + "-" + transport.scheduled.toISOString()
-}
-
-
 export class Transport extends Subscriber {
 
     constructor(base, msgtype) {
@@ -44,7 +44,7 @@ export class Transport extends Subscriber {
         this.listen((msgtype, data) => {
             //console.log("Transport::listen", msgtype, data)
             switch (msgtype) {
-                case "flightboard":
+                case FLIGHTBOARD_MSG:
                     that.updateOnFlightboard(data)
                     break
                 default:

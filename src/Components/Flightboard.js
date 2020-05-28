@@ -71,19 +71,12 @@ export class Flightboard extends Tile {
         let el = document.getElementById(this.elemid)
         el.innerHTML = html
 
-        //@todo:Use .bind() or arrow function
-        let that = this
-        let locallistener = function(msgtype, data) {
-            if (that.move == data.move) {
-                that.update()
-            }
-        }
-        this.listen(locallistener)
+        this.listen(this.update.bind(this))
     }
 
 
     // update display (html table)
-    update(datetime = false) {
+    update(msgtype, data, datetime = false) {
         /*
         function getTime(f) { // returns the most recent known time for flight
             let t = f.hasOwnProperty(SCHEDULED) ? f[SCHEDULED] : false
@@ -95,6 +88,11 @@ export class Flightboard extends Tile {
             return t
         }
         */
+        if (this.move != data.move) {
+            return false
+        }
+
+
         function createTD(text, classes = "") {
             let td = document.createElement("td")
             classes.split(" ").forEach(classname => {

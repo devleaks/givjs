@@ -39,7 +39,7 @@ export class MovementForecastChart extends ApexTile {
     /*  installs the HTML code in the document
      */
     install() {
-        this.chart = new ApexCharts(document.querySelector("#" + this.elemid), {
+        this.chart = new ApexCharts(document.getElementById(this.elemid), {
             series: [{
                 name: this.move,
                 data: [0, 0, 0, 0, 0, 0]
@@ -92,19 +92,20 @@ export class MovementForecastChart extends ApexTile {
     // update display (html table)
     updateChart(datetime = false) {
         let ts = datetime ? datetime : moment() // default to now
+        ts.local()
 
         // sort flights to show most maxcount relevant flights for move
         // 1. Recently landed
         // 2. Arriving soon
         // 3. Arriving later
         // Remove landed more than 30min earlier
-        let that = this
         let hours = Array(24).fill(0)
         let flights = this.flights.getScheduledTransports(this.move, datetime)
 
         flights.forEach(f => {
             if (!f.hasOwnProperty(ACTUAL)) { // if not arrived/departed
                 let t = Transport.getTime(f)
+                t.local()
                 hours[t.hours()]++
             }
         })

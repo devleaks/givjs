@@ -23,7 +23,11 @@ export class Dashboard {
 
 
     register(name, tile) {
-        this.tiles.set(name, tile)
+        if (Array.isArray(name)) {
+            name.forEach( (n) => this.tiles.set(n, tile) )
+        } else {
+            this.tiles.set(name, tile)
+        }
     }
 
 }

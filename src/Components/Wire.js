@@ -65,7 +65,7 @@ export class Wire extends Tile {
      * installs the HTML code in the document
      */
     install() {
-        let hook = document.querySelector("#"+this.elemid)
+        let hook = document.querySelector("#" + this.elemid)
         let newel = document.createElement("ul")
         hook.appendChild(newel)
         this.listen(this.listener.bind(this))
@@ -90,11 +90,11 @@ export class Wire extends Tile {
     listener(msg, data) {
         //console.log("Wire::listener", msg, data)
         // add wire
-        let hook = document.querySelector("#wire ul")
+        let hook = document.querySelector("#" + this.elemid + " ul")
         let newel = document.createElement("li")
         newel.innerHTML = data.subject
 
-        let first = document.querySelector("#wire ul li:first-child")
+        let first = document.querySelector("#" + this.elemid + " ul li:first-child")
 
         if (!first) { // we insert the first elem
             hook.appendChild(newel)
@@ -102,11 +102,11 @@ export class Wire extends Tile {
             hook.insertBefore(newel, first)
         }
 
-        let allwires = document.querySelectorAll("#wire ul li")
+        let allwires = document.querySelectorAll("#" + this.elemid + " ul li")
         while (allwires.length > this.options.maxentries) {
-            let last = document.querySelector("#wire ul li:last-child")
+            let last = document.querySelector("#" + this.elemid + " ul li:last-child")
             hook.removeChild(last)
-            allwires = document.querySelector("#wire ul li")
+            allwires = document.querySelector("#" + this.elemid + " ul li")
         }
 
 

@@ -39,7 +39,7 @@ export class ParkingOccupancyChart extends ApexTile {
      */
     install() {
         let data = this.aprons.slice(1, this.aprons.length)
-        this.chart = new ApexCharts(document.querySelector("#" + this.elemid), {
+        this.chart = new ApexCharts(document.getElementById(this.elemid), {
             series: data,
             colors: APRONS_COLORS.slice(1, APRONS_COLORS.length),
             chart: {

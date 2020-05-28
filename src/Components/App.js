@@ -21,6 +21,7 @@ import { Flightboard } from "./Flightboard"
 import { MovementForecastChart } from "./Charts/MovementForecastChart"
 import { ParkingOccupancyChart } from "./Charts/ParkingOccupancyChart"
 import { ParkingOccupancy } from "./ParkingOccupancy"
+import { Rotation } from "./Rotation"
 import { TurnaroundGantt } from "./Charts/TurnaroundGantt"
 
 // Utilities
@@ -109,7 +110,12 @@ export class App {
         this.dashboard.register("parking", new ParkingOccupancy("parking", this.parkings, this.omap, { aprons_max: APRONS_MAXCOUNT }))
         this.dashboard.register("parking", new ParkingOccupancyChart("parking-occupancy", PARKING_MSG, this.parkings, { aprons_max: APRONS_MAXCOUNT }))
 
-        this.dashboard.register("stopped", new TurnaroundGantt("turnaround-gantts", [STOPPED, JUST_STOPPED, JUST_STARTED, MOVED], this.parkings))
+
+        let rotations = new Rotation([STOPPED, JUST_STOPPED, JUST_STARTED, MOVED], this.parkings)
+
+        this.dashboard.register([STOPPED, JUST_STOPPED, JUST_STARTED, MOVED], rotations)
+
+        this.dashboard.register("stopped", new TurnaroundGantt("turnaround-gantts", [STOPPED, JUST_STOPPED, JUST_STARTED, MOVED], this.parkings, rotations))
 
         this.dashboard.register("datetime", new Clock("clock", [CLOCK_MSG, SIMULATION_MSG]))
 

@@ -8,7 +8,6 @@
 import { deepExtend } from "../Utilities"
 import { ApexTile } from "./ApexTile"
 
-import { booleanPointInPolygon } from "@turf/turf"
 import moment from "moment"
 
 /**
@@ -35,25 +34,15 @@ export class TurnaroundGantt extends ApexTile {
      */
     install() {
         // prepare wire element
-        let hook = document.querySelector("#" + this.elemid)
+        let hook = document.getElementById(this.elemid)
         let newel = document.createElement("ul")
         hook.appendChild(newel)
-        this.listen(this.listener.bind(this))
+        // this.listen(this.listener.bind(this))
     }
 
 
     listener(msg, feature) {
-        const parr = this.parkings.features.filter(f => booleanPointInPolygon(feature.geometry.coordinates, f))
-        if (parr.length > 0) {
-            const box = parr[0]
-            this.update({
-                parking: box.properties.name,
-                feature: feature
-            })
-        } else {
-            console.log("TurnaroundGantt::listener:stopped: not parked", feature)
-        }
-        //console.log("TurnaroundGantt::listener", msg, data)
+        console.log("TurnaroundGantt::listener", msg, feature)
     }
 
 
@@ -70,7 +59,7 @@ export class TurnaroundGantt extends ApexTile {
             newel.appendChild(newdiv)
             hook.appendChild(newel)
 
-            chart = new ApexCharts(document.querySelector("#" + id), {
+            chart = new ApexCharts(document.getElementById(id), {
                 series: chartdata,
                 chart: {
                     height: 150,
@@ -235,59 +224,6 @@ export class TurnaroundGantt extends ApexTile {
     update(stopped) {
         console.log("TurnaroundGantt::update", stopped)
         return;
-        if (stopped.feature.properties.type == "SERVICE") {
-            const vehicle = stopped.feature.id
-            const sarr = vehicle.split(':') // id = "catering:0"
-            const service = sarr[0]
-            let r = this.gantt.get('' + stopped.parking)
-            let create = false
-
-            if (!r) { // we see a service vehicle before the plane, we need to record it...
-                r = {
-                    services: {}
-                }
-                create = true
-                console.log("TurnaroundGantt::update", "service arrived before plane?", stopped)
-            }
-
-            if (!r.departure) {
-                if (r.arrival) {
-                    console.log("TurnaroundGantt::update", "service has arrival", r, stopped)
-                    r.departure = Oscars.Util.getDepartureFlight(r.arrival.name)
-                    if (r.departure) {
-                        console.log("TurnaroundGantt::update", "service has departure", r, stopped)
-                    }
-                } else {
-                    console.log("TurnaroundGantt::update", "service has no flight assigned", r, stopped)
-                }
-            }
-
-            r.services[service] = r.services.hasOwnProperty(service) ?
-                r.services[service] : {}
-            let thisservice = r.services[service]
-
-            thisservice[vehicle] = thisservice.hasOwnProperty(vehicle) ?
-                thisservice[vehicle] : {}
-
-            let thisvehicle = thisservice[vehicle]
-
-            console.log("TurnaroundGantt::update", moment().valueOf(), stopped.feature)
-
-            if (!thisvehicle.hasOwnProperty("firstseen")) {
-                // console.log("TurnaroundGantt::update: First visit...", moment(stopped.feature.properties._timestamp_emission, moment.ISO_8601).valueOf(), stopped.feature)
-                // console.log("TurnaroundGantt::update: First visit...", StackTrace.getSync())
-                thisvehicle.firstseen = moment(stopped.feature.properties._timestamp_emission, moment.ISO_8601).valueOf()
-            } else {
-                console.log("TurnaroundGantt::update: Second visit...", thisvehicle.firstseen, moment(stopped.feature.properties._timestamp_emission, moment.ISO_8601).valueOf(), stopped.feature)
-                // console.log("TurnaroundGantt::update: Second visit...", StackTrace.getSync())
-            }
-            thisvehicle.lastseen = moment(stopped.feature.properties._timestamp_emission, moment.ISO_8601).valueOf()
-
-            // do we need to push r back on map??
-            this.gantt.set('' + stopped.parking, r)
-
-            create_update_chart(parking)
-        }
     }
 
 }
