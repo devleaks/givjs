@@ -5,20 +5,25 @@
  *
  * Install map in div
  */
+import "leaflet/dist/leaflet.css"
 import "../css/map.css"
 
-import L from "leaflet"
-import "../../node_modules/leaflet/dist/leaflet.css"
-
+// older libs:
 // these just "load" js and hook to L.control
+import L from "leaflet"
+
 import "leaflet-groupedlayercontrol"
-import "../../node_modules/leaflet-groupedlayercontrol/dist/leaflet.groupedlayercontrol.min.css"
+import "leaflet-groupedlayercontrol/dist/leaflet.groupedlayercontrol.min.css"
 
 import "leaflet-betterscale/L.Control.BetterScale.js"
-import "../../node_modules/leaflet-betterscale/L.Control.BetterScale.css"
+import "leaflet-betterscale/L.Control.BetterScale.css"
 
 import "@ansur/leaflet-pulse-icon"
-import "../../node_modules/@ansur/leaflet-pulse-icon/dist/L.Icon.Pulse.css"
+import "@ansur/leaflet-pulse-icon/dist/L.Icon.Pulse.css"
+
+// newer libs
+// import as module
+import { Map as LeafletMap, TileLayer, LayerGroup, GeoJSON as GeoJSONLAyer, Marker, Circle, ImageOverlay, LatLng, LatLngBounds } from "leaflet"
 
 import "leaflet-rotatedmarker"
 
@@ -61,7 +66,11 @@ const DEFAULTS = {
     }
 }
 
-
+/**
+ * Map widget
+ *
+ * @class      Omap (name)
+ */
 export class Omap extends Tile {
 
     constructor(elemid, message_type, options) {
@@ -71,29 +80,30 @@ export class Omap extends Tile {
         this.install()
     }
 
-    /*  installs the HTML code in the document
+    /**
+     *  installs the HTML code in the document
      */
     install() {
-        let OpenStreetMap_France = L.tileLayer("https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png", {
+        let OpenStreetMap_France = new TileLayer("https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png", {
             maxZoom: 20,
             attribution: "&copy; Openstreetmap France | &copy; <a href='https://www.openstreetmap.org/copyright0'>OpenStreetMap</a> contributors"
         });
 
-        let OpenTopoMap = L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", {
+        let OpenTopoMap = new TileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", {
             maxZoom: 17,
             attribution: "Map data: &copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors, <a href='http://viewfinderpanoramas.org'>SRTM</a> | Map style: &copy; <a href='https://opentopomap.org'>OpenTopoMap</a> (<a href='https://creativecommons.org/licenses/by-sa/3.0/'>CC-BY-SA</a>)"
         });
 
-        let Stadia_AlidadeSmoothDark = L.tileLayer("https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png", {
+        let Stadia_AlidadeSmoothDark = new TileLayer("https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png", {
             maxZoom: 20,
             attribution: "&copy; <a href='https://stadiamaps.com/''>Stadia Maps</a>, &copy; <a href='https://openmaptiles.org/''>OpenMapTiles</a> &copy; <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors"
         });
 
-        let Esri_WorldImagery = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
+        let Esri_WorldImagery = new TileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
             attribution: "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
         });
 
-        let CartoDB_DarkMatterNoLabels = L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png", {
+        let CartoDB_DarkMatterNoLabels = new TileLayer("https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png", {
             attribution: "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors &copy; <a href='https://carto.com/attributions'>CARTO</a>",
             subdomains: "abcd",
             maxZoom: 19
@@ -107,17 +117,17 @@ export class Omap extends Tile {
             "ESRI World Imagery": Esri_WorldImagery
         };
 
-        let airportOverlay = new L.ImageOverlay("src/data/EBLG_GMC01_v13.svg", new L.LatLngBounds(
-            new L.LatLng(50.62250, 5.41630), // en bas à gauche
-            new L.LatLng(50.65655, 5.47567)), { // en haut à droite 
+        let airportOverlay = new ImageOverlay("src/data/EBLG_GMC01_v13.svg", new LatLngBounds(
+            new LatLng(50.62250, 5.41630), // en bas à gauche
+            new LatLng(50.65655, 5.47567)), { // en haut à droite 
             opacity: 0.8
         });
 
         // S W N E: 50.62250,5.41630,50.65655,5.47567
 
-        let airportNightOverlay = new L.ImageOverlay("src/data/EBLG_GMC01_v13-night.svg", new L.LatLngBounds(
-            new L.LatLng(50.62250, 5.41630), // en bas à gauche
-            new L.LatLng(50.65655, 5.47567)), { // en haut à droite 
+        let airportNightOverlay = new ImageOverlay("src/data/EBLG_GMC01_v13-night.svg", new LatLngBounds(
+            new LatLng(50.62250, 5.41630), // en bas à gauche
+            new LatLng(50.65655, 5.47567)), { // en haut à droite 
             opacity: 1
         });
 
@@ -148,7 +158,7 @@ export class Omap extends Tile {
                 [50.64411320922499, 5.450441837310791]
             ], rabbit)
 
-        let night = L.layerGroup([airportNightOverlay, r1, r2, r3]),
+        let night = new LayerGroup([airportNightOverlay, r1, r2, r3]),
             day = airportOverlay
 
         this.options.layers = [OpenStreetMap_France]
@@ -170,7 +180,7 @@ export class Omap extends Tile {
         }
 
 
-        this.map = L.map(this.options.elemid, {
+        this.map = new LeafletMap(this.options.elemid, { // Map() is JS ES6 object
             center: this.options.center,
             zoom: this.options.zoom,
             layers: this.options.layers,
@@ -190,10 +200,15 @@ export class Omap extends Tile {
 
         // decoration
         const tower = [50.63725474594362, 5.453993082046508]
-        let radar = L.layerGroup().addTo(this.map)
-        L.circle(tower, { radius: 80000, color: "red", opacity: 0.3, weight: 1, fill: false }).addTo(radar)
-        L.circle(tower, { radius: 160000, color: "blue", opacity: 0.3, weight: 1, fill: false }).addTo(radar)
-        L.marker(tower, { icon: L.icon.pulse({ iconSize: [10, 10], color: "red" }) }).addTo(radar);
+        let radar = new LayerGroup()
+        radar.addTo(this.map)
+
+        let redCircle = new Circle(tower, { radius: 80000, color: "red", opacity: 0.3, weight: 1, fill: false })
+        redCircle.addTo(radar)
+        let blueCicle = new Circle(tower, { radius: 160000, color: "blue", opacity: 0.3, weight: 1, fill: false })
+        blueCicle.addTo(radar)
+        let towerPulse = new Marker(tower, { icon: L.icon.pulse({ iconSize: [10, 10], color: "red" }) })
+        towerPulse.addTo(radar);
 
         // test
         /*
@@ -206,28 +221,64 @@ export class Omap extends Tile {
         randomSparklineDemo("apexsparkline", "line")
         */
 
-        this.listen(this.listener.bind(this))
+        this.listen(this.update.bind(this))
 
         console.log("Omap::install", "ready")
     }
 
-    // listener for PubSub
-    listener(msg, data) {
+
+    /**
+     * Listener entry point
+     *
+     * @param      {String}  msg     The message
+     * @param      {Object}  data    The data
+     */
+    update(msg, data) {
         switch (msg) {
             case MAP_MSG:
                 // console.log("Omap::listener", msg, data)
-                this.update(data)
+                this.updateOnMap(data)
                 // experimental, generates extra events
                 stopped(data)
                 break
             case DARK_MSG:
-                this.dark(data)
+                this.updateOnDark(data)
         }
     }
 
 
-    // switch layers for day/night modes
-    dark(mode) {
+    /**
+     * Update single GeoJSON feature in optionnaly supplied layer.
+     * If leayer name is not supplied, try to guess it from feature's properties.
+     * If not found, use default generic layer (named "Other").
+     *
+     * @param      {Object}   feature     The feature
+     * @param      {String}  [ln=false]   The layer name
+     */
+    updateOnMap(feature, ln = false) {
+        let layerName = ln || getFeatureLayerName(feature)
+        let layer = this.layers.get(layerName)
+        if (!layer) { // we create a new layer for these things
+            layer = this.addLayer(layerName, "Other")
+        }
+        if (layer) {
+            let featureLayer = getFeatureLayer(feature)
+            layer.addData(feature)
+            if (featureLayer) {
+                layer.removeLayer(featureLayer)
+            }
+        } else {
+            console.warn("Omap::update", "layer not found", layerName)
+        }
+    }
+
+
+    /**
+     * Update map layers on day/night light/dark mode switch.
+     *
+     * @param      {String}  mode    The mode {DARK|LIGHT}.
+     */
+    updateOnDark(mode) {
         const that = this
         if (mode == DARK) {
             document.documentElement.setAttribute("data-theme", "dark")
@@ -248,14 +299,20 @@ export class Omap extends Tile {
                 that.map.removeLayer(l)
             })
         } else {
-            console.warn("Omap::dark: invalid mode",mode)
+            console.warn("Omap::dark: invalid mode", mode)
         }
     }
 
 
-    // Add empty but styled GeoJSON layer to map
+    /**
+     * Adds a layer.
+     *
+     * @param      {<type>}  layerName  The layer name
+     * @param      {<type>}  groupName  The group name
+     * @return     {<type>}  { description_of_the_return_value }
+     */
     addLayer(layerName, groupName) {
-        let layer = L.geoJSON(undefined, {
+        let layer = new GeoJSONLAyer(undefined, {
             pointToLayer: pointToLayer,
             style: style,
             onEachFeature: onEachFeature
@@ -266,33 +323,19 @@ export class Omap extends Tile {
         return layer
     }
 
-    /*  addData on geojson
+
+    /**
+     * Add GeoJSON to named layer.
+     *
+     * @param      {String}  layerName  The layer name
+     * @param      {Object}  geojson    GeoJSON object
      */
     add(layerName, geojson) {
         let layer = this.layers.get(layerName)
         if (layer) {
             layer.addData(geojson)
         } else {
-            console.log("Omap::add", "layer not found", layerName, layer)
-        }
-    }
-
-    /*  update single GeoJSON feature
-     */
-    update(feature, ln = false) {
-        let layerName = ln || getFeatureLayerName(feature)
-        let layer = this.layers.get(layerName)
-        if (!layer) { // we create a new layer for these things
-            layer = this.addLayer(layerName, "Other")
-        }
-        if (layer) {
-            let featureLayer = getFeatureLayer(feature)
-            layer.addData(feature)
-            if (featureLayer) {
-                layer.removeLayer(featureLayer)
-            }
-        } else {
-            console.log("Omap::update", "layer not found", layerName)
+            console.warn("Omap::add", "layer not found", layerName, layer)
         }
     }
 

@@ -73,7 +73,7 @@ export class Flightboard extends Tile {
         let that = this
         let locallistener = function(msgtype, data) {
             if (that.move == data.move) {
-                that.updateBoard()
+                that.update()
             }
         }
         this.listen(locallistener)
@@ -81,7 +81,7 @@ export class Flightboard extends Tile {
 
 
     // update display (html table)
-    updateBoard(datetime = false) {
+    update(datetime = false) {
         /*
         function getTime(f) { // returns the most recent known time for flight
             let t = f.hasOwnProperty(SCHEDULED) ? f[SCHEDULED] : false
@@ -282,7 +282,7 @@ export class Flightboard extends Tile {
                     s.start();
                 }
             } else {
-                console.warn("Flightboard::updateBoard: no solari class")
+                console.warn("Flightboard::update: no solari class")
             }
         }
     }

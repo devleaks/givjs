@@ -6,6 +6,11 @@ import { Subscriber } from "./Subscriber"
 
 import "../css/footer.css"
 
+/**
+ * This class describes the HTML page footer.
+ *
+ * @class      Footer (name)
+ */
 export class Footer extends Subscriber {
 
     constructor(msgtype, message) {
@@ -29,11 +34,22 @@ export class Footer extends Subscriber {
     }
 
 
+    /**
+     * Listener for footer update messages.
+     *
+     * @param      {<type>}  msg     The message
+     * @param      {<type>}  data    The data
+     */
     update(msg, data) {
         this.say(data)
     }
 
 
+    /**
+     * Update footer's central text message. Should be one liner, max ~60 character long. (No check.)
+     *
+     * @param      {String}  message  The message to display.
+     */
     say(message) {
         this.message = message
         this.install()

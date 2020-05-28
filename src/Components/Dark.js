@@ -7,7 +7,7 @@
  */
 
 import PubSub from "pubsub-js"
-import { MAP_MSG, DARK_MSG, DARK, LIGHT, LOCALSTORAGE_DARK } from "./Constant"
+import { DARK_MSG, DARK, LIGHT, LOCALSTORAGE_DARK } from "./Constant"
 
 import "../css/dark.css"
 
@@ -29,6 +29,7 @@ export class Dark {
         this.install()
         PubSub.publish(DARK_MSG, this.dark)
     }
+
 
     /*  installs the HTML code in the document
      */

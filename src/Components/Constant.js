@@ -35,6 +35,8 @@ export const MAP_MSG = "map"
 export const WIRE_MSG = "wire"
 export const DARK_MSG = "dark"
 export const FOOTER_MSG = "footer"
+export const CLOCK_MSG = "clock"
+export const SIMULATION_MSG = "siminfo"
 
 //
 export const LOCALSTORAGE_DARK = "theme"

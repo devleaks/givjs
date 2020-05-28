@@ -1,0 +1,87 @@
+doctype html
+head
+  title Geo Intelligent Viewer JS 2020
+  meta(charset='utf-8')
+  meta(name='description' content="Oscars' Geo Intelligent Viewer")
+  meta(name='keyword' content='oscars gip geo intelligent platform viewer')
+  meta(name='author' content='oscars')
+  link(rel='icon' type='image/png' href='dist/favicon.png')
+  // Structure of the page
+  // App
+  link(rel='stylesheet' href='dist/app.css')
+.grid-container
+  .menu-icon
+    i.las.la-bars
+  aside.aside
+    .aside_close-icon
+      i.las.la-times
+    #side-info.aside-card
+    #wire.aside-card
+    #turnaround-gantts.aside-card
+  main.main
+    .main_overview
+      .overview_card
+        .overview_card-info
+          i.las.la-plane.la-4x
+          i.las.la-parking.la-4x
+        #parking-occupancy.overview_card-icon
+      .overview_card
+        .overview_card-info
+          i.las.la-plane-arrival.la-4x
+        #forecast-arrival.overview_card-icon
+      .overview_card
+        .overview_card-info
+          i.las.la-plane-departure.la-4x
+        #forecast-departure.overview_card-icon
+      .overview_card
+        .overview_card-info
+          i.las.la-clock.la-4x
+        .overview_card-icon
+          #clock
+          #dark-toggle
+    .main_cards
+      #map.card
+      #flightboard-arrival.card
+      #flightboard-departure.card
+  footer.footer
+//
+  --
+  --    TEMPLATES
+  --
+template#template-clock
+  .clock
+    .wrap
+      span.hour
+      span.minute
+      span.second
+      span.dot
+template#template-wire
+  ul.wire
+template#template-wire-el
+  li.wire-el
+//
+  --
+  --    JAVASCRIPT (LAYOUT)
+  --
+script(type='text/javascript').
+  const menuIcon = document.querySelector('.menu-icon');
+  const aside = document.querySelector('.aside');
+  const asideClose = document.querySelector('.aside_close-icon');
+  function toggle(el, className) {
+  if (el.classList.contains(className)) {
+  el.classList.remove(className);
+  } else {
+  el.classList.add(className);
+  }
+  }
+  menuIcon.addEventListener('click', function() {
+  toggle(aside, 'active');
+  });
+  asideClose.addEventListener('click', function() {
+  toggle(aside, 'active');
+  });
+//
+  --
+  --    JAVASCRIPT (APP)
+  --
+script(src='dist/app.js')

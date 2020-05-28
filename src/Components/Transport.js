@@ -8,7 +8,7 @@
 import { Subscriber } from "./Subscriber"
 import moment from "moment"
 
-import { SCHEDULED, PLANNED, ACTUAL, DEPARTURE, ARRIVAL } from "./Constant"
+import { SCHEDULED, PLANNED, ACTUAL, DEPARTURE, ARRIVAL, CLOCK_MSG } from "./Constant"
 /**
  *  DEFAULT VALUES
 
@@ -38,27 +38,41 @@ export class Transport extends Subscriber {
         this.install()
     }
 
+
     install() {
         let that = this
         this.listen((msgtype, data) => {
             //console.log("Transport::listen", msgtype, data)
             switch (msgtype) {
                 case "flightboard":
-                    that.updateFlight(data)
+                    that.updateOnFlightboard(data)
                     break
                 default:
-                    console.log("Transport::no handler", msgtype)
+                    console.log("Transport::no listener", msgtype)
                     break
             }
             if(data.hasOwnProperty("timestamp")) {
-                PubSub.publish("datetime", data.timestamp)
+                PubSub.publish(CLOCK_MSG, data.timestamp)
             }
         })
     }
 
-    /*
+
+    /**
+     * Update for flights
+     *
+     * @param      {Object}  data    The data.
+     * {
+     *   flight: "SN123",
+     *   parking: "A51",
+     *   airport: "BRU",
+     *   move: {"departure"|"arrival"},
+     *   date: "2020-05-29",
+     *   time: "17:35",
+     *   info: {"scheduled"|"planned"|"actual"}
+     * }
      */
-    updateFlight(data) {
+    updateOnFlightboard(data) {
         let f = this.transports.get(data.flight)
         let time = moment(data.date + " " + data.time, data.info == SCHEDULED ? "YYYY-MM-DD HH:mm" : "DD/MM HH:mm")
         let id = data.flight + "-" + time.toISOString(true)
@@ -93,11 +107,13 @@ export class Transport extends Subscriber {
         this.transports.set(data.flight, f)
     }
 
+
     /*
      */
     isDeparture(transport) {
         return transport.from == this.base
     }
+
 
     /*
      */
@@ -105,11 +121,13 @@ export class Transport extends Subscriber {
         return transport.to == this.base
     }
 
+
     /*  transport = "SN123" or { name: "SN123" ... }
      */
     get(transport) {
         return this.transports.get(transport)
     }
+
 
     /*  get next departure transport from same parking space if known
      */
@@ -124,6 +142,7 @@ export class Transport extends Subscriber {
         }
         return departing[0]
     }
+
 
     // filter Map() and returns array of flight data
     getScheduledTransports(move, datefrom, maxcount) {
@@ -143,6 +162,7 @@ export class Transport extends Subscriber {
         transports = transports.sort((a, b) => a.scheduled.isBefore(b.scheduled))
         return transports.slice(0, maxcount)
     }
+
 
     static getTime(flight) { // returns the most recent known time for flight
         let t = false

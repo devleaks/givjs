@@ -5,8 +5,8 @@
  *
  * GIP Viewer Application. Initiates a dashboard and registers Tile in it.
  */
-import "../../node_modules/line-awesome/dist/font-awesome-line-awesome/css/all.css"
-import "../../node_modules/line-awesome/dist/line-awesome/css/line-awesome.css"
+import "line-awesome/dist/font-awesome-line-awesome/css/all.css"
+import "line-awesome/dist/line-awesome/css/line-awesome.css"
 
 import "../css/layout.css"
 import "../css/app.css"
@@ -30,7 +30,7 @@ import { FeatureCollection } from "./FeatureCollection"
 import { WS_URL, HOME, PARKINGS, APRONS_MAXCOUNT } from "./Config"
 import { DEPARTURE, ARRIVAL } from "./Constant"
 import { STOPPED, JUST_STOPPED, JUST_STARTED, MOVED } from "./Constant"
-import { FOOTER_MSG, FLIGHTBOARD_MSG, WIRE_MSG, MAP_MSG, PARKING_MSG, DARK_MSG } from "./Constant"
+import { CLOCK_MSG, SIMULATION_MSG, FOOTER_MSG, FLIGHTBOARD_MSG, WIRE_MSG, MAP_MSG, PARKING_MSG, DARK_MSG } from "./Constant"
 
 
 export class App {
@@ -103,11 +103,11 @@ export class App {
 
         this.dashboard.register("stopped", new TurnaroundGantt("turnaround-gantts", [STOPPED, JUST_STOPPED, JUST_STARTED, MOVED], this.parkings))
 
-        this.dashboard.register("datetime", new Clock("clock", ["datetime", "siminfo"]))
-
+        this.dashboard.register("datetime", new Clock("clock", [CLOCK_MSG, SIMULATION_MSG]))
 
         // eslint-disable-next-line no-unused-vars
         let dark = new Dark("dark-toggle") // just installs day/night toggle
+
         footer.say("Geo Intelligent Viewer ready")
 
     }

@@ -21,8 +21,7 @@ Object.assign(Paths, {
   INPUT: Paths.SRC + "/index.js",
   OUTPUT: Paths.DIST + "/index.js"
 })
-// `npm run build` -> `production` is true
-// `npm run dev` -> `production` is false
+
 
 export default {
     plugins: [

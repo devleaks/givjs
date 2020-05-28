@@ -31,14 +31,25 @@ export class ParkingOccupancy extends Subscriber {
     }
 
 
-    /*  installs the HTML code in the document
+    /**
+     * Installs the tile.
      */
     install() {
-        this.listen(this.updateParking.bind(this))
+        this.listen(this.update.bind(this))
     }
 
 
-    updateParking(msgtype, parking) {
+    /**
+     * Listener for "parking" messages.
+     *
+     * @param      {String}  msgtype  The msgtype
+     * @param      {Object}  parking  The parking. Parking object is as follow:
+     * {
+     *   name: "A51",
+     *   available: {"busy"|"available"}
+     * }
+     */
+    update(msgtype, parking) {
         const box = this.parkings.find(this.options.parking_id, parking.name)
         if (box) {
             box.properties._style = {
@@ -55,6 +66,6 @@ export class ParkingOccupancy extends Subscriber {
                 this.aprons[box.properties.apron] = this.aprons[box.properties.apron] == 0 ? 0 : this.aprons[box.properties.apron] - 1
             }
         }
-        this.map.update(box, "APRONS")
+        this.map.update(box, "APRONS") // should pass layer name as option
     }
 }
