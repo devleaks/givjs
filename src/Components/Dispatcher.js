@@ -49,7 +49,7 @@ export class Dispatcher {
     install() {
         for (let channel in this.options.channels) {
             if (this.options.channels.hasOwnProperty(channel)) {
-               let channelOptions = this.options.channels[channel]
+                let channelOptions = this.options.channels[channel]
                 let channelConnector = false
                 switch (channel) {
                     case "websocket":
@@ -67,6 +67,20 @@ export class Dispatcher {
     }
 
 
+    /**
+     * Dispatch message to viewer
+     *
+     * @param      {Object}  data    The data
+     * {
+            type: "map",            // <== destination of message
+            payload: {              // <== payload sent to destination, in this case payload is a Feature.
+                type: "Feature",
+                geometry: {},
+                properties: {},
+                id: "id"    
+            }
+        }
+     */
     dispatch(data) {
         let msg = null
 
@@ -86,7 +100,7 @@ export class Dispatcher {
                 PubSub.publish(msgtype, msg[this.options.PAYLOAD])
                 // console.log("Dispatcher::published", msgtype, msg[this.options.PAYLOAD])
             } catch (e) {
-                console.warn("Dispatcher::dispatch: problem during broadcast", msg[this.options.PAYLOAD], e)
+                console.error("Dispatcher::dispatch: problem during broadcast", msg[this.options.PAYLOAD], e)
             }
         } else {
             console.warn("Dispatcher::dispatch: message has no type or no payload", this.options.TYPE, this.options.PAYLOAD, data)

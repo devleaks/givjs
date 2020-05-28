@@ -1,14 +1,14 @@
 doctype html
 head
   title Geo Intelligent Viewer JS 2020
-  meta(charset='utf-8')
-  meta(name='description' content="Oscars' Geo Intelligent Viewer")
-  meta(name='keyword' content='oscars gip geo intelligent platform viewer')
-  meta(name='author' content='oscars')
-  link(rel='icon' type='image/png' href='dist/favicon.png')
+  meta(charset="utf-8")
+  meta(name="description" content="Oscars' Geo Intelligent Viewer")
+  meta(name="keyword" content="oscars gip geo intelligent platform viewer")
+  meta(name="author" content="oscars")
+  link(rel="icon" type="image/png" href="dist/favicon.png")
   // Structure of the page
   // App
-  link(rel='stylesheet' href='dist/app.css')
+  link(rel="stylesheet" href="dist/app.css")
 .grid-container
   .menu-icon
     i.las.la-bars
@@ -63,10 +63,10 @@ template#template-wire-el
   --
   --    JAVASCRIPT (LAYOUT)
   --
-script(type='text/javascript').
-  const menuIcon = document.querySelector('.menu-icon');
-  const aside = document.querySelector('.aside');
-  const asideClose = document.querySelector('.aside_close-icon');
+script(type="text/javascript").
+  const menuIcon = document.querySelector(".menu-icon");
+  const aside = document.querySelector(".aside");
+  const asideClose = document.querySelector(".aside_close-icon");
   function toggle(el, className) {
   if (el.classList.contains(className)) {
   el.classList.remove(className);
@@ -74,14 +74,14 @@ script(type='text/javascript').
   el.classList.add(className);
   }
   }
-  menuIcon.addEventListener('click', function() {
-  toggle(aside, 'active');
+  menuIcon.addEventListener("click", function() {
+  toggle(aside, "active");
   });
-  asideClose.addEventListener('click', function() {
-  toggle(aside, 'active');
+  asideClose.addEventListener("click", function() {
+  toggle(aside, "active");
   });
 //
   --
   --    JAVASCRIPT (APP)
   --
-script(src='dist/app.js')
+script(src="dist/app.js")

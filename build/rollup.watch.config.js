@@ -3,11 +3,13 @@ import commonjs from "@rollup/plugin-commonjs"
 import json from "@rollup/plugin-json"
 import image from "@rollup/plugin-image"
 
+import pug from "rollup-plugin-pug"
+
 import { eslint } from "rollup-plugin-eslint"
 import postcss from "rollup-plugin-postcss"
 import postcssImport from "postcss-import"
-import postcssUrl from "./plugins/postcssUrl" // copied from https://github.com/pashaigood/bundlers-comparison
-
+import postcssUrl from "./plugins/postcssUrl"
+import clean from "rollup-plugin-clean"
 import serve from "rollup-plugin-serve"
 import livereload from "rollup-plugin-livereload"
 
@@ -23,8 +25,6 @@ Object.assign(Paths, {
   INPUT: Paths.SRC + "/app.js",
   OUTPUT: Paths.DIST + "/app.js"
 })
-// `npm run build` -> `production` is true
-// `npm run dev` -> `production` is false
 
 export default {
     plugins: [
@@ -32,6 +32,7 @@ export default {
         commonjs(),
         json(),
         image(),
+        pug(),
         postcss({
             extract: true,
             plugins: [

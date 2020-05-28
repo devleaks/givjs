@@ -48,6 +48,8 @@ export class Flightboard extends Tile {
     /*  installs the HTML code in the document
      */
     install() {
+        // let elhtml = document.getElementById("template-"+this.elemid)
+        // let html == elhtml.innerHTML
         let html = `
 <div id='${ this.elemid }' class="flightboard">
     <table>

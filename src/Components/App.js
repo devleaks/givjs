@@ -14,8 +14,6 @@ import { Dashboard } from "./Dashboard"
 //import L from "leaflet"
 
 // Tiles
-import { Dark } from "./Dark"
-import { Footer } from "./Footer"
 import { Omap } from "./Omap"
 import { Wire } from "./Wire"
 import { Transport } from "./Transport"
@@ -24,15 +22,25 @@ import { MovementForecastChart } from "./Charts/MovementForecastChart"
 import { ParkingOccupancyChart } from "./Charts/ParkingOccupancyChart"
 import { ParkingOccupancy } from "./ParkingOccupancy"
 import { TurnaroundGantt } from "./Charts/TurnaroundGantt"
+
+// Utilities
+import { Dark } from "./Dark"
+import { Footer } from "./Footer"
 import { Clock } from "./Clock"
 import { FeatureCollection } from "./FeatureCollection"
 
+// Shared constant
 import { WS_URL, HOME, PARKINGS, APRONS_MAXCOUNT } from "./Config"
 import { DEPARTURE, ARRIVAL } from "./Constant"
 import { STOPPED, JUST_STOPPED, JUST_STARTED, MOVED } from "./Constant"
 import { CLOCK_MSG, SIMULATION_MSG, FOOTER_MSG, FLIGHTBOARD_MSG, WIRE_MSG, MAP_MSG, PARKING_MSG, DARK_MSG } from "./Constant"
 
 
+/**
+ * Main
+ *
+ * @class      App (name)
+ */
 export class App {
 
     constructor(options) {

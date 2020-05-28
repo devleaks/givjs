@@ -1,9 +1,5 @@
 /*
- * GIP Viewer
- * 2017-2020 Pierre M
- * License: MIT
- *
- * Install map in div
+ *  Stolen from https://codepen.io/himalayasingh/pen/PdqbqV
  */
 
 import PubSub from "pubsub-js"

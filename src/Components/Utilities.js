@@ -1,17 +1,14 @@
 /*
- * jQuery Oscars GIP Map Widget Helper
- * 2017 Pierre M
- * License: MIT
-
  *  Helper functions.
  */
-const VERSION = "1.0.0"
-const MODULE_NAME = "Utilities"
 
-/*
- * deepExtend({}, objA, objB)
+/**
+ * Add a lsit of object's properties to the first one, recursively.
+ *
+ * @param      {list of Objects}  out     List of objects
+ * @return     {Object}  The first object of the list, augmented with the properties of the following object(s).
  */
-function deepExtend(out) {
+export function deepExtend(out) {
   out = out || {};
 
   for (let i = 1; i < arguments.length; i++) {
@@ -36,28 +33,3 @@ function deepExtend(out) {
 
   return out;
 }
-
-// Check property existance
-function isSet(property) {
-    return typeof property != "undefined" && (property || property === false);
-}
-
-function nvl(val, dft) {
-    return isSet(val) ? val : dft
-}
-
-//
-
-/**
- *  MODULE EXPORTS
- */
-function version() {
-    console.log(MODULE_NAME, VERSION);
-}
-
-export {
-    version,
-    deepExtend,
-    nvl
-}
-

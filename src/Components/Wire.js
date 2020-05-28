@@ -48,6 +48,11 @@ const BOOTSTRAP_COLORS = [
     "default"
 ]
 
+/**
+ * Class that implement a list of messages (wire-elements) to display.
+ *
+ * @class      Wire (name)
+ */
 export class Wire extends Tile {
 
     constructor(elemid, message_type, options) {
@@ -56,16 +61,32 @@ export class Wire extends Tile {
         this.install()
     }
 
-    /*  installs the HTML code in the document
+    /**
+     * installs the HTML code in the document
      */
     install() {
-        // prepare wire element
         let hook = document.querySelector("#"+this.elemid)
         let newel = document.createElement("ul")
         hook.appendChild(newel)
         this.listen(this.listener.bind(this))
     }
 
+    /**
+     * Wire message handler
+     *
+     * @param      {String}  msg     The message's type
+     * @param      {Object}  data    The message
+     * {
+            source: 'aodb',
+            type: 'flightboard',
+            subject: move + " " + payload.flight + (payload.move == "departure" ? " to " : " from ") + payload.airport,
+            body: msgtype + " " + payload.time,
+            created_at: objcsv.timestamp,
+            priority: 2,
+            icon: "la-plane-" + payload.move,
+            "icon-color": msgcolor
+        }
+     */
     listener(msg, data) {
         //console.log("Wire::listener", msg, data)
         // add wire

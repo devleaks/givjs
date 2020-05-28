@@ -1,5 +1,5 @@
 /*
- *  Stolen here: https://codepen.io/dope/pen/KJYMZz
+ *  Stolen from https://codepen.io/dope/pen/KJYMZz
  */
 import { Subscriber } from "./Subscriber"
 import { deepExtend } from "./Utilities"
@@ -64,7 +64,7 @@ export class Clock extends Subscriber {
      * @param      {String}  data     The time as ISO 8601 formatted string.
      */
     update(msgtype, data) {
-        console.log("Clock::updateClock", msgtype, data)
+        // console.log("Clock::updateClock", msgtype, data)
         switch(msgtype) {
             case CLOCK_MSG:
             this.setClock(moment(data), moment.ISO_8601)
