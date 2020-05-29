@@ -7,7 +7,7 @@
  */
 import "../css/wire.css"
 
-import { deepExtend } from "./Utilities"
+import { deepExtend } from "./Utils/Utilities"
 import { Tile } from "./Tile"
 import JSONFormatter from "json-formatter-js"
 

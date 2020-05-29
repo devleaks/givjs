@@ -5,7 +5,7 @@
  *
  * Install map in div
  */
-import { deepExtend } from "./Utilities"
+import { deepExtend } from "./Utils/Utilities"
 
 /**
  *  DEFAULT VALUES

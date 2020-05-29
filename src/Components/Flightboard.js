@@ -7,7 +7,7 @@
  */
 import "../css/flightboard.css"
 
-import { deepExtend } from "./Utilities"
+import { deepExtend } from "./Utils/Utilities"
 import { Tile } from "./Tile"
 import moment from "moment"
 

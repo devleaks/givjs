@@ -106,7 +106,7 @@ export class Rotation extends Subscriber {
      */
     update(stopped) {
         let rid = Rotation.mkRotationId(stopped)
-        console.log("Rotation::updating..", rid, stopped)
+        //console.log("Rotation::updating..", rid, stopped)
 
         if (stopped.feature.properties.type == "SERVICE") {
             const vehicle = stopped.feature.properties.name
@@ -159,7 +159,7 @@ export class Rotation extends Subscriber {
             // do we need to push r back on map??
             this.rotations.set(rid, r)
 
-            console.log("Rotation::..updated", rid, r, create)
+            //console.log("Rotation::..updated", rid, r, create)
             // create_update_chart(parking)
         }
     }

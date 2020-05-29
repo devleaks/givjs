@@ -1,7 +1,7 @@
 /*  Base class for subscriber to Dispatcher messages
  */
 import { booleanPointInPolygon, booleanWithin } from "@turf/turf"
-import { deepExtend } from "./Utilities"
+import { deepExtend } from "./Utils/Utilities"
 
 
 export class FeatureCollection {

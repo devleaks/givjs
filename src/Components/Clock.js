@@ -2,7 +2,7 @@
  *  Stolen from https://codepen.io/dope/pen/KJYMZz
  */
 import { Subscriber } from "./Subscriber"
-import { deepExtend } from "./Utilities"
+import { deepExtend } from "./Utils/Utilities"
 import moment from "moment"
 
 

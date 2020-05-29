@@ -29,15 +29,15 @@ import "leaflet-rotatedmarker"
 
 import { AntPath } from "leaflet-ant-path"
 
-import { deepExtend } from "./Utilities"
+import { deepExtend } from "./Utils/Utilities"
 import { Tile } from "./Tile"
 
-import { getFeatureLayerName } from "./GeoJSON"
-import { style, onEachFeature, pointToLayer, getFeatureLayer } from "./Style"
+import { getFeatureLayerName } from "./Utils/GeoJSON"
+import { style, onEachFeature, pointToLayer, getFeatureLayer } from "./Utils/Style"
 
 //import { randomSparklineDemo } from "./Charts/sparkline"
 
-import { stopped } from "./Utils/stopped"
+import { stopped } from "./Utils/Stopped"
 
 
 import { MAP_MSG, DARK_MSG, DARK, LIGHT } from "./Constant"

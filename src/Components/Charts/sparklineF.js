@@ -148,27 +148,28 @@ const SPARKLINES = {
     }
 }
 
-export class Sparkline {
 
-    constructor(el, type, data, width = 40, height = 20) {
-        let options = SPARKLINES[type]
-        if (["radialBar", "donut", "pie"].indexOf(type) > -1) {
-            options.series = data
-        } else {
-            options.series = [{
-                data: data
-            }]
-        }
-        options.chart.width = width
-        options.chart.height = height
-        return new ApexCharts(document.getElementById(el), options);
+export function randomSparklineDemo(el, t = false) {
+    let types = Object.keys(SPARKLINES)
+    let type = t ? t : types[Math.floor(Math.random() * types.length)]
+    var chart = new ApexCharts(document.getElementById(el), SPARKLINES[type]);
+    chart.render();
+}
+
+
+export function sparkline(el, type, data, width = 40, height = 20) {
+    let options = SPARKLINES[type]
+    if(["radialBar", "donut", "pie"].indexOf(type) > -1 ) {
+        options.series = data
+    } else {
+        options.series = [
+            {
+                data:data
+            }
+        ]
     }
-
-
-    static randomSparklineDemo(el, t = false) {
-        let types = Object.keys(SPARKLINES)
-        let type = t ? t : types[Math.floor(Math.random() * types.length)]
-        var chart = new ApexCharts(document.getElementById(el), SPARKLINES[type]);
-        chart.render();
-    }
+    options.chart.width = width
+    options.chart.height = height
+    // chart.render();
+    return new ApexCharts(document.getElementById(el), options);
 }

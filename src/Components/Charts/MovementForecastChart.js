@@ -7,7 +7,7 @@
  */
 //import "../css/flightboard.css"
 
-import { deepExtend } from "../Utilities"
+import { deepExtend } from "../Utils/Utilities"
 import { ApexTile } from "./ApexTile"
 import { Transport } from "../Transport"
 import moment from "moment"

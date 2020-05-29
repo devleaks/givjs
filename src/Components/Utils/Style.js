@@ -1,15 +1,15 @@
 /*  Module dedicated to the mapping of geojson feature (points and polygons) to Leaflet visuals.
  *
  */
-import L from "leaflet"
+import { DivIcon, Marker } from "leaflet"
 import moment from "moment"
 // import chroma from "chroma-js"
 import Mustache from "mustache"
 
 import { getFeatureId } from "./GeoJSON"
-import { sparkline } from "./Charts/sparkline"
+import { Sparkline } from "../Charts/Sparkline"
 
-import { HIDE_FEATURE, HIDE_STYLE, HIDE_TOUCHED, APRONS_COLORS, HASDATA } from "./Constant"
+import { HIDE_FEATURE, HIDE_STYLE, HIDE_TOUCHED, APRONS_COLORS, HASDATA } from "../Constant"
 
 // possible property names for rotation. Must be a number
 const ROTATION_PROPERTIES = ["heading", "bearing", "orientation", "orient"]
@@ -113,10 +113,16 @@ function getRotation(feature) {
 function getMarker(feature, latlng) {
     feature.properties[ROTATION_PROPERTY] = getRotation(feature)
     //console.log("Style::getMarker", feature, latlng)
-    return L.marker(latlng, {
-        icon: getIcon(feature),
+    let icon = getIcon(feature)
+    let marker = new Marker(latlng, {
+        icon: icon.icon,
         rotationAngle: feature.properties[ROTATION_PROPERTY]
     })
+    if (icon.chart !== false) {
+        console.log("getMarker", "Marker has listener")
+        marker.on("add", function() { icon.chart.render() } );
+    }
+    return marker
 }
 
 
@@ -135,6 +141,12 @@ STYLE: {
     inactiveMarkerColor: "darkgrey"
 }
 
+ */
+/**
+ * Gets the icon.
+ *
+ * @param      {<type>}  feature  The feature
+ * @return     {Object}  The icon and a function to be called when added to the map.
  */
 function getIcon(feature) {
     let icon = DEFAULTS["markerSymbol"],
@@ -163,10 +175,13 @@ function getIcon(feature) {
     // eslint-disable-next-line quotes
     // let html = "<i class='la la-" + icon + "' style='color: " + '"' + color + '"' + "; font-size:" + size + "px;'></i>"
     let html = `<i class='la la-${ icon }' style='color: ${ color }; font-size:${ size }px;'></i>`
-    return L.divIcon({
-        className: DEFAULTS.lDivIconClassname,
-        html: html
-    })
+    return {
+        icon: new DivIcon({
+            className: DEFAULTS.lDivIconClassname,
+            html: html
+        }),
+        chart: false
+    }
 }
 
 
@@ -176,13 +191,13 @@ function getSparkline(feature) {
     let data = feature.properties[HASDATA]
     let fid = getFeatureId(feature)
     let elid = DEFAULTS.SparklinePrefix + fid
-    let icon = L.divIcon({
-        className: DEFAULTS.lDivIconClassname,
-        html: "<div id='" + elid + "'></div>"
-    })
-    let chart = sparkline(elid, data.type, data.values)
-    chart.render()
-    return icon
+    return {
+        icon: new DivIcon({
+            className: DEFAULTS.lDivIconClassname,
+            html: "<div id='" + elid + "'></div>"
+        }),
+        chart: new Sparkline(elid, data.type, data.values)
+    }
 }
 
 
@@ -230,7 +245,7 @@ function bindTexts(feature, layer) {
                         if (DEFAULTS.info_content_id) {
                             layer.on("contextmenu", function() {
                                 if (feature.properties._texts.hasOwnProperty("sidebar")) {
-                                    let container = L.DomUtil.get(DEFAULTS.info_content_id)
+                                    let container = document.getElementById(DEFAULTS.info_content_id)
                                     if (container) {
                                         container.innerHTML = feature.properties._texts["sidebar"]
                                     } else {

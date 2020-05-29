@@ -4,7 +4,7 @@
 import PubSub from "pubsub-js"
 import { distance } from "@turf/turf"
 
-import { getFeatureId } from "../GeoJSON"
+import { getFeatureId } from "./GeoJSON"
 import { STOPPED, JUST_STOPPED, JUST_STARTED, MOVED } from "../Constant"
 
 const SPEED = "speed"

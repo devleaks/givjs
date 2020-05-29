@@ -5,7 +5,7 @@
  *
  * Install map in div
  */
-import { deepExtend } from "./Utilities"
+import { deepExtend } from "./Utils/Utilities"
 import { Subscriber } from "./Subscriber"
 
 import { BUSY, APRONS_COLORS } from "./Constant"
