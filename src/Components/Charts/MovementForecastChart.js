@@ -5,7 +5,7 @@
  *
  * Install map in div
  */
-//import "../css/flightboard.css"
+//import "../assets/css/flightboard.css"
 
 import { deepExtend } from "../Utils/Utilities"
 import { ApexTile } from "./ApexTile"
@@ -115,7 +115,7 @@ export class MovementForecastChart extends ApexTile {
         let hourNow = ts.hours()
         hours = hours.concat(hours) // cycle for across midnight runs
         let forecast = hours.slice(hourNow, hourNow + this.options.maxcount)
-        // console.log("MovementForecastChart::updateChart", this.move, forecast)
+        console.log("MovementForecastChart::updateChart", this.move, hourNow, hours)
         this.chart.updateSeries([{
             name: this.move,
             data: forecast

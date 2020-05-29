@@ -4,7 +4,7 @@
 import moment from "moment"
 import { Subscriber } from "./Subscriber"
 
-import "../css/footer.css"
+import "../assets/css/footer.css"
 
 /**
  * This class describes the HTML page footer.

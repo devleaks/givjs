@@ -85,11 +85,6 @@ export class Rotation extends Subscriber {
                     console.warn("Rotation::no listener", msgtype)
                     break
             }
-            /*
-            if (feature.hasOwnProperty("timestamp")) {
-                PubSub.publish(CLOCK_MSG, data.timestamp)
-            }
-            */
         })
     }
 
@@ -113,13 +108,11 @@ export class Rotation extends Subscriber {
             const sarr = vehicle.split(":") // id = "catering:0"
             const service = sarr[0]
             let r = this.rotations.get(rid)
-            let create = false
 
             if (!r) { // we see a service vehicle before the plane, we need to record it...
                 r = {
                     services: {}
                 }
-                create = true
                 console.log("Rotation::update", "service arrived before plane?", stopped)
             }
 
@@ -159,7 +152,7 @@ export class Rotation extends Subscriber {
             // do we need to push r back on map??
             this.rotations.set(rid, r)
 
-            //console.log("Rotation::..updated", rid, r, create)
+            //console.log("Rotation::..updated", rid, r)
             // create_update_chart(parking)
         }
     }

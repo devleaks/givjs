@@ -6,7 +6,7 @@
  * Install map in div
  */
 import "leaflet/dist/leaflet.css"
-import "../css/map.css"
+import "../assets/css/map.css"
 
 // older libs:
 // these just "load" js and hook to L.control
@@ -166,7 +166,7 @@ export class Omap extends Tile {
         this.options.layerControl = {
             baseLayers: baseLayers,
             overlays: {
-                "<span style='color: #0C64AF;''><img src='src/i/liegeairport-14.png'>&nbsp;Liège Airport</span>": {
+                "<span style='color: #0C64AF;''><img src='src/data/eblg-logo.svg' width='14' height='14'>&nbsp;Liège Airport</span>": {
                     "<span style='color: #EE850A;''>Day</span>": day,
                     "<span style='color: #EE850A;''>Night</span>": night
                 }

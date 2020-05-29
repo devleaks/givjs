@@ -5,7 +5,7 @@
 import PubSub from "pubsub-js"
 import { DARK_MSG, DARK, LIGHT, LOCALSTORAGE_DARK } from "./Constant"
 
-import "../css/dark.css"
+import "../assets/css/dark.css"
 
 
 /**

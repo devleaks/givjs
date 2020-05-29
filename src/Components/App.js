@@ -8,8 +8,8 @@
 import "line-awesome/dist/font-awesome-line-awesome/css/all.css"
 import "line-awesome/dist/line-awesome/css/line-awesome.css"
 
-import "../css/layout.css"
-import "../css/app.css"
+import "../assets/css/layout.css"
+import "../assets/css/app.css"
 import { Dashboard } from "./Dashboard"
 //import L from "leaflet"
 
@@ -106,9 +106,10 @@ export class App {
 
         this.dashboard.register("flightboard", new MovementForecastChart("forecast-arrival", FLIGHTBOARD_MSG, ARRIVAL, transport, {}))
         this.dashboard.register("flightboard", new MovementForecastChart("forecast-departure", FLIGHTBOARD_MSG, DEPARTURE, transport, {}))
-        //                                                                                                                            1   2   3   4   5   6
-        this.dashboard.register("parking", new ParkingOccupancy("parking", this.parkings, this.omap, { aprons_max: APRONS_MAXCOUNT }))
-        this.dashboard.register("parking", new ParkingOccupancyChart("parking-occupancy", PARKING_MSG, this.parkings, { aprons_max: APRONS_MAXCOUNT }))
+        //
+        let parkingOccupancy = new ParkingOccupancy(PARKING_MSG, this.parkings, { aprons_max: APRONS_MAXCOUNT, aprons_layer_name: "APRONS" })
+        this.dashboard.register("parking", parkingOccupancy)
+        this.dashboard.register("parking", new ParkingOccupancyChart("parking-occupancy", PARKING_MSG, parkingOccupancy))
 
 
         let rotations = new Rotation([STOPPED, JUST_STOPPED, JUST_STARTED, MOVED], this.parkings)

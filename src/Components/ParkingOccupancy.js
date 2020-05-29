@@ -5,27 +5,29 @@
  *
  * Install map in div
  */
+import PubSub from "pubsub-js"
+
 import { deepExtend } from "./Utils/Utilities"
 import { Subscriber } from "./Subscriber"
 
-import { BUSY, APRONS_COLORS } from "./Constant"
+import { BUSY, APRONS_COLORS, MAP_MSG } from "./Constant"
 
 /**
  *  DEFAULT VALUES
  */
 const DEFAULTS = {
-    msgtype: "flightboard",
+    msgtype: "parking",
     parking_id: "name",
-    aprons_max: []
+    aprons_max: [],
+    aprons_layer_name: ""
 }
 
 export class ParkingOccupancy extends Subscriber {
 
-    constructor(message_type, parkings, map, options) {
+    constructor(message_type, parkings, options) {
         super(message_type)
         this.options = deepExtend(DEFAULTS, options)
         this.parkings = parkings
-        this.map = map
         this.aprons = Array(this.options.aprons_max.length).fill(0)
         this.install()
     }
@@ -59,13 +61,21 @@ export class ParkingOccupancy extends Subscriber {
                 fillColor: "green", // fill color
                 fillOpacity: 0.4 // fill opacity 1 = opaque
             }
+            box.properties.layerName = this.options.aprons_layer_name
             if (parking.available == BUSY) {
                 this.aprons[box.properties.apron]++
                 box.properties._style.fillColor = "red"
             } else {
                 this.aprons[box.properties.apron] = this.aprons[box.properties.apron] == 0 ? 0 : this.aprons[box.properties.apron] - 1
             }
+            PubSub.publish(MAP_MSG, box)
         }
-        this.map.update(box, "APRONS") // should pass layer name as option
+    }
+
+    getOccupancy() {
+        return {
+            busy: this.aprons,
+            max: this.options.aprons_max
+        }
     }
 }

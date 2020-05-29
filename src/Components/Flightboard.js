@@ -5,7 +5,7 @@
  *
  * Install map in div
  */
-import "../css/flightboard.css"
+import "../assets/css/flightboard.css"
 
 import { deepExtend } from "./Utils/Utilities"
 import { Tile } from "./Tile"
@@ -13,7 +13,7 @@ import moment from "moment"
 
 import { SCHEDULED, PLANNED, ACTUAL, DEPARTURE } from "./Constant"
 
-import { flipper } from "../js/flipper.js"
+import { flipper } from "../assets/js/flipper.js"
 
 /**
  *  DEFAULT VALUES

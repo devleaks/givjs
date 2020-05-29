@@ -5,7 +5,7 @@
  *
  * Install map in div
  */
-import "../css/wire.css"
+import "../assets/css/wire.css"
 
 import { deepExtend } from "./Utils/Utilities"
 import { Tile } from "./Tile"

@@ -5,7 +5,7 @@
  *
  * Starts main viewer application.
  */
-// import "../css/dashboard.css"
+// import "../assets/css/dashboard.css"
 
 import { Dispatcher } from "./Dispatcher"
 

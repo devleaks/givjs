@@ -39,7 +39,7 @@ export default {
                 postcssImport(),
                 ...postcssUrl({
                     basePath: [
-                        Paths.SRC+"/css",
+                        Paths.SRC+"/assets/css",
                         Paths.NODE_MODULES+"/line-awesome/dist/font-awesome-line-awesome/css",
                         Paths.NODE_MODULES+"/line-awesome/dist/line-awesome/css",
                         Paths.NODE_MODULES+"/leaflet/dist"

@@ -8,7 +8,7 @@ import moment from "moment"
 
 import { CLOCK_MSG, SIMULATION_MSG } from "./Constant"
 
-import "../css/clock.css"
+import "../assets/css/clock.css"
 
 const DEFAULTS = {
     refresh: 1, //seconds

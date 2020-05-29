@@ -7,8 +7,6 @@
  */
 import { deepExtend } from "../Utils/Utilities"
 import { ApexTile } from "./ApexTile"
-import { Transport } from "../Transport"
-import moment from "moment"
 
 import { BUSY, APRONS_COLORS } from "../Constant"
 
@@ -19,18 +17,15 @@ import ApexCharts from "apexcharts"
  */
 const DEFAULTS = {
     elemid: "ParkingOccupancyChart",
-    msgtype: "flightboard",
-    parking_id: "name",
-    aprons_max: []
+    msgtype: "parking"
 }
 
 export class ParkingOccupancyChart extends ApexTile {
 
-    constructor(elemid, message_type, parkings, options) {
+    constructor(elemid, message_type, parkingOccupancy, options) {
         super(elemid, message_type)
         this.options = deepExtend(DEFAULTS, options)
-        this.parkings = parkings
-        this.aprons = Array(this.options.aprons_max.length).fill(0)
+        this.parkingOccupancy = parkingOccupancy
         this.install()
     }
 
@@ -38,7 +33,8 @@ export class ParkingOccupancyChart extends ApexTile {
     /*  installs the HTML code in the document
      */
     install() {
-        let data = this.aprons.slice(1, this.aprons.length)
+        let occupancy = this.parkingOccupancy.getOccupancy()
+        let data = occupancy.busy.slice(1, occupancy.busy.length)
         this.chart = new ApexCharts(document.getElementById(this.elemid), {
             series: data,
             colors: APRONS_COLORS.slice(1, APRONS_COLORS.length),
@@ -68,37 +64,27 @@ export class ParkingOccupancyChart extends ApexTile {
             labels: ["APRON 1", "APRON 2", "APRON 3", "APRON 4", "APRON 5", "APRON 6"],
         })
         this.chart.render()
-
-        let that = this
-        let locallistener = function(msgtype, data) {
-            //console.log("ParkingOccupancyChart::listener", msgtype, data)
-            that.updateParking(data)
-        }
-        this.listen(locallistener)
+        this.listen(this.update.bind(this))
     }
 
 
-    updateParking(parking) {
-        const box = this.parkings.find(this.options.parking_id, parking.name)
-        if (box) {
-            if (parking.available == BUSY) {
-                this.aprons[box.properties.apron]++
-            } else {
-                this.aprons[box.properties.apron] = this.aprons[box.properties.apron] == 0 ? 0 : this.aprons[box.properties.apron] - 1
-            }
-        }
-        this.updateChart()
-    }
-
-
-    // update chart
-    updateChart() {
-        let aprons_max = this.options.aprons_max
-        let data = this.aprons
+    /**
+     * Update chart from ParkingOccupancy.
+     * Note: Since both ParkingOccupancy and ParkingOccupancyChart respond to "parking" messages,
+     * there might be a race condition where ParkingOccupancyChart gets the data while it has not been updated
+     * in ParkingOccupancy yet. We'll fix that one day by adding a message (parking-chart-update).
+     *
+     * @param      {<type>}  msgtype  The msgtype
+     * @param      {<type>}  parking  The parking
+     */
+    update(msgtype, parking) {
+        let occupancy = this.parkingOccupancy.getOccupancy()
+        let aprons_max = occupancy.max
+        let data = occupancy.busy
         let pcts = data.map((x, i) => (aprons_max[i] > 0 ? Math.round(100 * x / aprons_max[i]) : 0))
         let total = data.reduce((a, v) => a + v)
 
-        this.chart.updateSeries(pcts.slice(1, this.aprons.length))
+        this.chart.updateSeries(pcts.slice(1, data.length))
         this.chart.updateOptions({
             plotOptions: {
                 radialBar: {

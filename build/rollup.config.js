@@ -49,7 +49,7 @@ export default {
                 postcssImport(),
                 ...postcssUrl({ // https://github.com/pashaigood/bundlers-comparison
                     basePath: [
-                        Paths.SRC + "/css",
+                        Paths.SRC + "/assets/css",
                         Paths.NODE_MODULES + "/line-awesome/dist/font-awesome-line-awesome/css",
                         Paths.NODE_MODULES + "/line-awesome/dist/line-awesome/css",
                         Paths.NODE_MODULES + "/leaflet/dist"
