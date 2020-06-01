@@ -11,4 +11,13 @@ export class ApexTile extends Tile {
         super(elemid, message_type)
     }
 
+    /**
+     * Stores data for state restore
+     * (Nothing to store, data is in Transport)
+     */
+    passivate() {
+
+    }
+
+
 }

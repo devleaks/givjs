@@ -5,10 +5,10 @@
  *
  * Install map in div
  */
-import "../assets/css/wire.css"
+import "../../assets/css/wire.css"
 
-import { deepExtend } from "./Utils/Utilities"
-import { Tile } from "./Tile"
+import { deepExtend } from "../Utils/Utilities"
+import { Tile } from "../Tile"
 import JSONFormatter from "json-formatter-js"
 
 /**

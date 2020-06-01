@@ -6,7 +6,7 @@
  * Install map in div
  */
 import "leaflet/dist/leaflet.css"
-import "../assets/css/map.css"
+import "../../assets/css/map.css"
 
 // older libs:
 // these just "load" js and hook to L.control
@@ -29,18 +29,18 @@ import "leaflet-rotatedmarker"
 
 import { AntPath } from "leaflet-ant-path"
 
-import { deepExtend } from "./Utils/Utilities"
-import { Tile } from "./Tile"
+import { deepExtend } from "../Utils/Utilities"
+import { Tile } from "../Tile"
 
-import { getFeatureLayerName } from "./Utils/GeoJSON"
-import { style, onEachFeature, pointToLayer, getFeatureLayer } from "./Utils/Style"
+import { getFeatureLayerName } from "../Utils/GeoJSON"
+import { style, onEachFeature, pointToLayer, getFeatureLayer } from "../Utils/Style"
 
 //import { randomSparklineDemo } from "./Charts/sparkline"
 
-import { stopped } from "./Utils/Stopped"
+import { stopped } from "../Utils/Stopped"
 
 
-import { MAP_MSG, DARK_MSG, DARK, LIGHT } from "./Constant"
+import { MAP_MSG, DARK_MSG, DARK, LIGHT } from "../Constant"
 
 /**
  *  DEFAULT VALUES

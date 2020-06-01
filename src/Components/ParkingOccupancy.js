@@ -10,7 +10,7 @@ import PubSub from "pubsub-js"
 import { deepExtend } from "./Utils/Utilities"
 import { Subscriber } from "./Subscriber"
 
-import { BUSY, APRONS_COLORS, MAP_MSG } from "./Constant"
+import { BUSY, APRONS_COLORS, MAP_MSG, PARKING_UPDATE_MSG } from "./Constant"
 
 /**
  *  DEFAULT VALUES
@@ -69,13 +69,10 @@ export class ParkingOccupancy extends Subscriber {
                 this.aprons[box.properties.apron] = this.aprons[box.properties.apron] == 0 ? 0 : this.aprons[box.properties.apron] - 1
             }
             PubSub.publish(MAP_MSG, box)
-        }
-    }
-
-    getOccupancy() {
-        return {
-            busy: this.aprons,
-            max: this.options.aprons_max
+            PubSub.publish(PARKING_UPDATE_MSG, {
+                busy: this.aprons,
+                max: this.options.aprons_max
+            })
         }
     }
 }

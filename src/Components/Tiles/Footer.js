@@ -2,19 +2,19 @@
  *  Stolen here: https://codepen.io/dope/pen/KJYMZz
  */
 import moment from "moment"
-import { Subscriber } from "./Subscriber"
+import { Tile } from "../Tile"
 
-import "../assets/css/footer.css"
+import "../../assets/css/footer.css"
 
 /**
  * This class describes the HTML page footer.
  *
  * @class      Footer (name)
  */
-export class Footer extends Subscriber {
+export class Footer extends Tile {
 
     constructor(msgtype, message) {
-        super(msgtype)
+        super("footer", msgtype)
         this.message = message
         this.install()
     }

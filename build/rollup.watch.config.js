@@ -51,8 +51,7 @@ export default {
         }),
         eslint({
             include: [
-                Paths.SRC+"/app.js",
-                Paths.SRC+"/Components/**.js"
+                Paths.SRC+"/**.js"
             ]
         }),
         serve(),      // index.html should be in root of project

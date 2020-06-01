@@ -30,8 +30,8 @@ const Paths = {
     NODE_MODULES: `${CWD}/node_modules`
 }
 Object.assign(Paths, {
-    INPUT: Paths.SRC + "/index.js",
-    OUTPUT: Paths.DIST + "/index.js"
+    INPUT: Paths.SRC + "/app.js",
+    OUTPUT: Paths.DIST + "/app.js"
 })
 
 
@@ -61,8 +61,7 @@ export default {
         }),
         eslint({
             include: [
-                "src/app.js",
-                "src/Components/**.js"
+                "src/**.js"
             ]
         }),
         {   // https://github.com/patarapolw/minimal-rollup-ts-pug-sass-template
@@ -78,9 +77,9 @@ export default {
             terser()
         ] : [])
     ],
-    input: "src/app.js",
+    input: Paths.INPUT,
     output: {
-        file: "dist/app.js",
+        file: Paths.OUTPUT,
         format: "iife"
     }
 };

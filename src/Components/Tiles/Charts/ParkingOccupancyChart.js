@@ -5,10 +5,10 @@
  *
  * Install map in div
  */
-import { deepExtend } from "../Utils/Utilities"
-import { ApexTile } from "./ApexTile"
+import { deepExtend } from "../../Utils/Utilities"
+import { ApexTile } from "../ApexTile"
 
-import { BUSY, APRONS_COLORS } from "../Constant"
+import { BUSY, APRONS_COLORS } from "../../Constant"
 
 import ApexCharts from "apexcharts"
 
@@ -22,10 +22,9 @@ const DEFAULTS = {
 
 export class ParkingOccupancyChart extends ApexTile {
 
-    constructor(elemid, message_type, parkingOccupancy, options) {
+    constructor(elemid, message_type, options) {
         super(elemid, message_type)
         this.options = deepExtend(DEFAULTS, options)
-        this.parkingOccupancy = parkingOccupancy
         this.install()
     }
 
@@ -33,8 +32,7 @@ export class ParkingOccupancyChart extends ApexTile {
     /*  installs the HTML code in the document
      */
     install() {
-        let occupancy = this.parkingOccupancy.getOccupancy()
-        let data = occupancy.busy.slice(1, occupancy.busy.length)
+        let data = Array(6).fill(0)
         this.chart = new ApexCharts(document.getElementById(this.elemid), {
             series: data,
             colors: APRONS_COLORS.slice(1, APRONS_COLORS.length),
@@ -77,10 +75,9 @@ export class ParkingOccupancyChart extends ApexTile {
      * @param      {<type>}  msgtype  The msgtype
      * @param      {<type>}  parking  The parking
      */
-    update(msgtype, parking) {
-        let occupancy = this.parkingOccupancy.getOccupancy()
-        let aprons_max = occupancy.max
+    update(msgtype, occupancy) {
         let data = occupancy.busy
+        let aprons_max = occupancy.max
         let pcts = data.map((x, i) => (aprons_max[i] > 0 ? Math.round(100 * x / aprons_max[i]) : 0))
         let total = data.reduce((a, v) => a + v)
 

@@ -7,12 +7,12 @@
  */
 //import "../assets/css/flightboard.css"
 
-import { deepExtend } from "../Utils/Utilities"
-import { ApexTile } from "./ApexTile"
-import { Transport } from "../Transport"
+import { deepExtend } from "../../Utils/Utilities"
+import { ApexTile } from "../ApexTile"
+import { Transport } from "../../Transport"
 import moment from "moment"
 
-import { ACTUAL } from "../Constant"
+import { ACTUAL } from "../../Constant"
 
 import ApexCharts from "apexcharts"
 
@@ -36,7 +36,8 @@ export class MovementForecastChart extends ApexTile {
     }
 
 
-    /*  installs the HTML code in the document
+    /**
+     *   Installs the HTML code in the document
      */
     install() {
         this.chart = new ApexCharts(document.getElementById(this.elemid), {
@@ -79,7 +80,7 @@ export class MovementForecastChart extends ApexTile {
             //console.log("MovementForecastChart::listener", msgtype, data, that.move)
             if (data.hasOwnProperty("move")) {
                 if (that.move == data.move) {
-                    that.updateChart()
+                    that.update()
                 }
             } else {
                 console.warn("MovementForecastChart::listener: data has no move info", data)
@@ -89,16 +90,14 @@ export class MovementForecastChart extends ApexTile {
     }
 
 
-    // update display (html table)
-    updateChart(datetime = false) {
+    /**
+     * Update chart for supplied date/time. Default to now (live operations.)
+     *
+     * @param      {boolean}  [datetime=false]  The datetime
+     */
+    update(datetime = false) {
         let ts = datetime ? datetime : moment() // default to now
-        ts.local()
 
-        // sort flights to show most maxcount relevant flights for move
-        // 1. Recently landed
-        // 2. Arriving soon
-        // 3. Arriving later
-        // Remove landed more than 30min earlier
         let hours = Array(24).fill(0)
         let flights = this.flights.getScheduledTransports(this.move, datetime)
 
@@ -110,12 +109,10 @@ export class MovementForecastChart extends ApexTile {
             }
         })
 
-
-        //update simple graph
+        ts.local()
         let hourNow = ts.hours()
         hours = hours.concat(hours) // cycle for across midnight runs
         let forecast = hours.slice(hourNow, hourNow + this.options.maxcount)
-        console.log("MovementForecastChart::updateChart", this.move, hourNow, hours)
         this.chart.updateSeries([{
             name: this.move,
             data: forecast

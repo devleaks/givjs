@@ -7,7 +7,7 @@ import moment from "moment"
 import Mustache from "mustache"
 
 import { getFeatureId } from "./GeoJSON"
-import { Sparkline } from "../Charts/Sparkline"
+import { Sparkline } from "../Tiles/Charts/Sparkline"
 
 import { HIDE_FEATURE, HIDE_STYLE, HIDE_TOUCHED, APRONS_COLORS, HASDATA } from "../Constant"
 

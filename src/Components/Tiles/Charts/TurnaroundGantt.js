@@ -5,8 +5,8 @@
  *
  * Install map in div
  */
-import { deepExtend } from "../Utils/Utilities"
-import { ApexTile } from "./ApexTile"
+import { deepExtend } from "../../Utils/Utilities"
+import { ApexTile } from "../ApexTile"
 
 import moment from "moment"
 

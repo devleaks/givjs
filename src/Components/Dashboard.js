@@ -24,10 +24,15 @@ export class Dashboard {
 
     register(name, tile) {
         if (Array.isArray(name)) {
-            name.forEach( (n) => this.tiles.set(n, tile) )
+            name.forEach((n) => this.tiles.set(n, tile))
         } else {
             this.tiles.set(name, tile)
         }
+    }
+
+
+    passivate() {
+        this.tiles.forEach((tile) => { tile.passivate() })
     }
 
 }

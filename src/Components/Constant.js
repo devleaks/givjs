@@ -31,6 +31,7 @@ export const MOVED = "moved"
 // other messages
 export const FLIGHTBOARD_MSG = "flightboard"
 export const PARKING_MSG = "parking"
+export const PARKING_UPDATE_MSG = "parking-update"
 export const MAP_MSG = "map"
 export const WIRE_MSG = "wire"
 export const DARK_MSG = "dark"

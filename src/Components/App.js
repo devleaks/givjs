@@ -14,19 +14,22 @@ import { Dashboard } from "./Dashboard"
 //import L from "leaflet"
 
 // Tiles
-import { Omap } from "./Omap"
-import { Wire } from "./Wire"
-import { Transport } from "./Transport"
-import { Flightboard } from "./Flightboard"
-import { MovementForecastChart } from "./Charts/MovementForecastChart"
-import { ParkingOccupancyChart } from "./Charts/ParkingOccupancyChart"
-import { ParkingOccupancy } from "./ParkingOccupancy"
-import { Rotation } from "./Rotation"
-import { TurnaroundGantt } from "./Charts/TurnaroundGantt"
+import { Omap } from "./Tiles/Omap"
+import { Wire } from "./Tiles/Wire"
+import { Flightboard } from "./Tiles/Flightboard"
+
+import { Footer } from "./Tiles/Footer"
+
+import { MovementForecastChart } from "./Tiles/Charts/MovementForecastChart"
+import { ParkingOccupancyChart } from "./Tiles/Charts/ParkingOccupancyChart"
+import { TurnaroundGantt } from "./Tiles/Charts/TurnaroundGantt"
 
 // Utilities
+import { Transport } from "./Transport"
+import { Rotation } from "./Rotation"
+import { ParkingOccupancy } from "./ParkingOccupancy"
+
 import { Dark } from "./Dark"
-import { Footer } from "./Footer"
 import { Clock } from "./Clock"
 import { FeatureCollection } from "./FeatureCollection"
 
@@ -34,7 +37,7 @@ import { FeatureCollection } from "./FeatureCollection"
 import { WS_URL, HOME, PARKINGS, APRONS_MAXCOUNT } from "./Config"
 import { DEPARTURE, ARRIVAL } from "./Constant"
 import { STOPPED, JUST_STOPPED, JUST_STARTED, MOVED } from "./Constant"
-import { CLOCK_MSG, SIMULATION_MSG, FOOTER_MSG, FLIGHTBOARD_MSG, WIRE_MSG, MAP_MSG, PARKING_MSG, DARK_MSG } from "./Constant"
+import { CLOCK_MSG, SIMULATION_MSG, FOOTER_MSG, FLIGHTBOARD_MSG, WIRE_MSG, MAP_MSG, PARKING_MSG, PARKING_UPDATE_MSG, DARK_MSG } from "./Constant"
 
 
 /**
@@ -109,7 +112,7 @@ export class App {
         //
         let parkingOccupancy = new ParkingOccupancy(PARKING_MSG, this.parkings, { aprons_max: APRONS_MAXCOUNT, aprons_layer_name: "APRONS" })
         this.dashboard.register("parking", parkingOccupancy)
-        this.dashboard.register("parking", new ParkingOccupancyChart("parking-occupancy", PARKING_MSG, parkingOccupancy))
+        this.dashboard.register("parking", new ParkingOccupancyChart("parking-occupancy", PARKING_UPDATE_MSG))
 
 
         let rotations = new Rotation([STOPPED, JUST_STOPPED, JUST_STARTED, MOVED], this.parkings)
