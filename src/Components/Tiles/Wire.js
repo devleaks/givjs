@@ -9,7 +9,8 @@ import "../../assets/css/wire.css"
 
 import { deepExtend } from "../Utils/Utilities"
 import { Tile } from "../Tile"
-import JSONFormatter from "json-formatter-js"
+
+import { showJson } from "../Utils/Display"
 
 /**
  *  DEFAULT VALUES
@@ -109,10 +110,7 @@ export class Wire extends Tile {
             allwires = document.querySelector("#" + this.elemid + " ul li")
         }
 
-
-
-        const formatter = new JSONFormatter(data);
-        newel.appendChild(formatter.render());
+        const formatter = showJson(data, newel)
         formatter.openAtDepth(0) // all closed. See https://github.com/mohsen1/json-formatter-js
 
     }

@@ -75,4 +75,18 @@ export class ParkingOccupancy extends Subscriber {
             })
         }
     }
+
+
+    /**
+     * Save class instance essentials for restoration
+     */
+    passivate() {
+        let content = {
+            parkings: this.parkings,
+            aprons: this.aprons
+        }
+        localStorage.setItem("parking-occupancy", JSON.stringify(content))
+    }
+
+
 }

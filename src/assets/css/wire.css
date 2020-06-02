@@ -2,3 +2,9 @@
 #wire {
   font-size: 0.75em;
 }
+#wire ul {
+  padding-left: 10px;
+}
+#wire ul li {
+  padding-left: 0px;
+}

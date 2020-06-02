@@ -178,4 +178,16 @@ export class Transport extends Subscriber {
         return t
     }
 
+
+    /**
+     * Save class instance essentials for restoration
+     */
+    passivate() {
+        let content = {
+            base: this.base,
+            transports: this.transports
+        }
+        localStorage.setItem("transports", JSON.stringify(content))
+    }
+
 }

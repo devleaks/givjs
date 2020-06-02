@@ -339,4 +339,18 @@ export class Omap extends Tile {
         }
     }
 
+
+    /**
+     * Save class instance essentials for restoration
+     */
+    passivate() {
+        let content = {}
+
+        this.layers.forEach( (n, l) => {
+            content[n] = l.toGeoJSON()
+        })
+
+        localStorage.setItem(this.elemid, JSON.stringify(content))
+    }
+
 }
