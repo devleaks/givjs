@@ -1,0 +1,74 @@
+/* dark.css: stolen from  */
+#light-dark-toggle-btn.toggle-btn {
+    position: relative;
+    width: 36px;
+    height: 19px;
+    border-radius: 10px;
+    margin: 10px 35%;
+}
+
+#light-dark-toggle-btn input[type="checkbox"] {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    margin: 0px;
+    cursor: pointer;
+    opacity: 0;
+    z-index: 2;
+}
+
+
+#light-dark-toggle-btn span {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    overflow: hidden;
+    opacity: 1;
+    background-color: #fff;
+    box-shadow: 0px 1px 6px #d9d9d9;
+    border-radius: 10px;
+    transition: 0.2s ease background-color, 0.2s ease opacity;
+}
+
+#light-dark-toggle-btn span:before,
+#light-dark-toggle-btn span:after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    transition: 0.5s ease transform, 0.2s ease background-color;
+}
+
+#light-dark-toggle-btn span:before {
+    background-color: #fff;
+    transform: translate(-13px, 0px);
+    z-index: 1;
+}
+
+#light-dark-toggle-btn span:after {
+    background-color: #ec0;
+    transform: translate(3px, 0px);
+    z-index: 0;
+}
+
+#light-dark-toggle-btn input[type="checkbox"]:checked+span {
+    background-color: #000;
+}
+
+#light-dark-toggle-btn input[type="checkbox"]:active+span {
+    opacity: 0.5;
+}
+
+#light-dark-toggle-btn input[type="checkbox"]:checked+span:before {
+    background-color: #000;
+    transform: translate(12px, -4px);
+}
+
+#light-dark-toggle-btn input[type="checkbox"]:checked+span:after {
+    background-color: #fff;
+    transform: translate(17px, 0px);
+}

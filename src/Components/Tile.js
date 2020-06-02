@@ -1,8 +1,8 @@
 /*  Base class for HTML rendered dashboard elements
  */
+import { Subscriber } from "./Subscriber"
 
 import JSONFormatter from "json-formatter-js"
-import { Subscriber } from "./Subscriber"
 
 /**
  * A Tile is a HTML rendered "widget" that respond to messages sent to it.
@@ -46,11 +46,19 @@ export class Tile extends Subscriber {
                 console.warn("Tile::listener: No handler found for message type", msgtype)
                 break
         }
-    } 
+    }
 
 
     updateOnMsg1(data) {
         console.log("Tile::updateOnMsg1",data)
+    }
+
+
+    /**
+     * Save Tile state to localStorage
+     */
+    passivate() {
+        console.log("Tile::passivate")
     }
 
 }

@@ -1,0 +1,19 @@
+/* map.css */
+#map {
+  height: 700px;
+}
+
+.leaflet-control-layers-group label input.leaflet-control-layers-selector {
+    margin-left: 10px;
+}
+
+.leaflet-control-layers {
+    box-shadow: none;
+    width: 100%;
+    color: var(--heading-color);
+    background-color: var(--bg-color);
+}
+
+.gip-marker {
+  background-color: transparent;
+}
