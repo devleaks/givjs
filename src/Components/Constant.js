@@ -39,6 +39,18 @@ export const FOOTER_MSG = "footer"
 export const CLOCK_MSG = "clock"
 export const SIMULATION_MSG = "siminfo"
 
+export const CLOCK_TICKS = [ // minutes
+    1,
+    2,
+    5,
+    10,
+    15,
+    20,
+    30,
+    60,
+    120
+]
+
 //
 export const LOCALSTORAGE_DARK = "theme"
 export const DARK = "dark"

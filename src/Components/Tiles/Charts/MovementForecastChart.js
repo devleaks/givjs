@@ -6,15 +6,16 @@
  * Install map in div
  */
 //import "../assets/css/flightboard.css"
+import moment from "moment"
+import ApexCharts from "apexcharts"
 
 import { deepExtend } from "../../Utils/Utilities"
 import { ApexTile } from "../ApexTile"
 import { Transport } from "../../Transport"
-import moment from "moment"
+import { Clock } from "../../Clock"
 
-import { ACTUAL } from "../../Constant"
+import { FLIGHTBOARD_MSG, ACTUAL } from "../../Constant"
 
-import ApexCharts from "apexcharts"
 
 /**
  *  DEFAULT VALUES
@@ -22,7 +23,8 @@ import ApexCharts from "apexcharts"
 const DEFAULTS = {
     elemid: "movementforecast",
     msgtype: "flightboard",
-    maxcount: 6
+    maxcount: 6,
+    flights_ahead: 360 // mins
 }
 
 export class MovementForecastChart extends ApexTile {
@@ -75,18 +77,7 @@ export class MovementForecastChart extends ApexTile {
         });
         this.chart.render()
 
-        let that = this
-        let locallistener = function(msgtype, data) {
-            //console.log("MovementForecastChart::listener", msgtype, data, that.move)
-            if (data.hasOwnProperty("move")) {
-                if (that.move == data.move) {
-                    that.update()
-                }
-            } else {
-                console.warn("MovementForecastChart::listener: data has no move info", data)
-            }
-        }
-        this.listen(locallistener)
+        this.listen(this.update.bind(this))
     }
 
 
@@ -95,27 +86,33 @@ export class MovementForecastChart extends ApexTile {
      *
      * @param      {boolean}  [datetime=false]  The datetime
      */
-    update(datetime = false) {
-        let ts = datetime ? datetime : moment() // default to now
+    update(msgtype, data) {
 
-        let hours = Array(24).fill(0)
-        let flights = this.flights.getScheduledTransports(this.move, datetime)
+        if (msgtype == FLIGHTBOARD_MSG && this.move != data.move) {
+            return false
+        }
+
+        let ts = moment() // default to now
+        if (msgtype == Clock.clock_message(this.options.update_time)) {
+            ts = moment(data, moment.ISO_8601)
+        }
+
+        let maxahead = moment(ts).add(this.options.flights_ahead, "minutes")
+        let hours = Array(this.options.maxcount).fill(0)
+        let flights = this.flights.getScheduledTransports(this.move, maxahead)
 
         flights.forEach(f => {
             if (!f.hasOwnProperty(ACTUAL)) { // if not arrived/departed
-                let t = Transport.getTime(f)
-                t.local()
-                hours[t.hours()]++
+                const t = Transport.getTime(f)
+                const i = Math.floor(moment.duration(t.diff(ts)).asHours())
+                if (i < this.options.maxcount) {
+                    hours[i]++
+                }
             }
         })
-
-        ts.local()
-        let hourNow = ts.hours()
-        hours = hours.concat(hours) // cycle for across midnight runs
-        let forecast = hours.slice(hourNow, hourNow + this.options.maxcount)
         this.chart.updateSeries([{
             name: this.move,
-            data: forecast
+            data: hours
         }])
     }
 }

@@ -9,9 +9,10 @@ import "../../assets/css/flightboard.css"
 
 import { deepExtend } from "../Utils/Utilities"
 import { Tile } from "../Tile"
+import { Clock } from "../Clock"
 import moment from "moment"
 
-import { SCHEDULED, PLANNED, ACTUAL, DEPARTURE } from "../Constant"
+import { FLIGHTBOARD_MSG, SCHEDULED, PLANNED, ACTUAL, DEPARTURE } from "../Constant"
 
 import { flipper } from "../../assets/js/flipper.js"
 
@@ -25,7 +26,9 @@ const DEFAULTS = {
     solari: true,
     announce_delay: 15,  // min. After, announce flight is delayed.
     announce_boarding: 40,
-    announce_lastcall: 20
+    announce_lastcall: 20,
+    update_time: 15,
+    flights_ahead: 360 // min
 }
 
 const SOLARI = "solari",
@@ -79,7 +82,7 @@ export class Flightboard extends Tile {
 
 
     // update display (html table)
-    update(msgtype, data, datetime = false) {
+    update(msgtype, data) {
         /*
         function getTime(f) { // returns the most recent known time for flight
             let t = f.hasOwnProperty(SCHEDULED) ? f[SCHEDULED] : false
@@ -91,7 +94,7 @@ export class Flightboard extends Tile {
             return t
         }
         */
-        if (this.move != data.move) {
+        if (msgtype == FLIGHTBOARD_MSG && this.move != data.move) {
             return false
         }
 
@@ -107,7 +110,14 @@ export class Flightboard extends Tile {
             return td
         }
 
-        let ts = datetime ? datetime : moment() // default to now
+
+        console.log("Flightboard::update: ",msgtype,data)
+
+        let ts = moment() // default to now
+        if(msgtype == Clock.clock_message(this.options.update_time)) {
+            ts = moment(data, moment.ISO_8601)
+            console.log("Flightboard::update_time: Updating for",data)
+        }
 
         // sort flights to show most maxcount relevant flights for move
         // 1. Recently landed
@@ -117,7 +127,11 @@ export class Flightboard extends Tile {
         let scroll = true // will flip true if first line is removed (and all subsequent lines move up)
         let farr = []
         let that = this
-        let flights = this.flights.getScheduledTransports(this.move, datetime)
+        let maxahead = moment(ts).add(this.options.flights_ahead, "minutes")
+        let flights = this.flights.getScheduledTransports(this.move, maxahead)
+
+
+        console.log("Flightboard::update", flights)
 
         flights.forEach(f => {
             let flight = that.flights.get(f.name)

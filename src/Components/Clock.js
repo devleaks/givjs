@@ -8,25 +8,14 @@ import { Subscriber } from "./Subscriber"
 import { deepExtend } from "./Utils/Utilities"
 
 
-import { CLOCK_MSG, SIMULATION_MSG } from "./Constant"
+import { CLOCK_MSG, CLOCK_TICKS, SIMULATION_MSG } from "./Constant"
 
 import "../assets/css/clock.css"
 
 const DEFAULTS = {
     refresh: 1, //seconds
     inc: 1, // seconds
-    log: false,
-    morethan: [ // minutes
-        1,
-        2,
-        5,
-        10,
-        15,
-        20,
-        30,
-        60,
-        120
-    ]
+    log: true
 }
 
 export class Clock extends Subscriber {
@@ -73,26 +62,24 @@ export class Clock extends Subscriber {
 
 
     /**
-     * Update clokc
+     * Update clock
      *
      * @param      {String}  msgtype  The msgtype
      * @param      {String}  data     The time as ISO 8601 formatted string.
      */
     update(msgtype, data) {
         if (this.options.log) {
-            console.log("Clock::updateClock", msgtype, data)
+            console.log("Clock::update", msgtype, data)
         }
         switch (msgtype) {
             case CLOCK_MSG:
                 this.setClock(moment(data, moment.ISO_8601))
-                this.morethanEmit()
                 break
             case SIMULATION_MSG:
                 this.setClock(moment(data.timestamp, moment.ISO_8601))
                 this.setInc(data.speed)
                 break
-            default:
-                console.log("Clock::update: Received default", msgtype)
+            default: // Ignore CLOCK_MSG.{DELAY} messages
                 break
         }
     }
@@ -102,20 +89,24 @@ export class Clock extends Subscriber {
      * Example: CLOCK_MSG.15 generates a message whenever 15 minutes elapsed since last generation of CLOCK_MSG.15.
      */
     morethanEmit() {
-        this.options.morethan.forEach((delay) => {
+        CLOCK_TICKS.forEach((delay) => {
             let lasttime = this.morethan.get(delay)
+            // console.log("Clock::morethanEmit: get", CLOCK_MSG + "." + delay, lasttime)
             if (lasttime) {
+                lasttime = moment(lasttime)
                 const d = moment.duration(this.date.diff(lasttime)).asMinutes()
-
-                console.log("Clock::morethan", delay, d, d > delay, lasttime.toISOString(true), this.date.toISOString(true))
                 if (d > delay) {
-                    console.log("Clock::morethan: EMIT", CLOCK_MSG + "." + delay, this.date.toISOString(true))
-                    this.morethan.set(delay, this.date)
-                    PubSub.publish(CLOCK_MSG + "." + delay, this.date.toISOString(true))
+                    /*if (this.options.log) {
+                        console.log("Clock::morethanEmit", Clock.clock_message(delay), this.date.toISOString(true), lasttime.toISOString(true), d)
+                    }*/
+                    // console.log("Clock::morethanEmit: EMIT", CLOCK_MSG + "." + delay, this.date.toISOString(true), lasttime.toISOString(true), d)
+                    this.morethan.set(delay, this.date.toISOString())
+                    PubSub.publish(Clock.clock_message(delay)
+                        , this.date.toISOString(true))
                 }
             } else {
-                console.log("Clock::morethan: setting", delay, this.date.toISOString(true))
-                this.morethan.set(delay, this.date)
+                console.log("Clock::morethanEmit: set", CLOCK_MSG + "." + delay, this.date.toISOString(true))
+                this.morethan.set(delay, this.date.toISOString())
             }
         })
     }
@@ -134,10 +125,30 @@ export class Clock extends Subscriber {
         document.querySelector(".second").style.transform = `rotate(${seconds}deg)`
         document.querySelector(".minute").style.transform = `rotate(${minutes}deg)`
         document.querySelector(".hour").style.transform = `rotate(${hours}deg)`
+
+        this.morethanEmit()
     }
 
 
     setClock(d) {
+        if (this.running) {
+            clearInterval(this.running)
+            delete this.running
+        }
+        // console.log("Clock::setClock:", d.isBefore(this.date), d.toISOString(true), this.date.toISOString(true))
+        if (d.isBefore(this.date)) { //back to the future
+            console.log("Clock::RESETTING MAP")
+            CLOCK_TICKS.forEach((delay) => {
+                let lasttime = this.morethan.get(delay)
+                if (lasttime) {
+                    lasttime = moment(lasttime)
+                    if (lasttime.isAfter(d)) {
+                        console.log("Clock::setClock: back to the future", delay, lasttime.toISOString(), d.toISOString())
+                        this.morethan.set(delay, d.toISOString())
+                    }
+                }
+            })
+        }
         this.date = d
         this.run()
     }
@@ -167,5 +178,9 @@ export class Clock extends Subscriber {
      */
     get() {
         return this.date
+    }
+
+    static clock_message(i) {
+        return CLOCK_TICKS.indexOf(i) > -1 ? CLOCK_MSG + "." + i : CLOCK_MSG
     }
 }
