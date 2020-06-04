@@ -12,6 +12,11 @@ const MOVED_DISTANCE = 0.050 // km
 
 let _devices = new Map()
 
+/**
+ * Check for absence of movment and stopped position: Is it on a parking spot? Triggers message accordingly.
+ *
+ * @param      {<type>}  feature  The feature
+ */
 export function stopped(feature) {
     const fid = getFeatureId(feature)
     var lastseen = _devices.get(fid)

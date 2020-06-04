@@ -21,7 +21,21 @@ const DEFAULTS = {
     markerSize: 12, // px
     lDivIconClassname: "gip-marker",
     SparklinePrefix: "spark-",
-    info_content_id: "side-info"
+    info_content_id: "side-info",
+    apron_default_style: {
+        color: "darkgrey", // stroke color
+        opacity: 0.4, // stroke opacity 0 = transparent
+        weight: 1, // stroke width
+        fillColor: "darkgrey", // fill color
+        fillOpacity: 0.2 // fill opacity 1 = opaque
+    },
+    style: {
+        color: "darkgrey", // stroke color
+        opacity: 0.6, // stroke opacity 0 = transparent
+        weight: 1, // stroke width
+        fillColor: "darkgrey", // fill color
+        fillOpacity: 0.2 // fill opacity 1 = opaque
+    }
 }
 
 let featureLayerIds = new Map()
@@ -59,21 +73,11 @@ export function style(feature) {
         return feature.properties[HIDE_STYLE]
     }
     if (feature.properties.hasOwnProperty("apron")) {
-        return {
-            color: APRONS_COLORS[feature.properties.apron], // stroke color
-            opacity: 0.4, // stroke opacity 0 = transparent
-            weight: 1, // stroke width
-            fillColor: "darkgrey", // fill color
-            fillOpacity: 0.2 // fill opacity 1 = opaque
-        }
+        let style = DEFAULTS.apron_default_style
+        style.color = APRONS_COLORS[feature.properties.apron]
+        return style
     }
-    return {
-        color: "darkgrey", // stroke color
-        opacity: 0.6, // stroke opacity 0 = transparent
-        weight: 1, // stroke width
-        fillColor: "darkgrey", // fill color
-        fillOpacity: 0.2 // fill opacity 1 = opaque
-    }
+    return DEFAULTS.style
 }
 
 
@@ -110,18 +114,31 @@ function getRotation(feature) {
 }
 
 
+function getSparklineId(feature) {
+    return DEFAULTS.SparklinePrefix + getFeatureId(feature)
+}
+
 function getMarker(feature, latlng) {
     feature.properties[ROTATION_PROPERTY] = getRotation(feature)
-    //console.log("Style::getMarker", feature, latlng)
-    let icon = getIcon(feature)
+
     let marker = new Marker(latlng, {
-        icon: icon.icon,
+        icon: getIcon(feature),
         rotationAngle: feature.properties[ROTATION_PROPERTY]
     })
-    if (icon.chart !== false) {
-        console.log("getMarker", "Marker has listener")
-        marker.on("add", function() { icon.chart.render() } );
+
+    if (feature.properties.hasOwnProperty(HASDATA)) {
+        marker.on("add", function() {
+            console.log("Style::getMarker::on add", feature)
+            let chart = new Sparkline(
+                getSparklineId(feature),
+                feature.properties[HASDATA].type,
+                feature.properties[HASDATA].values
+            )
+            chart.render()
+        });
+        console.log("Style::getMarker", "Marker has data, has listener")
     }
+
     return marker
 }
 
@@ -149,55 +166,35 @@ STYLE: {
  * @return     {Object}  The icon and a function to be called when added to the map.
  */
 function getIcon(feature) {
-    let icon = DEFAULTS["markerSymbol"],
+    let glyph = DEFAULTS["markerSymbol"],
         color = DEFAULTS["markerColor"],
         size = DEFAULTS["markerSize"]
+    let html = ''
 
     if (feature.properties.hasOwnProperty(HASDATA)) {
-        console.log("Style::getIcon: Has data!", feature)
-        return getSparkline(feature)
-    }
-    if (feature.properties.hasOwnProperty(HIDE_STYLE)) {
-        if (feature.properties[HIDE_STYLE]["markerSymbol"]) {
-            icon = feature.properties[HIDE_STYLE]["markerSymbol"]
+        html = "<div id='" + getSparklineId(feature) + "'></div>"
+    } else {
+        if (feature.properties.hasOwnProperty(HIDE_STYLE)) {
+            if (feature.properties[HIDE_STYLE]["markerSymbol"]) {
+                glyph = feature.properties[HIDE_STYLE]["markerSymbol"]
+            }
+            if (feature.properties[HIDE_STYLE]["markerColor"]) {
+                color = feature.properties[HIDE_STYLE]["markerColor"]
+                /*
+                if (color.charAt(0) == "#") { // to avoid double quotes in html string...
+                    color = "rgb(" + chroma(color).rgb().join(",") + ")"
+                }*/
+            }
+            if (feature.properties[HIDE_STYLE]["markerSize"]) {
+                size = feature.properties[HIDE_STYLE]["markerSize"]
+            }
         }
-        if (feature.properties[HIDE_STYLE]["markerColor"]) {
-            color = feature.properties[HIDE_STYLE]["markerColor"]
-            /*
-            if (color.charAt(0) == "#") { // to avoid double quotes in html string...
-                color = "rgb(" + chroma(color).rgb().join(",") + ")"
-            }*/
-        }
-        if (feature.properties[HIDE_STYLE]["markerSize"]) {
-            size = feature.properties[HIDE_STYLE]["markerSize"]
-        }
+        html = `<i class='la la-${ glyph }' style='color: ${ color }; font-size:${ size }px;'></i>`
     }
-    // eslint-disable-next-line quotes
-    // let html = "<i class='la la-" + icon + "' style='color: " + '"' + color + '"' + "; font-size:" + size + "px;'></i>"
-    let html = `<i class='la la-${ icon }' style='color: ${ color }; font-size:${ size }px;'></i>`
-    return {
-        icon: new DivIcon({
-            className: DEFAULTS.lDivIconClassname,
-            html: html
-        }),
-        chart: false
-    }
-}
-
-
-// Replace device icon with sparkline. Really a show-off feature.
-// Example: fuel truck that displays what is in its tank.
-function getSparkline(feature) {
-    let data = feature.properties[HASDATA]
-    let fid = getFeatureId(feature)
-    let elid = DEFAULTS.SparklinePrefix + fid
-    return {
-        icon: new DivIcon({
-            className: DEFAULTS.lDivIconClassname,
-            html: "<div id='" + elid + "'></div>"
-        }),
-        chart: new Sparkline(elid, data.type, data.values)
-    }
+    return new DivIcon({
+        className: DEFAULTS.lDivIconClassname,
+        html: html
+    })
 }
 
 

@@ -9,7 +9,6 @@ import { eslint } from "rollup-plugin-eslint"
 import postcss from "rollup-plugin-postcss"
 import postcssImport from "postcss-import"
 import postcssUrl from "./plugins/postcssUrl"
-import clean from "rollup-plugin-clean"
 import serve from "rollup-plugin-serve"
 import livereload from "rollup-plugin-livereload"
 

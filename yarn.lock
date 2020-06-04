@@ -4509,6 +4509,11 @@ supports-color@^7.0.0, supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
+svg-to-geojson@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/svg-to-geojson/-/svg-to-geojson-1.0.0.tgz#5df1b893302dd5b4c67ce98fd6920fcba0c3cbb3"
+  integrity sha1-XfG4kzAt1bTGfOmP1pIPy6DDy7M=
+
 svg.draggable.js@^2.2.2:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/svg.draggable.js/-/svg.draggable.js-2.2.2.tgz#c514a2f1405efb6f0263e7958f5b68fce50603ba"

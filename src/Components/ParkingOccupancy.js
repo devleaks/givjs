@@ -12,6 +12,8 @@ import { Subscriber } from "./Subscriber"
 
 import { BUSY, APRONS_COLORS, MAP_MSG, PARKING_UPDATE_MSG } from "./Constant"
 
+PubSub.immediateExceptions = true;
+
 /**
  *  DEFAULT VALUES
  */
@@ -58,8 +60,8 @@ export class ParkingOccupancy extends Subscriber {
                 color: APRONS_COLORS[box.properties.apron], // stroke color
                 opacity: 0.4, // stroke opacity 0 = transparent
                 weight: 1, // stroke width
-                fillColor: "green", // fill color
-                fillOpacity: 0.4 // fill opacity 1 = opaque
+                fillColor: "darkgrey", // fill color
+                fillOpacity: 0.2 // fill opacity 1 = opaque
             }
             box.properties.layerName = this.options.aprons_layer_name
             if (parking.available == BUSY) {

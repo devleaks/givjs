@@ -12,7 +12,8 @@ import "../assets/css/clock.css"
 
 const DEFAULTS = {
     refresh: 1, //seconds
-    inc: 1 // seconds
+    inc: 1, // seconds
+    log: false
 }
 
 export class Clock extends Subscriber {
@@ -64,7 +65,9 @@ export class Clock extends Subscriber {
      * @param      {String}  data     The time as ISO 8601 formatted string.
      */
     update(msgtype, data) {
-        console.log("Clock::updateClock", msgtype, data)
+        if(this.options.log) {
+            console.log("Clock::updateClock", msgtype, data)
+        }
         switch(msgtype) {
             case CLOCK_MSG:
             this.setClock(moment(data), moment.ISO_8601)
@@ -85,11 +88,11 @@ export class Clock extends Subscriber {
 
         const seconds = this.date.seconds() * 6
         const minutes = this.date.minutes() * 6
-        const hours = this.date.hours() * 30 + Math.floor( this.date.minutes() / 2 )
+        const hours   = this.date.hours() * 30 + Math.floor( this.date.minutes() / 2 )
 
         document.querySelector(".second").style.transform = `rotate(${seconds}deg)`
         document.querySelector(".minute").style.transform = `rotate(${minutes}deg)`
-        document.querySelector(".hour").style.transform = `rotate(${hours}deg)`
+        document.querySelector(".hour").style.transform   = `rotate(${hours}deg)`
     }
 
 

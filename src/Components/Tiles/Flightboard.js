@@ -22,7 +22,10 @@ const DEFAULTS = {
     elemid: "flightboard",
     msgtype: "flightboard",
     maxcount: 12,
-    solari: true
+    solari: true,
+    announce_delay: 15,  // min. After, announce flight is delayed.
+    announce_boarding: 40,
+    announce_lastcall: 20
 }
 
 const SOLARI = "solari",
@@ -165,8 +168,8 @@ export class Flightboard extends Tile {
                     t = flight[ACTUAL]
                     if (flight.hasOwnProperty(SCHEDULED)) {
                         let diff = moment.duration(flight[ACTUAL].diff(flight[SCHEDULED])).asMinutes()
-                        if (diff > 15) { // minutes
-                            flight.note = (move == DEPARTURE ? "Delayed +" : "Landed +") + diff + " min"
+                        if (diff > this.options.announce_delay) {
+                            flight.note = (this.move == DEPARTURE ? "Delayed +" : "Landed +") + diff + " min"
                             s = false
                             scolor = "red"
                         }
@@ -180,7 +183,7 @@ export class Flightboard extends Tile {
                     t = flight[PLANNED]
                     if (flight.hasOwnProperty(SCHEDULED)) {
                         let diff = moment.duration(flight[PLANNED].diff(flight[SCHEDULED])).asMinutes()
-                        if (diff > 15) { // minutes
+                        if (diff > this.options.announce_delay) {
                             flight.note = "Delayed" // "Delayed "+diff+" min"
                             s = false
                         }
@@ -192,10 +195,10 @@ export class Flightboard extends Tile {
                     status = s ? Msuccess : Mdanger
                     if (this.move == DEPARTURE && !flight.hasOwnProperty(ACTUAL)) {
                         let boarding = moment.duration(flight[PLANNED].diff(ts)).asMinutes()
-                        if (boarding < 40) { // minutes
+                        if (boarding < this.options.announce_boarding) {
                             status = Mboarding // :-)
-                            flight.note = boarding < 20 ? "LAST CALL" : "Boarding"
-                            scolor = boarding < 20 ? "red" : "green"
+                            flight.note = boarding < this.options.announce_lastcall ? "LAST CALL" : "Boarding"
+                            scolor = boarding < this.options.announce_lastcall ? "red" : "green"
                         }
                     }
                 } else {

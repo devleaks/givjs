@@ -51,9 +51,6 @@ export class Transport extends Subscriber {
                     console.log("Transport::no listener", msgtype)
                     break
             }
-            if(data.hasOwnProperty("timestamp")) {
-                PubSub.publish(CLOCK_MSG, data.timestamp)
-            }
         })
     }
 

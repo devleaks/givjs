@@ -14,28 +14,20 @@ import { deepExtend } from "./Utils/Utilities"
 
 
 import { ChannelWebsocket } from "./ChannelWebsocket"
+import { CLOCK_MSG } from "./Constant"
+
+PubSub.immediateExceptions = true;
 
 /**
  *  DEFAULT VALUES
-
-expected message format: {
-    type: "map",            // <== destination of message
-    payload: {              // <== payload sent to destination
-        type: "Feature",
-        geometry: {},
-        properties: {},
-        id: "-=id=-"    
-    }
-}
-
  */
 const DEFAULTS = {
     debug: false,
     TYPE: "type",
     PAYLOAD: "payload",
+    TIMESTAMP: "timestamp",
     channels: {}
 }
-
 
 export class Dispatcher {
 
@@ -71,13 +63,15 @@ export class Dispatcher {
      * Dispatch message to viewer
      *
      * @param      {Object}  data    The data
-     * {
+    *  expected data format:
+        {
             type: "map",            // <== destination of message
-            payload: {              // <== payload sent to destination, in this case payload is a Feature.
+            timestamp: "",          // <== ISO 8861 formatted (original) date/time of message
+            payload: {              // <== payload sent to destination
                 type: "Feature",
                 geometry: {},
                 properties: {},
-                id: "id"    
+                id: "-=id=-"    
             }
         }
      */
@@ -98,6 +92,10 @@ export class Dispatcher {
             const msgtype = msg[this.options.TYPE]
             try {
                 PubSub.publish(msgtype, msg[this.options.PAYLOAD])
+                if (msg.hasOwnProperty(this.options.TIMESTAMP)) { // adjust simulation clock
+                    PubSub.publish(CLOCK_MSG, msg[this.options.TIMESTAMP])
+                }
+
                 // console.log("Dispatcher::published", msgtype, msg[this.options.PAYLOAD])
             } catch (e) {
                 console.error("Dispatcher::dispatch: problem during broadcast", msg[this.options.PAYLOAD], e)
