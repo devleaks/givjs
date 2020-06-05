@@ -15,11 +15,12 @@ import postcss from "rollup-plugin-postcss"
 import postcssImport from "postcss-import"
 import postcssUrl from "./plugins/postcssUrl"
 import clean from "rollup-plugin-clean"
+import copy from "rollup-plugin-copy"
 
 import pkg from "../package.json"
 
 const DEVELOPMENT = "development"
-const PRODUCTION  = "production"
+const PRODUCTION = "production"
 
 process.env.NODE_ENV = DEVELOPMENT
 
@@ -43,6 +44,18 @@ export default {
         json(),
         pug(),
         image(),
+        copy({
+            targets: [
+                { src: "index.html", dest: "dist/" },
+                { src: ["assets/assets/i/favicon.ico"], dest: "dist/" },
+                { src: [
+                    "src/data/eblg-logo.svg",
+                    "src/data/eblg-parking-boxes.geojson",
+                    "src/data/EBLG_GMC01_v13.svg",
+                    "src/data/EBLG_GMC01_v13-night.svg"
+                ], dest: "dist/src/data/" }
+            ]
+        }),
         postcss({
             extract: true,
             plugins: [
@@ -64,10 +77,10 @@ export default {
                 "src/**.js"
             ]
         }),
-        {   // https://github.com/patarapolw/minimal-rollup-ts-pug-sass-template
+        { // https://github.com/patarapolw/minimal-rollup-ts-pug-sass-template
             name: "emitPug",
             generateBundle() {
-                fs.writeFileSync(path.join(`${ CWD }`, "index.html"), pugAPI.compileFile("src/index.pug")({
+                fs.writeFileSync(path.join(Paths.DIST, "index.html"), pugAPI.compileFile("src/index.pug")({
                     description: pkg.description,
                     title: pkg.name
                 }))

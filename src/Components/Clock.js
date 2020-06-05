@@ -112,7 +112,7 @@ export class Clock extends Subscriber {
                         , this.date.toISOString(true))
                 }
             } else {
-                console.log("Clock::morethanEmit: set", CLOCK_MSG + "." + delay, this.date.toISOString(true))
+                // console.log("Clock::morethanEmit: set", CLOCK_MSG + "." + delay, this.date.toISOString(true))
                 this.morethan.set(delay, this.date.toISOString())
             }
         })
