@@ -210,17 +210,6 @@ export class Omap extends Tile {
         let towerPulse = new Marker(tower, { icon: L.icon.pulse({ iconSize: [10, 10], color: "red" }) })
         towerPulse.addTo(radar);
 
-        // test
-        /*
-        L.marker([50.64, 5.47], {
-            icon: L.divIcon({
-                className: "gip-marker",
-                html: "<div id='apexsparkline'></div>"
-            })
-        }).addTo(this.map)
-        randomSparklineDemo("apexsparkline", "line")
-        */
-
         this.listen(this.update.bind(this))
 
         console.log("Omap::install", "ready")
