@@ -18,6 +18,13 @@ const DEFAULTS = {
     log: true
 }
 
+/**
+ * This class describes the dashboard's clock, whether it is live or simulated.
+ * The Clock udpate mechanism exploit the wonderful message type hierarchy of pubsubjs.
+ * The clock eats all messages of its type and spit messages when a certain number of minutes have elapsed.
+ *
+ * @class      Clock (name)
+ */
 export class Clock extends Subscriber {
 
     constructor(elemid, msgtype, options) {

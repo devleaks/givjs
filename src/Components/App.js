@@ -108,11 +108,10 @@ export class App {
         const flightboard_update_message = Clock.clock_message(flightboard_update)
         this.dashboard.register("flightboard", new Flightboard("flightboard-arrival", [FLIGHTBOARD_MSG,flightboard_update_message], ARRIVAL, transport, {update_time: flightboard_update}))
         this.dashboard.register("flightboard", new Flightboard("flightboard-departure", [FLIGHTBOARD_MSG,flightboard_update_message], DEPARTURE, transport, {update_time: flightboard_update}))
-        // this.dashboard.register("flightboard", new Flightboard("flightboard-departure", FLIGHTBOARD_MSG, DEPARTURE, transport, {}))
 
         this.dashboard.register("flightboard", new MovementForecastChart("forecast-arrival", [FLIGHTBOARD_MSG,flightboard_update_message], ARRIVAL, transport, {update_time: flightboard_update}))
         this.dashboard.register("flightboard", new MovementForecastChart("forecast-departure", [FLIGHTBOARD_MSG,flightboard_update_message], DEPARTURE, transport, {update_time: flightboard_update}))
-        //
+
         let parkingOccupancy = new ParkingOccupancy(PARKING_MSG, this.parkings, { aprons_max: APRONS_MAXCOUNT, aprons_layer_name: "APRONS" })
         this.dashboard.register("parking", parkingOccupancy)
         this.dashboard.register("parking", new ParkingOccupancyChart("parking-occupancy", PARKING_UPDATE_MSG))
