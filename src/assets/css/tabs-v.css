@@ -10,20 +10,11 @@
 .tabs .tab {
     position: absolute;
     top: 0;
-    left: 12px;
-    width: 100%;
+    padding-left: 11px;
+    width: 90%;
     height: 100%;
-    -webkit-transition: -webkit-transform 0.4s ease;
-    transition: -webkit-transform 0.4s ease;
     transition: transform 0.4s ease;
-    transition: transform 0.4s ease, -webkit-transform 0.4s ease;
-    -webkit-transform: translateX(-100%);
     transform: translateX(-100%);
-}
-
-.tab label {
-    display: block;
-    transform: rotate(-90deg);
 }
 
 .tabs input[type="radio"] {
@@ -39,12 +30,12 @@
 }
 
 .tabs input[type="radio"]:nth-of-type(1) {
-    outline-color: #666;
+    outline-color: #444;
     top: 0%;
 }
 
 .tabs input[type="radio"]:nth-of-type(2) {
-    outline-color: #777;
+    outline-color: #666;
     top: 25%;
 }
 
@@ -54,15 +45,11 @@
 }
 
 .tabs input[type="radio"]:nth-of-type(4) {
-    outline-color: #999;
+    outline-color: #aaa;
     top: 75%;
 }
 
-.tabs input[type="radio"]:checked+div {
-    -webkit-transform: translateX(0%);
+.tabs input[type="radio"]:checked + div {
     transform: translateX(0%);
-    -webkit-transition: -webkit-transform 0.4s ease 0.4s;
-    transition: -webkit-transform 0.4s ease 0.4s;
     transition: transform 0.4s ease 0.4s;
-    transition: transform 0.4s ease 0.4s, -webkit-transform 0.4s ease 0.4s;
 }
