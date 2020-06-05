@@ -15,7 +15,7 @@ import "../assets/css/clock.css"
 const DEFAULTS = {
     refresh: 1, //seconds
     inc: 1, // seconds
-    log: true
+    log: false
 }
 
 /**
@@ -144,13 +144,13 @@ export class Clock extends Subscriber {
         }
         // console.log("Clock::setClock:", d.isBefore(this.date), d.toISOString(true), this.date.toISOString(true))
         if (d.isBefore(this.date)) { //back to the future
-            console.log("Clock::RESETTING MAP")
+            console.log("Clock::setClock: rewinding time")
             CLOCK_TICKS.forEach((delay) => {
                 let lasttime = this.morethan.get(delay)
                 if (lasttime) {
                     lasttime = moment(lasttime)
                     if (lasttime.isAfter(d)) {
-                        console.log("Clock::setClock: back to the future", delay, lasttime.toISOString(), d.toISOString())
+                        // console.log("Clock::setClock: back to the future", delay, lasttime.toISOString(), d.toISOString())
                         this.morethan.set(delay, d.toISOString())
                     }
                 }

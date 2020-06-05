@@ -82,9 +82,7 @@ export class App {
         this.dashboard.register("map", this.omap)
 
         // Add layers of information on map
-        //this.taxiways = new FeatureCollection("src/data/eblg-taxiways.geojson")
         this.parkings = new FeatureCollection(PARKINGS)
-
         this.parkings.addProperties({ // tooltip APRON / PARKING
             "_templates": {
                 "show_label": true,
@@ -95,15 +93,13 @@ export class App {
         this.omap.addLayer("APRONS", "Airport")
         this.omap.add("APRONS", this.parkings)
 
-        //this.omap.addLayer("SERVICES", "Airport") // now created antomagically
-        //this.omap.addLayer("AIRCRAFTS", "Aircrafts")
-
         this.dashboard.register("wire", new Wire("wire", WIRE_MSG, {}))
 
         let transport = new Transport(HOME, FLIGHTBOARD_MSG)
 
         this.dashboard.register("flightboard", transport)
 
+        // flightboard and related charts gets updated every 15 minutes in simulation.
         const flightboard_update = 15
         const flightboard_update_message = Clock.clock_message(flightboard_update)
         this.dashboard.register("flightboard", new Flightboard("flightboard-arrival", [FLIGHTBOARD_MSG,flightboard_update_message], ARRIVAL, transport, {update_time: flightboard_update}))
@@ -127,6 +123,7 @@ export class App {
 
         // eslint-disable-next-line no-unused-vars
         let dark = new Dark("dark-toggle") // just installs day/night toggle
+        //this.dashboard.register("datetime", new Dark("dark-toggle"))
 
         footer.say("Geo Intelligent Viewer ready")
 

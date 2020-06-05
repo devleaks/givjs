@@ -111,8 +111,6 @@ export class Flightboard extends Tile {
         }
 
 
-        console.log("Flightboard::update: ",msgtype,data)
-
         let ts = moment() // default to now
         if(msgtype == Clock.clock_message(this.options.update_time)) {
             ts = moment(data, moment.ISO_8601)
@@ -129,9 +127,6 @@ export class Flightboard extends Tile {
         let that = this
         let maxahead = moment(ts).add(this.options.flights_ahead, "minutes")
         let flights = this.flights.getScheduledTransports(this.move, maxahead)
-
-
-        console.log("Flightboard::update", flights)
 
         flights.forEach(f => {
             let flight = that.flights.get(f.name)

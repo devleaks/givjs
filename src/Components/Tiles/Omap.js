@@ -262,10 +262,10 @@ export class Omap extends Tile {
             layer = this.addLayer(layerName, "Other")
         }
         if (layer) {
-            let featureLayer = getFeatureLayer(feature)
+            let featureOldLayer = getFeatureLayer(feature)
             layer.addData(feature)
-            if (featureLayer) {
-                layer.removeLayer(featureLayer)
+            if (featureOldLayer) {
+                layer.removeLayer(featureOldLayer)
             }
         } else {
             console.warn("Omap::update", "layer not found", layerName)
