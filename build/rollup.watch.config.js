@@ -16,13 +16,13 @@ process.env.NODE_ENV = "development"
 
 const CWD = process.cwd()
 const Paths = {
-  SRC: `${CWD}/src`,
-  DIST: `${CWD}/dist`,
-  NODE_MODULES: `${CWD}/node_modules`
+    SRC: `${CWD}/src`,
+    DIST: `${CWD}/dist`,
+    NODE_MODULES: `${CWD}/node_modules`
 }
 Object.assign(Paths, {
-  INPUT: Paths.SRC + "/app.js",
-  OUTPUT: Paths.DIST + "/app.js"
+    INPUT: Paths.SRC + "/app.js",
+    OUTPUT: Paths.DIST + "/app.js"
 })
 
 export default {
@@ -38,10 +38,10 @@ export default {
                 postcssImport(),
                 ...postcssUrl({
                     basePath: [
-                        Paths.SRC+"/assets/css",
-                        Paths.NODE_MODULES+"/line-awesome/dist/font-awesome-line-awesome/css",
-                        Paths.NODE_MODULES+"/line-awesome/dist/line-awesome/css",
-                        Paths.NODE_MODULES+"/leaflet/dist"
+                        Paths.SRC + "/assets/css",
+                        Paths.NODE_MODULES + "/line-awesome/dist/font-awesome-line-awesome/css",
+                        Paths.NODE_MODULES + "/line-awesome/dist/line-awesome/css",
+                        Paths.NODE_MODULES + "/leaflet/dist"
                     ],
                     assetsPath: Paths.DIST + "/assets",
                     dest: Paths.DIST
@@ -50,10 +50,10 @@ export default {
         }),
         eslint({
             include: [
-                Paths.SRC+"/**.js"
+                Paths.SRC + "/**.js"
             ]
         }),
-        serve(),      // index.html should be in root of project
+        serve(), // index.html should be in root of project
         livereload()
     ],
     input: Paths.INPUT,

@@ -1,26 +1,29 @@
 /* app.css */
 :root {
-    --primary-color: #302AE6;
-    --secondary-color: #536390;
-    --font-color: #424242;
-    --bg-color: #fff;
-    --heading-color: #222222;
-    --sidebar-background: rgba(220, 220, 220, 0.6);
+    --primary-color: black;
+    --secondary-color: #db2004;
+    --font-color: #222;
+    --bg-color: whitesmoke;
+    --heading-bg-color: whitesmoke;
+    --sidebar-bg-color: #ddd;
     --sidebar-contour: "#fff";
+    --inset-color: rgba(0, 0, 0, 0.20);
 }
 
 [data-theme="dark"] {
-    --primary-color: #9A97F3;
-    --secondary-color: #818cab;
-    --font-color: #dddddd;
-    --bg-color: #111;
-    --heading-color: #dddddd;
-    --sidebar-background: rgba(40, 40, 40, 0.6);
+    --primary-color: white;
+    --secondary-color: #db2004;
+    --font-color: #ddd;
+    --bg-color: #0a0a0a;
+    --heading-bg-color: #0a0a0a;   /* #0a0a0a is opposite of whitesmoke (#f5f5f5) */
+    --sidebar-bg-color: #222; /* rgba(40, 40, 40, 0.6); */
     --sidebar-contour: "#000";
+    --inset-color: rgba(255, 255, 255, 0.40);
 }
 
 body {
     padding: 0;
     margin: 0;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: var(--font-color);
 }

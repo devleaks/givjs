@@ -29,15 +29,15 @@ import "leaflet-rotatedmarker"
 
 import { AntPath } from "leaflet-ant-path"
 
-import { deepExtend } from "../Utils/Utilities"
+import { deepExtend } from "../Utilities/Utils"
 import { Tile } from "../Tile"
 
-import { getFeatureLayerName } from "../Utils/GeoJSON"
-import { style, onEachFeature, pointToLayer, getFeatureLayer } from "../Utils/Style"
+import { getFeatureLayerName } from "../Utilities/GeoJSON"
+import { style, onEachFeature, pointToLayer, getFeatureLayer } from "../Utilities/Style"
 
 //import { randomSparklineDemo } from "./Charts/sparkline"
 
-import { stopped } from "../Utils/Stopped"
+import { stopped } from "../Utilities/Stopped"
 
 
 import { MAP_MSG, DARK_MSG, DARK, LIGHT } from "../Constant"
@@ -270,8 +270,6 @@ export class Omap extends Tile {
     updateOnDark(mode) {
         const that = this
         if (mode == DARK) {
-            document.documentElement.setAttribute("data-theme", "dark")
-            document.documentElement.className = "theme-dark";
             this.options.themes.dark.forEach(function f(l) {
                 l.addTo(that.map)
             })
@@ -279,8 +277,6 @@ export class Omap extends Tile {
                 that.map.removeLayer(l)
             })
         } else if (mode == LIGHT) {
-            document.documentElement.setAttribute("data-theme", "light")
-            document.documentElement.className = "theme-light";
             this.options.themes.light.forEach(function f(l) {
                 l.addTo(that.map)
             })

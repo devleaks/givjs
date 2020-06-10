@@ -9,7 +9,7 @@
 import moment from "moment"
 import ApexCharts from "apexcharts"
 
-import { deepExtend } from "../../Utils/Utilities"
+import { deepExtend } from "../../Utilities/Utils"
 import { ApexTile } from "../ApexTile"
 import { Transport } from "../../Transport"
 import { Clock } from "../../Clock"

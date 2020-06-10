@@ -5,7 +5,7 @@ import PubSub from "pubsub-js"
 import moment from "moment"
 
 import { Subscriber } from "./Subscriber"
-import { deepExtend } from "./Utils/Utilities"
+import { deepExtend } from "./Utilities/Utils"
 
 
 import { CLOCK_MSG, CLOCK_TICKS, SIMULATION_MSG } from "./Constant"

@@ -7,10 +7,10 @@
  */
 import "../../assets/css/wire.css"
 
-import { deepExtend } from "../Utils/Utilities"
+import { deepExtend } from "../Utilities/Utils"
 import { Tile } from "../Tile"
 
-import { showJson } from "../Utils/Display"
+import { showJson } from "../Utilities/Display"
 
 /**
  *  DEFAULT VALUES

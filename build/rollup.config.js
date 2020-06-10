@@ -48,12 +48,15 @@ export default {
             targets: [
                 { src: "index.html", dest: "dist/" },
                 { src: ["assets/assets/i/favicon.ico"], dest: "dist/" },
-                { src: [
-                    "src/data/eblg-logo.svg",
-                    "src/data/eblg-parking-boxes.geojson",
-                    "src/data/EBLG_GMC01_v13.svg",
-                    "src/data/EBLG_GMC01_v13-night.svg"
-                ], dest: "dist/src/data/" }
+                {
+                    src: [
+                        "src/data/eblg-logo.svg",
+                        "src/data/eblg-parking-boxes.geojson",
+                        "src/data/EBLG_GMC01_v13.svg",
+                        "src/data/EBLG_GMC01_v13-night.svg"
+                    ],
+                    dest: "dist/src/data/"
+                }
             ]
         }),
         postcss({

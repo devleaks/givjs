@@ -5,7 +5,7 @@
  *
  * Install map in div
  */
-import { deepExtend } from "../../Utils/Utilities"
+import { deepExtend } from "../../Utilities/Utils"
 import { ApexTile } from "../ApexTile"
 
 import { BUSY, APRONS_COLORS } from "../../Constant"

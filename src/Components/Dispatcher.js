@@ -10,7 +10,7 @@
  *  Messages with no receving element are reported on console and discarded.
  */
 import PubSub from "pubsub-js"
-import { deepExtend } from "./Utils/Utilities"
+import { deepExtend } from "./Utilities/Utils"
 
 
 import { ChannelWebsocket } from "./ChannelWebsocket"

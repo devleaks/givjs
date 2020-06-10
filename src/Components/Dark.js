@@ -45,6 +45,9 @@ export class Dark {
         input.addEventListener("change", function() {
             that.dark = (that.dark == DARK ? LIGHT : DARK)
             localStorage.setItem(LOCALSTORAGE_DARK, that.dark)
+            // sets a global set of variables to console styles
+            document.documentElement.setAttribute("data-theme", that.dark)
+            document.documentElement.className = "theme-" + that.dark;
             PubSub.publish(DARK_MSG, that.dark)
         })
 
@@ -52,6 +55,10 @@ export class Dark {
         button.appendChild(span)
         let el = document.getElementById(this.elemid)
         el.appendChild(button)
+
+        // set it for now
+        document.documentElement.setAttribute("data-theme", this.dark)
+        document.documentElement.className = "theme-" + this.dark;
     }
 
 

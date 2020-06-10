@@ -7,7 +7,7 @@
  */
 import PubSub from "pubsub-js"
 
-import { deepExtend } from "./Utils/Utilities"
+import { deepExtend } from "./Utilities/Utils"
 import { Subscriber } from "./Subscriber"
 
 import { BUSY, APRONS_COLORS, MAP_MSG, PARKING_UPDATE_MSG } from "./Constant"

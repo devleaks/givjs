@@ -5,7 +5,7 @@
  *
  * GIP Viewer Application. Initiates a dashboard and registers Tile in it.
  */
-import { deepExtend } from "./Utils/Utilities"
+import { deepExtend } from "./Utilities/Utils"
 import { Channel } from "./Channel"
 
 const DEFAULTS = {

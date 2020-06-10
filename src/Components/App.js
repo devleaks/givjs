@@ -8,8 +8,8 @@
 import "line-awesome/dist/font-awesome-line-awesome/css/all.css"
 import "line-awesome/dist/line-awesome/css/line-awesome.css"
 
-import "../assets/css/layout.css"
 import "../assets/css/app.css"
+import "../assets/css/layout.css"
 
 import { Dashboard } from "./Dashboard"
 //import L from "leaflet"
