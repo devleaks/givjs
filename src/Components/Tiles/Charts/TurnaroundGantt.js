@@ -5,26 +5,26 @@
  */
 
 
+import moment from "moment"
+import ApexCharts from "apexcharts"
+
 import { deepExtend } from "../../Utilities/Utils"
 import { ApexTile } from "../ApexTile"
 
-import moment from "moment"
 
-/**
- *  DEFAULT VALUES
- */
 const DEFAULTS = {
     elemid: "turnaround-gantts",
-    msgtype: "stopped"
+    msgtype: "ROTATION_UPDATED"
 }
 
 
 export class TurnaroundGantt extends ApexTile {
 
-    constructor(elemid, message_type, parkings, options) {
+    constructor(elemid, message_type, parkings, rotations, options) {
         super(elemid, message_type)
         this.options = deepExtend(DEFAULTS, options)
         this.parkings = parkings
+        this.rotations = rotations
         this.charts = new Map()
         this.gantt =  new Map()
         this.install()
@@ -37,12 +37,13 @@ export class TurnaroundGantt extends ApexTile {
         let hook = document.getElementById(this.elemid)
         let newel = document.createElement("ul")
         hook.appendChild(newel)
-        // this.listen(this.listener.bind(this))
+        this.listen(this.update.bind(this))
     }
 
 
-    listener(msg, feature) {
-        console.log("TurnaroundGantt::listener", msg, feature)
+    update(msg, stopped) {
+        console.log("TurnaroundGantt::update", msg, stopped)
+        this.create_update_chart(stopped.parking)
     }
 
 
@@ -50,8 +51,10 @@ export class TurnaroundGantt extends ApexTile {
         let chartdata = this.getServices(parking)
         let chart = this.charts.get(parking)
 
-        if (!chart) {
-            let hook = document.querySelector("#wire ul")
+        if (chart) {
+            chart.updateSeries(chartdata)
+        } else { // creates it            
+            let hook = document.querySelector("#" + this.elemid + " ul")
             let newel = document.createElement("li")
             let newdiv = document.createElement("div")
             let id = "gantchart" + Math.floor(Math.random() * 1000000)
@@ -102,15 +105,15 @@ export class TurnaroundGantt extends ApexTile {
             })
             chart.render()
             this.charts.set(data.parking, chart)
-
-        } else {
-            chart.updateSeries(chartdata)
         }
     }
 
     /*  update/insert HTML code on event
      */
     getServices(parking) {
+        let data = []
+        let now = moment()
+        /*
         const colors = {
             plane: "#db2004",
             fuel: "#008FFB",
@@ -121,10 +124,7 @@ export class TurnaroundGantt extends ApexTile {
         }
         let r = this.gantt.get("" + parking)
         console.log("getServices::r", r)
-        let now = moment()
-        let data = [],
-            data2,
-            arrt = false,
+        let arrt = false,
             dept = false
 
         if (r.arrival) {
@@ -160,14 +160,14 @@ export class TurnaroundGantt extends ApexTile {
                 }
             }
         }
-
-        // console.log("getServices::data", data)
-
-        data2 = [{
+        console.log("getServices::data", data)
+        */
+        data = [
+            {
                 x: "Plane",
                 y: [
-                    arrt.valueOf(),
-                    dept.valueOf()
+                    moment(now).subtract(60, "minutes").valueOf(),
+                    moment(now).subtract(60, "minutes").valueOf()
                 ],
                 fillColor: "#008FFB"
             },
@@ -219,11 +219,6 @@ export class TurnaroundGantt extends ApexTile {
             data: data
         }];
 
-    }
-
-    update(stopped) {
-        console.log("TurnaroundGantt::update", stopped)
-        return;
     }
 
 }

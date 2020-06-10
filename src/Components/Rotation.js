@@ -5,7 +5,7 @@
  */
 
 
-import { booleanPointInPolygon } from "@turf/turf"
+import PubSub from "pubsub-js"
 import moment from "moment"
 
 import { Subscriber } from "./Subscriber"
@@ -183,8 +183,7 @@ export class Rotation extends Subscriber {
             // do we need to push r back on map??
             this.rotations.set(rid, r)
 
-            //console.log("Rotation::..updated", rid, r)
-            // create_update_chart(parking)
+            PubSub.publish("ROTATION_UPDATED", stopped)
         }
     }
 

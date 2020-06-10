@@ -128,7 +128,7 @@ export class App {
 
         this.dashboard.register([STOPPED, JUST_STOPPED, JUST_STARTED, MOVED], rotations)
 
-        this.dashboard.register("stopped", new TurnaroundGantt("turnaround-gantts", [STOPPED, JUST_STOPPED, JUST_STARTED, MOVED], parkings, rotations))
+        this.dashboard.register("stopped", new TurnaroundGantt("turnaround-gantts", "ROTATION_UPDATED", parkings, rotations))
 
         // eslint-disable-next-line no-unused-vars
         let dark = new Dark("dark-toggle") // just installs day/night toggle
