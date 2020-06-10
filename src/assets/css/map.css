@@ -11,7 +11,7 @@
     box-shadow: none;
     width: 100%;
     color: var(--heading-color);
-    background-color: var(--bg-color);
+    background-color: var(--translucent-bg);
 }
 
 .gip-marker {

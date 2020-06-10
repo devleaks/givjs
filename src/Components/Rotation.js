@@ -62,18 +62,20 @@ export class Rotation extends Subscriber {
 
     install() {
         let that = this
-        this.listen((msgtype, feature) => {
+        this.listen((msgtype, stopped) => {
             //console.log("Rotation::listen", msgtype, feature)
             switch (msgtype) {
                 case JUST_STOPPED:
                 case STOPPED:
-                    const parr = that.parkings.features.filter(f => booleanPointInPolygon(feature.geometry.coordinates, f))
+                    const parr = stopped.areas.filter( (f) => f.hasOwnProperty("properties") && f.properties.hasOwnProperty("apron") )
+                    console.log("Rotation::listener:stopped", parr.length)
                     if (parr.length > 0) {
                         const box = parr[0]
                         this.update({
                             parking: box.properties.name,
-                            feature: feature
+                            feature: stopped.feature
                         })
+                        console.log("Rotation::listener:stopped: parked", box)
                     //} else {
                     //    console.log("Rotation::listener:stopped: not parked", feature)
                     }

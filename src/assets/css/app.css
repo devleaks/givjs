@@ -8,6 +8,7 @@
     --sidebar-bg-color: #ddd;
     --sidebar-contour: "#fff";
     --inset-color: rgba(0, 0, 0, 0.20);
+    --translucent-bg: rgba(255, 255, 255, 0.60);
 }
 
 [data-theme="dark"] {
@@ -19,6 +20,7 @@
     --sidebar-bg-color: #222; /* rgba(40, 40, 40, 0.6); */
     --sidebar-contour: "#000";
     --inset-color: rgba(255, 255, 255, 0.40);
+    --translucent-bg: rgba(255, 255, 255, 0.10);
 }
 
 body {

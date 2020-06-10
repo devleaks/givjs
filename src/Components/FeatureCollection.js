@@ -69,13 +69,13 @@ export class FeatureCollection {
     /*  Returns features that contain the supplied point
      */
     contains(point) {
-        this.fc.features.filter(f => booleanPointInPolygon(point.coordinates, f))
+        return this.fc.features.filter(f => booleanPointInPolygon(point.coordinates, f))
     }
 
     /*  Returns features that are inside the bbox feature (a polygon)
      */
     inside(bbox) {
-        this.fc.features.filter(f => 
+        return this.fc.features.filter(f => 
             booleanWithin(f, bbox))
     }
 
