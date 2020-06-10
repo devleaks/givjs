@@ -2,9 +2,9 @@
  * GIP Viewer
  * 2017-2020 Pierre M
  * License: MIT
- *
- * GIP Viewer Application. Initiates a dashboard and registers Tile in it.
  */
+
+
 import { deepExtend } from "./Utilities/Utils"
 import { Channel } from "./Channel"
 
@@ -12,14 +12,33 @@ const DEFAULTS = {
     reconnect_retry: 30 // tries to reconnect every x seconds
 }
 
+/**
+ * This class describes a websocket channel for data acquisition
+ *
+ * @class      ChannelWebsocket (name)
+ */
 export class ChannelWebsocket extends Channel {
 
+    /**
+     * Constructs a new ChannelWebsocket instance.
+     *
+     * @param      {<type>}  dispatcher  The dispatcher
+     * @param      {<type>}  options     The options
+     * {
+     *  reonnect_retry: 30 seconds
+     *  websocket: Web socket URL "ws://localhost:8051"
+     * }
+     */
     constructor(dispatcher, options) {
         super(dispatcher)
         this.options = deepExtend(DEFAULTS, options)
         this.install()
     }
 
+
+    /**
+     * Installs the ChannelWebsocket.
+     */
     install() {
         let ws = new WebSocket(this.options.websocket)
         let that = this

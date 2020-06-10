@@ -1,6 +1,10 @@
 /*
- *  Stolen here: https://codepen.io/dope/pen/KJYMZz
+ * GIP Viewer
+ * 2017-2020 Pierre M
+ * License: MIT
  */
+
+
 import moment from "moment"
 import { Tile } from "../Tile"
 

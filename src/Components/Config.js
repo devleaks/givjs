@@ -1,6 +1,9 @@
-/*  Variable constant (from customer to customer...)
- *
+/*
+ * GIP Viewer
+ * 2017-2020 Pierre M
+ * License: MIT
  */
+
 
 export const HOME = "LGG"
 export const HOME_IATA = "EBLG"

@@ -2,9 +2,9 @@
  * GIP Viewer
  * 2017-2020 Pierre M
  * License: MIT
- *
- * Install map in div
  */
+
+
 import { deepExtend } from "../../Utilities/Utils"
 import { ApexTile } from "../ApexTile"
 

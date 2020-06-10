@@ -2,9 +2,9 @@
  * GIP Viewer
  * 2017-2020 Pierre M
  * License: MIT
- *
- * Install map in div
  */
+
+
 import PubSub from "pubsub-js"
 
 import { deepExtend } from "./Utilities/Utils"

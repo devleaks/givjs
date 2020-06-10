@@ -1,6 +1,9 @@
-/**
- *
+/*
+ * GIP Viewer
+ * 2017-2020 Pierre M
+ * License: MIT
  */
+
 
 import JSONFormatter from "json-formatter-js"
 

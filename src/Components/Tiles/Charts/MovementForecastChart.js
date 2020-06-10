@@ -2,10 +2,9 @@
  * GIP Viewer
  * 2017-2020 Pierre M
  * License: MIT
- *
- * Install map in div
  */
-//import "../assets/css/flightboard.css"
+
+
 import moment from "moment"
 import ApexCharts from "apexcharts"
 

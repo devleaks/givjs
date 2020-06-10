@@ -1,6 +1,10 @@
 /*
- *
+ * GIP Viewer
+ * 2017-2020 Pierre M
+ * License: MIT
  */
+
+
 import PubSub from "pubsub-js"
 import { distance } from "@turf/turf"
 

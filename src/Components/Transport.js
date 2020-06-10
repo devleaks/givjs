@@ -2,9 +2,9 @@
  * GIP Viewer
  * 2017-2020 Pierre M
  * License: MIT
- *
- * Install map in div
  */
+
+
 import { Subscriber } from "./Subscriber"
 
 import moment from "moment"
@@ -42,13 +42,12 @@ export class Transport extends Subscriber {
     install() {
         let that = this
         this.listen((msgtype, data) => {
-            //console.log("Transport::listen", msgtype, data)
             switch (msgtype) {
                 case FLIGHTBOARD_MSG:
                     that.updateOnFlightboard(data)
                     break
                 default:
-                    console.log("Transport::no listener", msgtype)
+                    console.warn("Transport::listen: no listener", msgtype)
                     break
             }
         })

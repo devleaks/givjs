@@ -2,9 +2,9 @@
  * GIP Viewer
  * 2017-2020 Pierre M
  * License: MIT
- *
- * Install map in div
  */
+
+
 import { deepExtend } from "./Utilities/Utils"
 
 /**
@@ -18,17 +18,35 @@ import { deepExtend } from "./Utilities/Utils"
 }
  */
 
-export class Device {
+/**
+ * This class is a container for device.
+ *
+ * @class      Device (name)
+ */
+export class Devices {
 
+    /**
+     * Constructs a new Device instance.
+     */
     constructor() {
         this.devices = new Map()
     }
 
 
+    /**
+     * Adds the specified device.
+     *
+     * @param      {<Feature>}  device  The device
+     */
     add(device) {
         this.devices.set(device.id, device)
     }
-    /*
+
+
+    /**
+     * Updates the given device.
+     *
+     * @param      {<Feature>}  device  The device
      */
     update(device) {
         if (this.devices.has(device.id)) {
@@ -40,7 +58,12 @@ export class Device {
         }
     }
 
-    /*
+
+    /**
+     * Returns a device object
+     *
+     * @param      {<String>}     The device's identifier
+     * @return     {<Feature>}    The device
      */
     get(device) {
         return typeof device == "object" ? this.devices.get(device.id) : this.devices.get(device)

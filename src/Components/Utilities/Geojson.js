@@ -1,5 +1,11 @@
+/*
+ * GIP Viewer
+ * 2017-2020 Pierre M
+ * License: MIT
+ */
+
+
 /*  GeoJSON Utility Functions
- *
  */
 const LAYERNAME_PROPERTIES = ["layer", "layerName", "group_name"]
 

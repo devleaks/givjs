@@ -1,6 +1,10 @@
-/*  Tests
- *  Should only consider: Pie, Donut, Radial, Bars, Lines.
+/*
+ * GIP Viewer
+ * 2017-2020 Pierre M
+ * License: MIT
  */
+
+
 import ApexCharts from "apexcharts"
 
 const SPARKLINES = {
@@ -28,6 +32,7 @@ const SPARKLINES = {
             },
             y: {
                 title: {
+                    // eslint-disable-next-line no-unused-vars
                     formatter: function(seriesName) {
                         return ""
                     }
@@ -108,6 +113,7 @@ const SPARKLINES = {
             },
             y: {
                 title: {
+                    // eslint-disable-next-line no-unused-vars
                     formatter: function(seriesName) {
                         return ""
                     }
@@ -148,8 +154,24 @@ const SPARKLINES = {
     }
 }
 
+
+/**
+ * Creates a sparkline based on a template.
+ *
+ * @class      Sparkline (name)
+ */
 export class Sparkline {
 
+    /**
+     * Constructs a new Sparkline instance. Chart is NOT rendered.
+     *
+     * @param      {<type>}      el           HTML element identified holding the sparkline
+     * @param      {<type>}      type         Sparkline type {line|bar|pie|donut|radialBar}
+     * @param      {Array}       data         The data
+     * @param      {number}      [width=40]   The width of sparkline
+     * @param      {number}      [height=20]  The height of sparkline
+     * @return     {ApexCharts}  The apex charts.
+     */
     constructor(el, type, data, width = 40, height = 20) {
         let options = SPARKLINES[type]
         if (["radialBar", "donut", "pie"].indexOf(type) > -1) {
@@ -161,14 +183,26 @@ export class Sparkline {
         }
         options.chart.width = width
         options.chart.height = height
-        return new ApexCharts(document.getElementById(el), options);
+        this.chart = new ApexCharts(document.getElementById(el), options)
+        return this.chart
     }
 
 
-    static randomSparklineDemo(el, t = false) {
-        let types = Object.keys(SPARKLINES)
-        let type = t ? t : types[Math.floor(Math.random() * types.length)]
-        var chart = new ApexCharts(document.getElementById(el), SPARKLINES[type]);
-        chart.render();
+    /**
+     * Renders the sparkline
+     */
+    render() {
+        this.chart.render()
     }
+
+
+    /**
+     * Getter for chart object
+     *
+     * @type       {<type>}
+     */
+    get chart() {
+        return this.chart
+    }
+
 }

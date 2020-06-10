@@ -2,9 +2,9 @@
  * GIP Viewer
  * 2017-2020 Pierre M
  * License: MIT
- *
- * Install map in div
  */
+
+
 import "../../assets/css/flightboard.css"
 
 import { deepExtend } from "../Utilities/Utils"
@@ -115,7 +115,7 @@ export class Flightboard extends Tile {
         let ts = this.clock.time
         if(msgtype == Clock.clock_message(this.options.update_time)) {
             ts = moment(data, moment.ISO_8601)
-            console.log("Flightboard::update_time: Updating for",data)
+            // console.log("Flightboard::update_time: Updating for",data)
         }
 
         // sort flights to show most maxcount relevant flights for move
@@ -145,17 +145,6 @@ export class Flightboard extends Tile {
         //farr = farr.sort((a, b) => (moment(getTime(a)).isAfter(moment(getTime(b)))))
         farr = farr.sort((a, b) => (moment(a[SCHEDULED]).isAfter(moment(b[SCHEDULED]))))
         farr = farr.splice(0, this.options.maxcount)
-
-        //update simple graph
-        /* 
-        let hourNow = ts.hours()
-        hours = hours.concat(hours)
-        let forecast = hours.slice(hourNow, hourNow + 6)
-        Oscars.Omap.updateChart(move, [{
-            name: "Arrival',
-            data: forecast
-        }])
-        */
 
         // build table
         let tbody = document.createElement("tbody")

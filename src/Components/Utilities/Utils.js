@@ -1,6 +1,9 @@
 /*
- *  Helper functions.
+ * GIP Viewer
+ * 2017-2020 Pierre M
+ * License: MIT
  */
+
 
 /**
  * Add a lsit of object's properties to the first one, recursively.

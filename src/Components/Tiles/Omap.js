@@ -2,9 +2,9 @@
  * GIP Viewer
  * 2017-2020 Pierre M
  * License: MIT
- *
- * Install map in div
  */
+
+
 import "leaflet/dist/leaflet.css"
 import "../../assets/css/map.css"
 
@@ -223,11 +223,13 @@ export class Omap extends Tile {
     update(msg, data) {
         switch (msg) {
             case MAP_MSG:
-                // console.log("Omap::listener", msg, data)
                 this.updateOnMap(data)
                 break
             case DARK_MSG:
                 this.updateOnDark(data)
+                break
+            default:
+                console.warn("Omap::update", "unhandled messages received", msg, data)
         }
     }
 

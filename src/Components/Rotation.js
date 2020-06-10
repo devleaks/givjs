@@ -2,9 +2,9 @@
  * GIP Viewer
  * 2017-2020 Pierre M
  * License: MIT
- *
- * Install map in div
  */
+
+
 import { booleanPointInPolygon } from "@turf/turf"
 import moment from "moment"
 
@@ -52,56 +52,87 @@ import { STOPPED, JUST_STOPPED, JUST_STARTED, MOVED } from "./Constant"
  */
 export class Rotation extends Subscriber {
 
-    constructor(msgtype, parkings) {
+    /**
+     * Constructs a new rotation instance.
+     *
+     * @param      {<type>}  msgtype     Message types handled by this Subscriber
+     * @param      {<type>}  transports  The transport containing all transports
+     * @param      {<type>}  parkings    The parkings containing rotation rendez-vous point
+     */
+    constructor(msgtype, transports, parkings) {
         super(msgtype)
+        this.transports = transports
         this.parkings = parkings
         this.rotations = new Map()
         this.install()
     }
 
-
+    /**
+     * Installs the Rotation
+     */
     install() {
-        let that = this
-        this.listen((msgtype, stopped) => {
-            //console.log("Rotation::listen", msgtype, feature)
-            switch (msgtype) {
-                case JUST_STOPPED:
-                case STOPPED:
-                    const parr = stopped.areas.filter( (f) => f.hasOwnProperty("properties") && f.properties.hasOwnProperty("apron") )
-                    console.log("Rotation::listener:stopped", parr.length)
-                    if (parr.length > 0) {
-                        const box = parr[0]
-                        this.update({
-                            parking: box.properties.name,
-                            feature: stopped.feature
-                        })
-                        console.log("Rotation::listener:stopped: parked", box)
-                    //} else {
-                    //    console.log("Rotation::listener:stopped: not parked", feature)
-                    }
-                    break
-                case JUST_STARTED:
-                case MOVED:
-                    break
-                default:
-                    console.warn("Rotation::no listener", msgtype)
-                    break
-            }
-        })
+        this.listen(this.update.bind(this))
     }
 
 
+    /**
+     * Geneates unique rotation identifier, with parking, and time of arrival of scheduled flight
+     *
+     * @param      {<type>}  rotation  The rotation
+     * @return     {string}  { description_of_the_return_value }
+     */
     static mkRotationId(rotation) {
         return "R::" + rotation.parking // + "-" + rotation.start_scheduled.toISOString()
     }
 
 
     /**
+     * Rotation listener. Dispatches to approprriate function.
+     *
+     * @param      {<type>}  msgtype  The msgtype
+     * @param      {<type>}  stopped  The stopped
+     * 
+     * {
+     *  feature: Device
+     *  areas: Array of Feature<Polygon>
+     * }
+     */
+    update(msgtype, stopped) {
+        //console.log("Rotation::listen", msgtype, feature)
+        switch (msgtype) {
+            case JUST_STOPPED:
+            case STOPPED:
+                const parr = stopped.areas.filter((f) => f.hasOwnProperty("properties") && f.properties.hasOwnProperty("apron"))
+                if (parr.length > 0) {
+                    const box = parr[0]
+                    this.updateOnStopped({
+                        feature: stopped.feature,
+                        parking: box.properties.name
+                    })
+                    //} else {
+                    //    console.log("Rotation::listener:stopped: not parked", feature)
+                }
+                break
+            case JUST_STARTED:
+            case MOVED:
+                break
+            default:
+                console.warn("Rotation::no listener", msgtype)
+                break
+        }
+    }
+
+    /**
      * Update a rotation
      *
      * @param      {Object}  rotation  The rotation
+     * 
+     * {
+     *  feature: Device
+     *  parking: First Feature<Polygon> of type parking (hasOwnProperty("apron"))
+     * }
      */
-    update(stopped) {
+    updateOnStopped(stopped) {
         let rid = Rotation.mkRotationId(stopped)
         //console.log("Rotation::updating..", rid, stopped)
 
@@ -121,7 +152,7 @@ export class Rotation extends Subscriber {
             if (!r.departure) {
                 if (r.arrival) {
                     console.log("Rotation::update", "service has arrival", r, stopped)
-                    r.departure = Oscars.Util.getDepartureFlight(r.arrival.name)
+                    r.departure = this.transports.getNextTransport(r.arrival.name)
                     if (r.departure) {
                         console.log("Rotation::update", "service has departure", r, stopped)
                     }
@@ -138,8 +169,6 @@ export class Rotation extends Subscriber {
                 thisservice[vehicle] : {}
 
             let thisvehicle = thisservice[vehicle]
-
-            console.log("Rotation::update", moment().valueOf(), stopped.feature)
 
             if (!thisvehicle.hasOwnProperty("firstseen")) {
                 // console.log("Rotation::update: First visit...", moment(stopped.feature.properties._timestamp_emission, moment.ISO_8601).valueOf(), stopped.feature)

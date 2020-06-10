@@ -2,9 +2,9 @@
  * GIP Viewer
  * 2017-2020 Pierre M
  * License: MIT
- *
- * GIP Viewer Application. Initiates a dashboard and registers Tile in it.
  */
+
+
 import "line-awesome/dist/font-awesome-line-awesome/css/all.css"
 import "line-awesome/dist/line-awesome/css/line-awesome.css"
 
@@ -44,24 +44,26 @@ import { CLOCK_MSG, SIMULATION_MSG, FOOTER_MSG, FLIGHTBOARD_MSG, WIRE_MSG, MAP_M
 
 
 /**
- * Main
+ * This class describes an application.
  *
  * @class      App (name)
  */
 export class App {
 
+    /**
+     * Viewer Application. Initiates a dashboard and registers Tile in it.
+     *
+     * @param      {<Object>}  options  The options
+     */
     constructor(options) {
         this.options = options
         this.install()
         this.test()
     }
 
-
-    run() {
-        console.log("App::run", "running...")
-    }
-
-
+    /**
+     * Creates the application.
+     */
     install() {
 
         this.dashboard = new Dashboard({
@@ -88,8 +90,8 @@ export class App {
         this.dashboard.register("map", this.omap)
 
         // Add layers of information on map
-        this.parkings = new FeatureCollection(PARKINGS)
-        this.parkings.addProperties({ // tooltip APRON / PARKING
+        let parkings = new FeatureCollection(PARKINGS)
+        parkings.addProperties({ // tooltip APRON / PARKING
             "_templates": {
                 "show_label": true,
                 "tooltip": "{{feature.properties.apron}} / {{feature.properties.name}}"
@@ -97,9 +99,9 @@ export class App {
         })
 
         this.omap.addLayer("APRONS", "Airport")
-        this.omap.add("APRONS", this.parkings)
+        this.omap.add("APRONS", parkings)
 
-        this.dashboard.register("stopped", new Stopped(MAP_MSG, [this.parkings], {}))
+        this.dashboard.register("stopped", new Stopped(MAP_MSG, [parkings], {}))
 
 
         this.dashboard.register("wire", new Wire("wire", WIRE_MSG, {}))
@@ -117,26 +119,36 @@ export class App {
         this.dashboard.register("flightboard", new MovementForecastChart("forecast-arrival", [FLIGHTBOARD_MSG,flightboard_update_message], ARRIVAL, transport, clock, {update_time: flightboard_update}))
         this.dashboard.register("flightboard", new MovementForecastChart("forecast-departure", [FLIGHTBOARD_MSG,flightboard_update_message], DEPARTURE, transport, clock, {update_time: flightboard_update}))
 
-        let parkingOccupancy = new ParkingOccupancy(PARKING_MSG, this.parkings, { aprons_max: APRONS_MAXCOUNT, aprons_layer_name: "APRONS" })
+        let parkingOccupancy = new ParkingOccupancy(PARKING_MSG, parkings, { aprons_max: APRONS_MAXCOUNT, aprons_layer_name: "APRONS" })
         this.dashboard.register("parking", parkingOccupancy)
         this.dashboard.register("parking", new ParkingOccupancyChart("parking-occupancy", PARKING_UPDATE_MSG))
 
 
-        let rotations = new Rotation([STOPPED, JUST_STOPPED, JUST_STARTED, MOVED], this.parkings)
+        let rotations = new Rotation([STOPPED, JUST_STOPPED, JUST_STARTED, MOVED], transport, parkings)
 
         this.dashboard.register([STOPPED, JUST_STOPPED, JUST_STARTED, MOVED], rotations)
 
-        this.dashboard.register("stopped", new TurnaroundGantt("turnaround-gantts", [STOPPED, JUST_STOPPED, JUST_STARTED, MOVED], this.parkings, rotations))
+        this.dashboard.register("stopped", new TurnaroundGantt("turnaround-gantts", [STOPPED, JUST_STOPPED, JUST_STARTED, MOVED], parkings, rotations))
 
         // eslint-disable-next-line no-unused-vars
         let dark = new Dark("dark-toggle") // just installs day/night toggle
         //this.dashboard.register("datetime", new Dark("dark-toggle"))
 
         footer.say("Geo Intelligent Viewer ready")
-
     }
 
 
+    /**
+     * Runs the application.
+     */
+    run() {
+        console.log("App::run", "running...")
+    }
+
+
+    /**
+     * Tests the application.
+     */
     test() {
 
     }

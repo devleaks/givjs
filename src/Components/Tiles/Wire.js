@@ -2,9 +2,9 @@
  * GIP Viewer
  * 2017-2020 Pierre M
  * License: MIT
- *
- * Install map in div
  */
+
+
 import "../../assets/css/wire.css"
 
 import { deepExtend } from "../Utilities/Utils"
@@ -89,7 +89,6 @@ export class Wire extends Tile {
         }
      */
     listener(msg, data) {
-        //console.log("Wire::listener", msg, data)
         // add wire
         let hook = document.querySelector("#" + this.elemid + " ul")
         let newel = document.createElement("li")
@@ -112,7 +111,6 @@ export class Wire extends Tile {
 
         const formatter = showJson(data, newel)
         formatter.openAtDepth(0) // all closed. See https://github.com/mohsen1/json-formatter-js
-
     }
 
     /*  update/insert HTML code on event

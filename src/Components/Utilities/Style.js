@@ -1,5 +1,11 @@
+/*
+ * GIP Viewer
+ * 2017-2020 Pierre M
+ * License: MIT
+ */
+
+
 /*  Module dedicated to the mapping of geojson feature (points and polygons) to Leaflet visuals.
- *
  */
 import { DivIcon, Marker } from "leaflet"
 import moment from "moment"
@@ -108,7 +114,7 @@ function getRotation(feature) {
         }
         // while(r > 360) { r -= 360 }
     } else {
-        console.log("Style::getRotation", "feature has no properties")
+        console.warn("Style::getRotation", "feature has no rotation properties", ROTATION_PROPERTIES, feature)
     }
     return rotation
 }
@@ -128,7 +134,6 @@ function getMarker(feature, latlng) {
 
     if (feature.properties.hasOwnProperty(HASDATA)) {
         marker.on("add", function() {
-            // console.log("Style::getMarker::on add", feature)
             let chart = new Sparkline(
                 getSparklineId(feature),
                 feature.properties[HASDATA].type,
@@ -136,7 +141,6 @@ function getMarker(feature, latlng) {
             )
             chart.render()
         });
-        // console.log("Style::getMarker", "Marker has data, has listener")
     }
 
     return marker
@@ -246,7 +250,7 @@ function bindTexts(feature, layer) {
                                     if (container) {
                                         container.innerHTML = feature.properties._texts["sidebar"]
                                     } else {
-                                        console.log("Style::bindTexts: Sidebar text container not found", feature)
+                                        console.warn("Style::bindTexts: Sidebar text container not found", DEFAULTS.info_content_id, feature)
 
                                     }
                                 } else {
@@ -257,7 +261,7 @@ function bindTexts(feature, layer) {
                         }
                         break
                 }
-                feature.properties._bound = bound.join("|") // debug
+                feature.properties._bound = bound // debug
             }
         })
     }

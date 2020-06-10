@@ -1,6 +1,10 @@
 /*
- *  Stolen from https://codepen.io/dope/pen/KJYMZz
+ * GIP Viewer
+ * 2017-2020 Pierre M
+ * License: MIT
  */
+
+
 import PubSub from "pubsub-js"
 import moment from "moment"
 
@@ -27,6 +31,18 @@ const DEFAULTS = {
  */
 export class Clock extends Subscriber {
 
+    /**
+     * Constructs a new Clock instance.
+     *
+     * @param      {<String>}  elemid   HTML element identifier where to hang the clock
+     * @param      {<String>|<Array<String>>}  msgtype  List of messages handled by the clock 
+     * @param      {<Object>}  options  Options
+     * {
+     *  refresh: 1 second Clock refresh rate,
+     *  inc: 1 second Clock increment
+     *  log: true|false Whether to log clock adjustments on browser console
+     * }
+     */
     constructor(elemid, msgtype, options) {
         super(msgtype)
         this.options = deepExtend(DEFAULTS, options)
@@ -38,17 +54,20 @@ export class Clock extends Subscriber {
     }
 
 
+    /**
+     * Installs the Clock object.
+     */
     install() {
         let el = document.getElementById(this.elemid)
         el.innerHTML = `
-                    <div class="clock">
-                      <div class="wrap">
-                        <span class="hour"></span>
-                        <span class="minute"></span>
-                        <span class="second"></span>
-                        <span class="dot"></span>
-                      </div>
-                    </div>`
+            <div class="clock">
+              <div class="wrap">
+                <span class="hour"></span>
+                <span class="minute"></span>
+                <span class="second"></span>
+                <span class="dot"></span>
+              </div>
+            </div>`
 
         this.listen(this.update.bind(this))
     }
@@ -59,12 +78,14 @@ export class Clock extends Subscriber {
      */
     run() {
         let refresh = this.options.refresh * 1000;
-        if (this.running) {
-            clearInterval(this.running)
-            delete this.running
+        if (refresh > 0) {
+            if (this.running) {
+                clearInterval(this.running)
+                delete this.running
+            }
+            this.clock() // now
+            this.running = setInterval(this.clock.bind(this), refresh)
         }
-        this.clock() // now
-        this.running = setInterval(this.clock.bind(this), refresh)
     }
 
 
@@ -98,7 +119,6 @@ export class Clock extends Subscriber {
     morethanEmit() {
         CLOCK_TICKS.forEach((delay) => {
             let lasttime = this.morethan.get(delay)
-            // console.log("Clock::morethanEmit: get", CLOCK_MSG + "." + delay, lasttime)
             if (lasttime) {
                 lasttime = moment(lasttime)
                 const d = moment.duration(this.date.diff(lasttime)).asMinutes()
@@ -106,13 +126,10 @@ export class Clock extends Subscriber {
                     /*if (this.options.log) {
                         console.log("Clock::morethanEmit", Clock.clock_message(delay), this.date.toISOString(true), lasttime.toISOString(true), d)
                     }*/
-                    // console.log("Clock::morethanEmit: EMIT", CLOCK_MSG + "." + delay, this.date.toISOString(true), lasttime.toISOString(true), d)
                     this.morethan.set(delay, this.date.toISOString())
-                    PubSub.publish(Clock.clock_message(delay)
-                        , this.date.toISOString(true))
+                    PubSub.publish(Clock.clock_message(delay), this.date.toISOString(true))
                 }
             } else {
-                // console.log("Clock::morethanEmit: set", CLOCK_MSG + "." + delay, this.date.toISOString(true))
                 this.morethan.set(delay, this.date.toISOString())
             }
         })
@@ -137,20 +154,23 @@ export class Clock extends Subscriber {
     }
 
 
+    /**
+     * Sets the clock date/time.
+     *
+     * @param      {<Moment>}  d       The new clock date/time as a Moment object
+     */
     setClock(d) {
         if (this.running) {
             clearInterval(this.running)
             delete this.running
         }
-        // console.log("Clock::setClock:", d.isBefore(this.date), d.toISOString(true), this.date.toISOString(true))
         if (d.isBefore(this.date)) { //back to the future
-            console.log("Clock::setClock: rewinding time")
+            console.warn("Clock::setClock: rewinding time", d, this.date)
             CLOCK_TICKS.forEach((delay) => {
                 let lasttime = this.morethan.get(delay)
                 if (lasttime) {
                     lasttime = moment(lasttime)
                     if (lasttime.isAfter(d)) {
-                        // console.log("Clock::setClock: back to the future", delay, lasttime.toISOString(), d.toISOString())
                         this.morethan.set(delay, d.toISOString())
                     }
                 }
@@ -161,11 +181,22 @@ export class Clock extends Subscriber {
     }
 
 
+    /**
+     * Sets the increment.
+     *
+     * @param      {<Float>}  inc     The new increment value in seconds.
+     */
     setInc(inc) {
         this.options.inc = inc
         this.run()
     }
 
+
+    /**
+     * Sets the refresh rate of the clock.
+     *
+     * @param      {number}  refresh  The refresh rate of the clock in seconds. If refresh is 0, clock is never updated.
+     */
     setRefresh(refresh) {
         this.options.refresh = refresh
         let refreshms = this.options.refresh * 1000;
@@ -187,6 +218,13 @@ export class Clock extends Subscriber {
         return this.date
     }
 
+
+    /**
+     * Generate clock update message type for supplied duration
+     *
+     * @param      {<Integer}  i      Update frequency of message in minutes.
+     * @return     {<String>}  Message type sent by the clock for this type of update
+     */
     static clock_message(i) {
         return CLOCK_TICKS.indexOf(i) > -1 ? CLOCK_MSG + "." + i : CLOCK_MSG
     }

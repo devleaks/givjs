@@ -1,5 +1,10 @@
-/*  Base class for HTML rendered dashboard elements
+/*
+ * GIP Viewer
+ * 2017-2020 Pierre M
+ * License: MIT
  */
+
+
 import { Subscriber } from "./Subscriber"
 
 /**

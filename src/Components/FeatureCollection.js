@@ -1,5 +1,10 @@
-/*  Base class for subscriber to Dispatcher messages
+/*
+ * GIP Viewer
+ * 2017-2020 Pierre M
+ * License: MIT
  */
+
+
 import { booleanPointInPolygon, booleanWithin } from "@turf/turf"
 import { deepExtend } from "./Utilities/Utils"
 

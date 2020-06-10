@@ -1,17 +1,12 @@
 /*
- * Oscars Geo Intelligent Platform Viewer
- * 
- * 2020 Pierre M
+ * GIP Viewer
+ * 2017-2020 Pierre M
  * License: MIT
- *
- *  Dashboard helper connects external sources (currently websocket)
- *  and broadcast events inside a web page to the destination element.
- *  Elements first need to register with the dispatcher to receive messages.
- *  Messages with no receving element are reported on console and discarded.
  */
+
+
 import PubSub from "pubsub-js"
 import { deepExtend } from "./Utilities/Utils"
-
 
 import { ChannelWebsocket } from "./ChannelWebsocket"
 import { CLOCK_MSG } from "./Constant"
@@ -29,6 +24,15 @@ const DEFAULTS = {
     channels: {}
 }
 
+/**
+ * This class describes a dispatcher.
+ *  Dashboard helper connects external sources (currently websocket)
+ *  and broadcast events inside a web page to the destination element.
+ *  Elements first need to register with the dispatcher to receive messages.
+ *  Messages with no receving element are reported on console and discarded.
+ *
+ * @class      Dispatcher (name)
+ */
 export class Dispatcher {
 
     constructor(options) {
@@ -45,11 +49,12 @@ export class Dispatcher {
                 let channelConnector = false
                 switch (channel) {
                     case "websocket":
-                        console.log("Dispatcher::install", channel, channelOptions)
                         channelConnector = new ChannelWebsocket(this, channelOptions)
+                        console.log("Dispatcher::installed", channel, channelOptions)
                         break
                     default:
-                        channelConnector = false
+                        console.warn("Dispatcher::install", "no connector for channel", channel)
+                        break
                 }
                 if (channelConnector !== false) {
                     this.channels.set(channel, channelConnector)
@@ -95,8 +100,6 @@ export class Dispatcher {
                 if (msg.hasOwnProperty(this.options.TIMESTAMP)) { // adjust simulation clock
                     PubSub.publish(CLOCK_MSG, msg[this.options.TIMESTAMP])
                 }
-
-                // console.log("Dispatcher::published", msgtype, msg[this.options.PAYLOAD])
             } catch (e) {
                 console.error("Dispatcher::dispatch: problem during broadcast", msg[this.options.PAYLOAD], e)
             }

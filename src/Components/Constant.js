@@ -1,6 +1,9 @@
-/*  Application constant
- *
+/*
+ * GIP Viewer
+ * 2017-2020 Pierre M
+ * License: MIT
  */
+
 
 export const DEPARTURE = "departure"
 export const ARRIVAL = "arrival"
