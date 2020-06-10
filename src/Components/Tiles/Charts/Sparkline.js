@@ -173,7 +173,7 @@ export class Sparkline {
      * @return     {ApexCharts}  The apex charts.
      */
     constructor(el, type, data, width = 40, height = 20) {
-        let options = SPARKLINES[type]
+        let options = Object.assign({}, SPARKLINES[type])
         if (["radialBar", "donut", "pie"].indexOf(type) > -1) {
             options.series = data
         } else {
@@ -183,16 +183,19 @@ export class Sparkline {
         }
         options.chart.width = width
         options.chart.height = height
-        this.chart = new ApexCharts(document.getElementById(el), options)
-        return this.chart
+        this._chart = new ApexCharts(document.getElementById(el), options)
     }
 
+    /*
+        this.chart = new ApexCharts(document.getElementById(el), options)
+    }
+    */
 
     /**
      * Renders the sparkline
      */
     render() {
-        this.chart.render()
+        this._chart.render()
     }
 
 
@@ -202,7 +205,7 @@ export class Sparkline {
      * @type       {<type>}
      */
     get chart() {
-        return this.chart
+        return this._chart
     }
 
 }

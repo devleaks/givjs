@@ -35,8 +35,6 @@ import { Tile } from "../Tile"
 import { getFeatureLayerName } from "../Utilities/GeoJSON"
 import { style, onEachFeature, pointToLayer, getFeatureLayer } from "../Utilities/Style"
 
-//import { randomSparklineDemo } from "./Charts/sparkline"
-
 
 import { MAP_MSG, DARK_MSG, DARK, LIGHT } from "../Constant"
 

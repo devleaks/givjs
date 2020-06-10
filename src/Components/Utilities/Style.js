@@ -134,12 +134,12 @@ function getMarker(feature, latlng) {
 
     if (feature.properties.hasOwnProperty(HASDATA)) {
         marker.on("add", function() {
-            let chart = new Sparkline(
+            let sparkline = new Sparkline(
                 getSparklineId(feature),
                 feature.properties[HASDATA].type,
                 feature.properties[HASDATA].values
             )
-            chart.render()
+            sparkline.render()
         });
     }
 
