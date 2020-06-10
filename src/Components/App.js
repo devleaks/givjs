@@ -76,6 +76,9 @@ export class App {
 
         let footer = new Footer(FOOTER_MSG, "Welcome") // just installs day/night toggle
 
+        let clock = new Clock("clock", [CLOCK_MSG, SIMULATION_MSG])
+        this.dashboard.register("datetime", clock)
+
         this.omap = new Omap("map", [MAP_MSG, DARK_MSG], {
             center: [50.64, 5.445],
             zoom: 14,
@@ -108,11 +111,11 @@ export class App {
         // flightboard and related charts gets updated every 15 minutes in simulation.
         const flightboard_update = 15
         const flightboard_update_message = Clock.clock_message(flightboard_update)
-        this.dashboard.register("flightboard", new Flightboard("flightboard-arrival", [FLIGHTBOARD_MSG,flightboard_update_message], ARRIVAL, transport, {update_time: flightboard_update}))
-        this.dashboard.register("flightboard", new Flightboard("flightboard-departure", [FLIGHTBOARD_MSG,flightboard_update_message], DEPARTURE, transport, {update_time: flightboard_update}))
+        this.dashboard.register("flightboard", new Flightboard("flightboard-arrival", [FLIGHTBOARD_MSG,flightboard_update_message], ARRIVAL, transport, clock, {update_time: flightboard_update}))
+        this.dashboard.register("flightboard", new Flightboard("flightboard-departure", [FLIGHTBOARD_MSG,flightboard_update_message], DEPARTURE, transport, clock, {update_time: flightboard_update}))
 
-        this.dashboard.register("flightboard", new MovementForecastChart("forecast-arrival", [FLIGHTBOARD_MSG,flightboard_update_message], ARRIVAL, transport, {update_time: flightboard_update}))
-        this.dashboard.register("flightboard", new MovementForecastChart("forecast-departure", [FLIGHTBOARD_MSG,flightboard_update_message], DEPARTURE, transport, {update_time: flightboard_update}))
+        this.dashboard.register("flightboard", new MovementForecastChart("forecast-arrival", [FLIGHTBOARD_MSG,flightboard_update_message], ARRIVAL, transport, clock, {update_time: flightboard_update}))
+        this.dashboard.register("flightboard", new MovementForecastChart("forecast-departure", [FLIGHTBOARD_MSG,flightboard_update_message], DEPARTURE, transport, clock, {update_time: flightboard_update}))
 
         let parkingOccupancy = new ParkingOccupancy(PARKING_MSG, this.parkings, { aprons_max: APRONS_MAXCOUNT, aprons_layer_name: "APRONS" })
         this.dashboard.register("parking", parkingOccupancy)
@@ -124,8 +127,6 @@ export class App {
         this.dashboard.register([STOPPED, JUST_STOPPED, JUST_STARTED, MOVED], rotations)
 
         this.dashboard.register("stopped", new TurnaroundGantt("turnaround-gantts", [STOPPED, JUST_STOPPED, JUST_STARTED, MOVED], this.parkings, rotations))
-
-        this.dashboard.register("datetime", new Clock("clock", [CLOCK_MSG, SIMULATION_MSG]))
 
         // eslint-disable-next-line no-unused-vars
         let dark = new Dark("dark-toggle") // just installs day/night toggle

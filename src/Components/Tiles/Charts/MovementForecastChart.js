@@ -29,11 +29,12 @@ const DEFAULTS = {
 
 export class MovementForecastChart extends ApexTile {
 
-    constructor(elemid, message_type, move, transport, options) {
+    constructor(elemid, message_type, move, transport, clock, options) {
         super(elemid, message_type)
         this.options = deepExtend(DEFAULTS, options)
         this.move = move
         this.flights = transport
+        this.clock = clock
         this.install()
     }
 
@@ -92,7 +93,7 @@ export class MovementForecastChart extends ApexTile {
             return false
         }
 
-        let ts = moment() // default to now
+        let ts = this.clock.time
         if (msgtype == Clock.clock_message(this.options.update_time)) {
             ts = moment(data, moment.ISO_8601)
         }
@@ -105,7 +106,7 @@ export class MovementForecastChart extends ApexTile {
             if (!f.hasOwnProperty(ACTUAL)) { // if not arrived/departed
                 const t = Transport.getTime(f)
                 const i = Math.floor(moment.duration(t.diff(ts)).asHours())
-                if (i < this.options.maxcount) {
+                if (i > -1 && i < this.options.maxcount) {
                     hours[i]++
                 }
             }

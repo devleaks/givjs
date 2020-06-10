@@ -183,7 +183,7 @@ export class Clock extends Subscriber {
      *
      * @type       {Object}     Simulated clock date/time as moment object.
      */
-    get() {
+    get time() {
         return this.date
     }
 

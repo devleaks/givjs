@@ -41,11 +41,12 @@ const SOLARI = "solari",
 
 export class Flightboard extends Tile {
 
-    constructor(elemid, message_type, move, transport, options) {
+    constructor(elemid, message_type, move, transport, clock, options) {
         super(elemid, message_type)
         this.options = deepExtend(DEFAULTS, options)
         this.move = move
         this.flights = transport
+        this.clock = clock
         this.lastLength = 0
         this.install()
     }
@@ -111,7 +112,7 @@ export class Flightboard extends Tile {
         }
 
 
-        let ts = moment() // default to now
+        let ts = this.clock.time
         if(msgtype == Clock.clock_message(this.options.update_time)) {
             ts = moment(data, moment.ISO_8601)
             console.log("Flightboard::update_time: Updating for",data)

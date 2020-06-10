@@ -56,6 +56,9 @@ export class ParkingOccupancyChart extends ApexTile {
                                 return data.reduce((a, v) => a + v)
                             }
                         }
+                    },
+                    track: {
+                        strokeWidth: "150%"
                     }
                 }
             },
