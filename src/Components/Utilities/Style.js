@@ -128,7 +128,7 @@ function getMarker(feature, latlng) {
 
     if (feature.properties.hasOwnProperty(HASDATA)) {
         marker.on("add", function() {
-            console.log("Style::getMarker::on add", feature)
+            // console.log("Style::getMarker::on add", feature)
             let chart = new Sparkline(
                 getSparklineId(feature),
                 feature.properties[HASDATA].type,
@@ -136,7 +136,7 @@ function getMarker(feature, latlng) {
             )
             chart.render()
         });
-        console.log("Style::getMarker", "Marker has data, has listener")
+        // console.log("Style::getMarker", "Marker has data, has listener")
     }
 
     return marker
@@ -169,7 +169,7 @@ function getIcon(feature) {
     let glyph = DEFAULTS["markerSymbol"],
         color = DEFAULTS["markerColor"],
         size = DEFAULTS["markerSize"]
-    let html = ''
+    let html = ""
 
     if (feature.properties.hasOwnProperty(HASDATA)) {
         html = "<div id='" + getSparklineId(feature) + "'></div>"

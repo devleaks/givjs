@@ -30,6 +30,8 @@ import { Transport } from "./Transport"
 import { Rotation } from "./Rotation"
 import { ParkingOccupancy } from "./ParkingOccupancy"
 
+import { Stopped } from "./Stopped"
+
 import { Dark } from "./Dark"
 import { Clock } from "./Clock"
 import { FeatureCollection } from "./FeatureCollection"
@@ -93,6 +95,9 @@ export class App {
 
         this.omap.addLayer("APRONS", "Airport")
         this.omap.add("APRONS", this.parkings)
+
+        this.dashboard.register("stopped", new Stopped(MAP_MSG, [this.parkings], {}))
+
 
         this.dashboard.register("wire", new Wire("wire", WIRE_MSG, {}))
 

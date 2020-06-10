@@ -37,8 +37,6 @@ import { style, onEachFeature, pointToLayer, getFeatureLayer } from "../Utilitie
 
 //import { randomSparklineDemo } from "./Charts/sparkline"
 
-import { stopped } from "../Utilities/Stopped"
-
 
 import { MAP_MSG, DARK_MSG, DARK, LIGHT } from "../Constant"
 
@@ -227,8 +225,6 @@ export class Omap extends Tile {
             case MAP_MSG:
                 // console.log("Omap::listener", msg, data)
                 this.updateOnMap(data)
-                // experimental, generates extra events
-                stopped(data)
                 break
             case DARK_MSG:
                 this.updateOnDark(data)
