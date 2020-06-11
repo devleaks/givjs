@@ -130,7 +130,7 @@ export class Flightboard extends Tile {
         let flights = this.flights.getScheduledTransports(this.move, maxahead)
 
         flights.forEach(f => {
-            let flight = that.flights.get(f.name)
+            let flight = that.flights.get(f)
             let showflight = true
             if (flight.hasOwnProperty("removeAt")) {
                 if (flight.removeAt.isBefore(ts)) {

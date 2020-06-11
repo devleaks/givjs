@@ -11,6 +11,7 @@ import ApexCharts from "apexcharts"
 import { deepExtend } from "../../Utilities/Utils"
 import { ApexTile } from "../ApexTile"
 
+import "../../../assets/css/turnaround-gantts.css"
 
 const DEFAULTS = {
     elemid: "turnaround-gantts",
@@ -26,7 +27,6 @@ export class TurnaroundGantt extends ApexTile {
         this.parkings = parkings
         this.rotations = rotations
         this.charts = new Map()
-        this.gantt =  new Map()
         this.install()
     }
 
@@ -41,15 +41,15 @@ export class TurnaroundGantt extends ApexTile {
     }
 
 
-    update(msg, stopped) {
-        console.log("TurnaroundGantt::update", msg, stopped)
-        this.create_update_chart(stopped.parking)
+    update(msg, rotation) {
+        //console.log("TurnaroundGantt::update", msg, rotation)
+        this.create_update_chart(rotation)
     }
 
 
-    create_update_chart(parking) {
-        let chartdata = this.getServices(parking)
-        let chart = this.charts.get(parking)
+    create_update_chart(rotation) {
+        let chartdata = this.getServices(rotation)
+        let chart = this.charts.get("" + rotation.parking)
 
         if (chart) {
             chart.updateSeries(chartdata)
@@ -104,16 +104,13 @@ export class TurnaroundGantt extends ApexTile {
                 }
             })
             chart.render()
-            this.charts.set(data.parking, chart)
+            this.charts.set("" + rotation.parking, chart)
         }
     }
 
     /*  update/insert HTML code on event
      */
-    getServices(parking) {
-        let data = []
-        let now = moment()
-        /*
+    getServices(rotation) {
         const colors = {
             plane: "#db2004",
             fuel: "#008FFB",
@@ -122,48 +119,43 @@ export class TurnaroundGantt extends ApexTile {
             cargo: "#FEB019",
             default: "#FF4560"
         }
-        let r = this.gantt.get("" + parking)
-        console.log("getServices::r", r)
-        let arrt = false,
-            dept = false
 
-        if (r.arrival) {
-            arrt = moment(r.arrival.scheduled).subtract(60, "minutes")
-            if (r.departure) {
-                dept = moment(r.arrival.scheduled).add(60, "minutes")
+        let arrt = false,
+            dept = false,
+            data = []
+
+        if (rotation.arrival) {
+            arrt = moment(rotation.arrival.scheduled).subtract(60, "minutes")
+            if (rotation.departure) {
+                dept = moment(rotation.arrival.scheduled).add(60, "minutes")
             }
         }
 
         if (arrt && dept) {
             data.push({
-                x: "Plane OO-123",
+                x: rotation.name, // r.id?
                 y: [arrt.valueOf(), dept.valueOf()],
                 fillColor: colors["plane"]
             })
+        } else {
+            console.log("TurnaroundGantt::getServices", "no service range", rotation.id)
         }
 
-        if (r) {
-            for (let service in r.services) {
-                if (r.services.hasOwnProperty(service)) {
-                    let s = r.services[service]
-                    for (let vehicle in s) {
-                        if (s.hasOwnProperty(vehicle)) {
-                            let v = s[vehicle]
-                            let e = v.firstseen == v.lastseen ? 20 * 60 * 1000 : 0
-                            data.push({
-                                x: service,
-                                y: [v.firstseen, v.lastseen + e],
-                                fillColor: colors[service]
-                            })
-                        }
-                    }
-                }
-            }
-        }
-        console.log("getServices::data", data)
-        */
-        data = [
-            {
+        rotation.services.forEach((service, sname) => {
+            service.forEach((vehicle, vname) => {
+                let e = vehicle.firstseen == vehicle.lastseen ? 20 * 60 * 1000 : 0
+                data.push({
+                    x: vname,
+                    y: [vehicle.firstseen, vehicle.lastseen + e],
+                    fillColor: colors[sname]
+                })
+            })
+        })
+
+
+        // template for development
+        let now = moment()
+        let data2 = [{
                 x: "Plane",
                 y: [
                     moment(now).subtract(60, "minutes").valueOf(),
@@ -213,8 +205,7 @@ export class TurnaroundGantt extends ApexTile {
             }
         ]
 
-        // console.log("getServices::returned", data)
-
+        //console.log("TurnaroundGantt::getServices", rotation, data)
         return [{
             data: data
         }];

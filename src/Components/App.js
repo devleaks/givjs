@@ -40,7 +40,7 @@ import { FeatureCollection } from "./FeatureCollection"
 import { WS_URL, HOME, PARKINGS, APRONS_MAXCOUNT } from "./Config"
 import { DEPARTURE, ARRIVAL } from "./Constant"
 import { STOPPED, JUST_STOPPED, JUST_STARTED, MOVED } from "./Constant"
-import { CLOCK_MSG, SIMULATION_MSG, FOOTER_MSG, FLIGHTBOARD_MSG, WIRE_MSG, MAP_MSG, PARKING_MSG, PARKING_UPDATE_MSG, DARK_MSG } from "./Constant"
+import { CLOCK_MSG, SIMULATION_MSG, FOOTER_MSG, FLIGHTBOARD_MSG, ROTATION_MSG, WIRE_MSG, MAP_MSG, PARKING_MSG, PARKING_UPDATE_MSG, DARK_MSG } from "./Constant"
 
 
 /**
@@ -124,9 +124,9 @@ export class App {
         this.dashboard.register("parking", new ParkingOccupancyChart("parking-occupancy", PARKING_UPDATE_MSG))
 
 
-        let rotations = new Rotation([STOPPED, JUST_STOPPED, JUST_STARTED, MOVED], transport, parkings)
+        let rotations = new Rotation([ROTATION_MSG, STOPPED, JUST_STOPPED, JUST_STARTED, MOVED], transport, parkings)
 
-        this.dashboard.register([STOPPED, JUST_STOPPED, JUST_STARTED, MOVED], rotations)
+        this.dashboard.register([ROTATION_MSG, STOPPED, JUST_STOPPED, JUST_STARTED, MOVED], rotations)
 
         this.dashboard.register("stopped", new TurnaroundGantt("turnaround-gantts", "ROTATION_UPDATED", parkings, rotations))
 

@@ -30,6 +30,7 @@ export const STOPPED = "stopped"
 export const JUST_STOPPED = "just_stopped"
 export const JUST_STARTED = "just_started"
 export const MOVED = "moved"
+export const ROTATION_MSG = "rotation"
 
 // other messages
 export const FLIGHTBOARD_MSG = "flightboard"
