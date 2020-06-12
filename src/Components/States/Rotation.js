@@ -8,9 +8,9 @@
 import PubSub from "pubsub-js"
 import moment from "moment"
 
-import { Subscriber } from "./Subscriber"
+import { Subscriber } from "../Subscriber"
 
-import { ROTATION_MSG, PARKING_MSG, STOPPED, JUST_STOPPED, JUST_STARTED, MOVED, DEPARTURE, ARRIVAL } from "./Constant"
+import { ROTATION_MSG, PARKING_MSG, STOPPED, JUST_STOPPED, JUST_STARTED, MOVED, DEPARTURE, ARRIVAL } from "../Constant"
 
 const UNSCHEDULED = "UNSCHEDULED"
 

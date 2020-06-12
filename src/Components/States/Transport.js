@@ -5,12 +5,12 @@
  */
 
 
-import { Subscriber } from "./Subscriber"
+import { Subscriber } from "../Subscriber"
 
 import moment from "moment"
 import PubSub from "pubsub-js"
 
-import { FLIGHTBOARD_MSG, ROTATION_MSG, SCHEDULED, PLANNED, ACTUAL, DEPARTURE, ARRIVAL } from "./Constant"
+import { FLIGHTBOARD_MSG, ROTATION_MSG, SCHEDULED, PLANNED, ACTUAL, DEPARTURE, ARRIVAL } from "../Constant"
 
 const UNSCHEDULED = "UNSCHEDULED"
 

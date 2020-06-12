@@ -8,12 +8,12 @@
 import PubSub from "pubsub-js"
 import { distance } from "@turf/turf"
 
-import { Subscriber } from "./Subscriber"
+import { Subscriber } from "../Subscriber"
 
-import { getFeatureId } from "./Utilities/GeoJSON"
-import { deepExtend } from "./Utilities/Utils"
+import { getFeatureId } from "../Utilities/GeoJSON"
+import { deepExtend } from "../Utilities/Utils"
 
-import { STOPPED, JUST_STOPPED, JUST_STARTED, MOVED } from "./Constant"
+import { STOPPED, JUST_STOPPED, JUST_STARTED, MOVED } from "../Constant"
 
 const DEFAULTS = {
     SPEED: "speed",

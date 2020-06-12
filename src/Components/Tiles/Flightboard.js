@@ -38,9 +38,23 @@ const SOLARI = "solari",
     Mboarding = "<span class='left off boarding-left'></span><span class='right off boarding-right'></span>"
 
 
-
+/**
+ * Display an HTML table as a flightboard.
+ *
+ * @class      Flightboard (name)
+ */
 export class Flightboard extends Tile {
 
+    /**
+     * Constructs a new Flightboard instance.
+     *
+     * @param      {<type>}  elemid        The elemid
+     * @param      {<type>}  message_type  The message type
+     * @param      {<type>}  move          The move
+     * @param      {<type>}  transport     The transport
+     * @param      {<type>}  clock         The clock
+     * @param      {<type>}  options       The options
+     */
     constructor(elemid, message_type, move, transport, clock, options) {
         super(elemid, message_type)
         this.options = deepExtend(DEFAULTS, options)
@@ -52,28 +66,29 @@ export class Flightboard extends Tile {
     }
 
 
-    /*  installs the HTML code in the document
+    /**
+     * Installs the Flightboard.
      */
     install() {
         // let elhtml = document.getElementById("template-"+this.elemid)
         // let html == elhtml.innerHTML
         let html = `
-<div id='${ this.elemid }' class="flightboard">
-    <table>
-        <caption>${ this.move }</caption>
-        <thead>
-            <tr>
-                <th>Flight</th>
-                <th>${ this.move == "arrival" ? "From" : "To "}</th>
-                <th>Time</th>
-                <th>Estimated</th>
-                <th>Remarks</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-</div>`
+            <div id='${ this.elemid }' class="flightboard">
+                <table>
+                    <caption>${ this.move }</caption>
+                    <thead>
+                        <tr>
+                            <th>Flight</th>
+                            <th>${ this.move == "arrival" ? "From" : "To "}</th>
+                            <th>Time</th>
+                            <th>Estimated</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>`
 
         let el = document.getElementById(this.elemid)
         el.innerHTML = html
@@ -82,7 +97,13 @@ export class Flightboard extends Tile {
     }
 
 
-    // update display (html table)
+    /**
+     * Listerner function for msgtype Flightboard events.
+     *
+     * @param      {<type>}   msgtype  The msgtype
+     * @param      {<type>}   data     The data
+     * @return     {boolean}  { description_of_the_return_value }
+     */
     update(msgtype, data) {
         /*
         function getTime(f) { // returns the most recent known time for flight

@@ -10,7 +10,7 @@ import ApexCharts from "apexcharts"
 
 import { deepExtend } from "../../Utilities/Utils"
 import { ApexTile } from "../ApexTile"
-import { Transport } from "../../Transport"
+import { Transport } from "../../States/Transport"
 import { Clock } from "../../Clock"
 
 import { FLIGHTBOARD_MSG, ACTUAL } from "../../Constant"

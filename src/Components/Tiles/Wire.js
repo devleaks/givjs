@@ -69,7 +69,7 @@ export class Wire extends Tile {
         let hook = document.querySelector("#" + this.elemid)
         let newel = document.createElement("ul")
         hook.appendChild(newel)
-        this.listen(this.listener.bind(this))
+        this.listen(this.update.bind(this))
     }
 
     /**
@@ -88,7 +88,7 @@ export class Wire extends Tile {
             "icon-color": msgcolor
         }
      */
-    listener(msg, data) {
+    update(msg, data) {
         // add wire
         let hook = document.querySelector("#" + this.elemid + " ul")
         let newel = document.createElement("li")
@@ -111,12 +111,6 @@ export class Wire extends Tile {
 
         const formatter = showJson(data, newel)
         formatter.openAtDepth(0) // all closed. See https://github.com/mohsen1/json-formatter-js
-    }
-
-    /*  update/insert HTML code on event
-     */
-    update() {
-        this.cb = BOOTSTRAP_COLORS[0]
     }
 
 }

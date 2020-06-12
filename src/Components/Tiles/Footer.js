@@ -17,6 +17,12 @@ import "../../assets/css/footer.css"
  */
 export class Footer extends Tile {
 
+    /**
+     * Constructs a new Foter instance.
+     *
+     * @param      {<type>}  msgtype  The msgtype
+     * @param      {<type>}  message  The message
+     */
     constructor(msgtype, message) {
         super("footer", msgtype)
         this.message = message
@@ -24,6 +30,10 @@ export class Footer extends Tile {
     }
 
 
+    /**
+     * Installs the footer on the HTML page.
+     * (Template should be externalized in <template> or pug file.)
+     */
     install() {
         let el = document.getElementsByTagName("footer")
         if (el) { // there should only be one footer...

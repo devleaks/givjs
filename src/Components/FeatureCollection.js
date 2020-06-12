@@ -8,7 +8,12 @@
 import { booleanPointInPolygon, booleanWithin } from "@turf/turf"
 import { deepExtend } from "./Utilities/Utils"
 
-
+/**
+ * Class to materialize a GeoJSON FeatureCollection (extensively used inside this application).
+ * Allow for geographic function processing through Turfjs.
+ *
+ * @class      FeatureCollection (name)
+ */
 export class FeatureCollection {
 
     constructor(url) {

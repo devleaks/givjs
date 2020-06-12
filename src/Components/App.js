@@ -26,11 +26,11 @@ import { ParkingOccupancyChart } from "./Tiles/Charts/ParkingOccupancyChart"
 import { TurnaroundGantt } from "./Tiles/Charts/TurnaroundGantt"
 
 // Utilities
-import { Transport } from "./Transport"
-import { Rotation } from "./Rotation"
-import { ParkingOccupancy } from "./ParkingOccupancy"
+import { Transport } from "./States/Transport"
+import { Rotation } from "./States/Rotation"
+import { ParkingOccupancy } from "./States/ParkingOccupancy"
 
-import { Stopped } from "./Stopped"
+import { Stopped } from "./Pipelines/Stopped"
 
 import { Dark } from "./Dark"
 import { Clock } from "./Clock"

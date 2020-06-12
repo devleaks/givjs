@@ -7,10 +7,10 @@
 
 import PubSub from "pubsub-js"
 
-import { deepExtend } from "./Utilities/Utils"
-import { Subscriber } from "./Subscriber"
+import { deepExtend } from "../Utilities/Utils"
+import { Subscriber } from "../Subscriber"
 
-import { BUSY, APRONS_COLORS, MAP_MSG, PARKING_UPDATE_MSG } from "./Constant"
+import { BUSY, APRONS_COLORS, MAP_MSG, PARKING_UPDATE_MSG } from "../Constant"
 
 PubSub.immediateExceptions = true;
 
