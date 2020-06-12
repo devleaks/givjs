@@ -176,7 +176,7 @@ export class Transport extends Subscriber {
                     airport: data.airport,
                     isnew: true,
                     type: "flight",
-                    to: (data.move == DEPARTURE) ? data.airport : this.base,
+                    to:   (data.move == DEPARTURE) ? data.airport : this.base,
                     from: (data.move == DEPARTURE) ? this.base : data.airport,
                     move: (data.move == DEPARTURE) ? DEPARTURE : ARRIVAL
                 }
@@ -193,7 +193,7 @@ export class Transport extends Subscriber {
                     airport: data.airport,
                     isnew: true,
                     type: "flight",
-                    to: (data.move == DEPARTURE) ? data.airport : this.base,
+                    to:   (data.move == DEPARTURE) ? data.airport : this.base,
                     from: (data.move == DEPARTURE) ? this.base : data.airport,
                     move: (data.move == DEPARTURE) ? DEPARTURE : ARRIVAL
                 }
@@ -275,12 +275,13 @@ export class Transport extends Subscriber {
      * @return     {<type>}  The scheduled transports.
      */
     getScheduledTransports(move, datefrom, maxcount) {
-        let local = (move == ARRIVAL) ? "to" : "from"
-        let here = this.base
+        //let local = (move == ARRIVAL) ? "to" : "from"
+        //let here = this.base
         let transports = []
         // eslint-disable-next-line no-unused-vars
         this.transports.forEach((value, key, map) => {
-            if (value[local] == here) {
+        //    if (value[local] == here) {
+            if (value.move == move) {
                 if (value.hasOwnProperty(SCHEDULED)) {
                     if (datefrom && value[SCHEDULED].isBefore(datefrom)) {
                         transports.push(value)

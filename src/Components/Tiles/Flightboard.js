@@ -131,14 +131,18 @@ export class Flightboard extends Tile {
 
         flights.forEach(f => {
             let flight = that.flights.get(f)
-            let showflight = true
-            if (flight.hasOwnProperty("removeAt")) {
-                if (flight.removeAt.isBefore(ts)) {
-                    showflight = false
+            if(flight) {
+                let showflight = true
+                if (flight.hasOwnProperty("removeAt")) {
+                    if (flight.removeAt.isBefore(ts)) {
+                        showflight = false
+                    }
                 }
-            }
-            if (showflight) {
-                farr.push(flight)
+                if (showflight) {
+                    farr.push(flight)
+                }
+            } else {
+                console.warn("Flightboard::update","cannot find flight", f)
             }
         })
 

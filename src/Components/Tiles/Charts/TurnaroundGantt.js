@@ -10,6 +10,7 @@ import ApexCharts from "apexcharts"
 
 import { deepExtend } from "../../Utilities/Utils"
 import { ApexTile } from "../ApexTile"
+import { Transport } from "../../Transport"
 
 import "../../../assets/css/turnaround-gantts.css"
 
@@ -125,9 +126,14 @@ export class TurnaroundGantt extends ApexTile {
             data = []
 
         if (rotation.arrival) {
-            arrt = moment(rotation.arrival.scheduled).subtract(60, "minutes")
+            arrt = Transport.getTime(rotation.arrival)
+            // arrt.subtract(60, "minutes")
             if (rotation.departure) {
-                dept = moment(rotation.arrival.scheduled).add(60, "minutes")
+                dept = Transport.getTime(rotation.departure)
+                // dept.add(60, "minutes")
+//            } else {
+//                dept = moment(arrt)
+//                dept.add(120, "minutes")
             }
         }
 

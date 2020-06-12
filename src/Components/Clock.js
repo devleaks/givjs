@@ -165,7 +165,7 @@ export class Clock extends Subscriber {
             delete this.running
         }
         if (d.isBefore(this.date)) { //back to the future
-            console.warn("Clock::setClock: rewinding time", d, this.date)
+            // console.warn("Clock::setClock: rewinding time", d, this.date)
             CLOCK_TICKS.forEach((delay) => {
                 let lasttime = this.morethan.get(delay)
                 if (lasttime) {

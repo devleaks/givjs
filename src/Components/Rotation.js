@@ -193,7 +193,7 @@ export class Rotation extends Subscriber {
         if (parkings.length == 0) {
             return
         } else if (parkings.length == 1) {
-            r = this.findRotation(f.properties.name, time)
+            r = this.findRotation(parkings[0].properties.name, time)
             if(r) {
                 parking = r.parking
             }
