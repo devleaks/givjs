@@ -14,6 +14,7 @@ import moment from "moment"
 
 import { TRANSPORTBOARD_MSG, SCHEDULED, PLANNED, ACTUAL, DEPARTURE } from "../Constant"
 
+
 /**
  *  DEFAULT VALUES
  */
@@ -21,7 +22,7 @@ const DEFAULTS = {
     elemid: "transportboard",
     msgtype: "transportboard",
     maxcount: 12,
-    announce_delay: 15,  // min. After, announce transport is delayed.
+    announce_delay: 15, // min. After, announce transport is delayed.
     announce_boarding: 40,
     announce_lastcall: 20,
     update_time: 15,
@@ -29,7 +30,7 @@ const DEFAULTS = {
 }
 
 /**
- * Display an HTML table as a transportboard.
+ * Display an HTML table as a Transportboard.
  *
  * @class      Transportboard (name)
  */
@@ -99,7 +100,6 @@ export class Transportboard extends Tile {
             return false
         }
 
-
         function createTD(text, classes = "") {
             let td = document.createElement("td")
             classes.split(" ").forEach(classname => {
@@ -113,7 +113,7 @@ export class Transportboard extends Tile {
 
 
         let ts = this.clock.time
-        if(msgtype == Clock.clock_message(this.options.update_time)) {
+        if (msgtype == Clock.clock_message(this.options.update_time)) {
             ts = moment(data, moment.ISO_8601)
             // console.log("Transportboard::update_time: Updating for",data)
         }
@@ -130,7 +130,7 @@ export class Transportboard extends Tile {
 
         transports.forEach(f => {
             let transport = that.transports.get(f)
-            if(transport) {
+            if (transport) {
                 let showtransport = true
                 if (transport.hasOwnProperty("removeAt")) {
                     if (transport.removeAt.isBefore(ts)) {
@@ -141,7 +141,7 @@ export class Transportboard extends Tile {
                     farr.push(transport)
                 }
             } else {
-                console.warn("Transportboard::update","cannot find transport", f)
+                console.warn("Transportboard::update", "cannot find transport", f)
             }
         })
 
@@ -161,7 +161,6 @@ export class Transportboard extends Tile {
                     (transport.hasOwnProperty('removeAt') && transport.removeAt.isBefore(ts)))*/
             ) {
                 let t = false
-                let s = true
                 let scolor = ""
                 if (transport.hasOwnProperty(ACTUAL)) {
                     t = transport[ACTUAL]
@@ -169,7 +168,6 @@ export class Transportboard extends Tile {
                         let diff = moment.duration(transport[ACTUAL].diff(transport[SCHEDULED])).asMinutes()
                         if (diff > this.options.announce_delay) {
                             transport.note = (this.move == DEPARTURE ? "Delayed +" : "Arrived +") + diff + " min"
-                            s = false
                             scolor = "red"
                         }
                     }
@@ -179,26 +177,17 @@ export class Transportboard extends Tile {
                         let diff = moment.duration(transport[PLANNED].diff(transport[SCHEDULED])).asMinutes()
                         if (diff > this.options.announce_delay) {
                             transport.note = "Delayed" // "Delayed "+diff+" min"
-                            s = false
-                        }
-                    }
-                    if (this.move == DEPARTURE && !transport.hasOwnProperty(ACTUAL)) {
-                        let boarding = moment.duration(transport[PLANNED].diff(ts)).asMinutes()
-                        if (boarding < this.options.announce_boarding) {
-                            transport.note = boarding < this.options.announce_lastcall ? "LAST CALL" : "Loading"
-                            scolor = boarding < this.options.announce_lastcall ? "red" : "green"
                         }
                     }
                 }
 
                 let tr = document.createElement("tr")
-                tbody.appendChild(tr)
-
-                tr.appendChild(createTD(transport.name, cnew))
-                tr.appendChild(createTD(transport.airport, cnew))
-                tr.appendChild(createTD(transport.hasOwnProperty(SCHEDULED) ? transport[SCHEDULED].format("HH.mm") : ".".repeat(5), cnew))
-                tr.appendChild(createTD(t ? t.format("HH.mm") : ".".repeat(5), cupd))
+                tr.appendChild(createTD(transport.name))
+                tr.appendChild(createTD(transport.destination))
+                tr.appendChild(createTD(transport.hasOwnProperty(SCHEDULED) ? transport[SCHEDULED].format("HH:mm") : ""))
+                tr.appendChild(createTD(t ? t.format("HH:mm") : ""))
                 tr.appendChild(createTD(transport.note ? transport.note : "", scolor))
+                tbody.appendChild(tr)
             }
         }
 
@@ -207,10 +196,10 @@ export class Transportboard extends Tile {
             const SPACE = "&nbsp;"
             for (let i = farr.length; i < this.options.maxcount; i++) {
                 let tr = document.createElement("tr")
-                tr.appendChild(createTD(SPACE.repeat(7)))
-                tr.appendChild(createTD(SPACE.repeat(3)))
-                tr.appendChild(createTD(SPACE.repeat(5)))
-                tr.appendChild(createTD(SPACE.repeat(5)))
+                tr.appendChild(createTD(SPACE))
+                tr.appendChild(createTD(SPACE))
+                tr.appendChild(createTD(SPACE))
+                tr.appendChild(createTD(SPACE))
                 tr.appendChild(createTD(SPACE))
                 tbody.appendChild(tr)
             }

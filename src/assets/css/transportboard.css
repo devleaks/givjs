@@ -43,7 +43,7 @@
     color: #CECACB;
 }
 
-.transportboard td:nth-last-child(2) {
+.transportboard td:last-child() {
     font-family: LED, Helvetica, Arial, sans-serif;
     font-size: 0.80em;
     text-transform: capitalize;
@@ -51,11 +51,11 @@
     text-align: left;
 }
 
-.transportboard td:nth-last-child(2).green {
+.transportboard td:last-child().green {
     color: rgb(0, 226, 0);
 }
 
-.transportboard td:nth-last-child(2).red {
+.transportboard td:last-child().red {
     color: rgb(226, 0, 0);
 }
 

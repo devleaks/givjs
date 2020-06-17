@@ -82,7 +82,7 @@ export class Transport extends Subscriber {
      * @param      {<type>}  transport  The transport
      * @return     {<type>}  { description_of_the_return_value }
      */
-    static mkTransfortId(name, time) {
+    static mkTransportId(name, time) {
         return "T::" + name + "|" + time
     }
 
@@ -95,10 +95,10 @@ export class Transport extends Subscriber {
     get(transport) {
         let tr = false
         if (transport.hasOwnProperty(SCHEDULED) && transport.scheduled !== false) {
-            let id = Transport.mkTransfortId(transport.name, transport.scheduled.toISOString(true))
+            let id = Transport.mkTransportId(transport.name, transport.scheduled.toISOString(true))
             tr = this.transports.get(id)
         } else {
-            let id = Transport.mkTransfortId(transport.name, UNSCHEDULED)
+            let id = Transport.mkTransportId(transport.name, UNSCHEDULED)
             tr = this.transports.get(id)
         }
         return tr
@@ -131,10 +131,10 @@ export class Transport extends Subscriber {
      * @param      {<type>}  name    The name
      * @param      {<type>}  time    The time
      */
-    findTransport(name, time, margin = 24) {
+    findTransport(move, name, time, margin = 24) {
         let found = false
         this.transports.forEach((value) => {
-            if (!found && value.name == name) {
+            if (!found && value.name == name && value.move == move) {
                 let tt = Transport.getTime(value)
                 let duration = Math.floor(moment.duration(tt.diff(time)).asHours())
                 if (Math.abs(duration) <= margin) {
@@ -168,7 +168,7 @@ export class Transport extends Subscriber {
 
         if (data.info == SCHEDULED) { // may be a new flight?
             let timekey = time.toISOString(true)
-            id = Transport.mkTransfortId(data.flight, timekey)
+            id = Transport.mkTransportId(data.flight, timekey)
             f = this.transports.get(id)
             if (!f) { // new flight
                 f = {
@@ -185,9 +185,9 @@ export class Transport extends Subscriber {
                 }
             }
         } else { // tries to find it...
-            f = this.findTransport(data.flight, time)
+            f = this.findTransport(data.move, data.flight, time)
             if (!f) { // we received PLANNED or ACTUAL but flight was not seen before. We create it with UNSCHEDULED keyword
-                id = Transport.mkTransfortId(data.name, UNSCHEDULED)
+                id = Transport.mkTransportId(data.name, UNSCHEDULED)
                 f = {
                     _key: UNSCHEDULED,
                     id: id,
@@ -244,9 +244,82 @@ export class Transport extends Subscriber {
 
 
     updateOnTransportboard(data) {
+        let time = moment(data.date + " " + data.time, data.info == SCHEDULED ? "YYYY-MM-DD HH:mm" : "DD/MM HH:mm")
+        let f = false
+        let id
+
+        if (data.info == SCHEDULED) { // may be a new transport?
+            let timekey = time.toISOString(true)
+            id = Transport.mkTransportId(data.name, timekey)
+            f = this.transports.get(id)
+            if (!f) { // new transport
+                f = {
+                    _key: timekey,
+                    id: id,
+                    name: data.name,
+                    parking: data.parking,
+                    destination: data.destination,
+                    isnew: true,
+                    type: "transport",
+                    to:   (data.move == DEPARTURE) ? data.destination : this.base,
+                    from: (data.move == DEPARTURE) ? this.base : data.destination,
+                    move: (data.move == DEPARTURE) ? DEPARTURE : ARRIVAL
+                }
+            }
+        } else { // tries to find it...
+            f = this.findTransport(data.move, data.name, time)
+            if (!f) { // we received PLANNED or ACTUAL but transport was not seen before. We create it with UNSCHEDULED keyword
+                id = Transport.mkTransportId(data.name, UNSCHEDULED)
+                f = {
+                    _key: UNSCHEDULED,
+                    id: id,
+                    name: data.name,
+                    parking: data.parking,
+                    destination: data.destination,
+                    isnew: true,
+                    type: "transport",
+                    to:   (data.move == DEPARTURE) ? data.destination : this.base,
+                    from: (data.move == DEPARTURE) ? this.base : data.destination,
+                    move: (data.move == DEPARTURE) ? DEPARTURE : ARRIVAL
+                }
+                console.warn("Transport::updateOnTransportboard", "unscheduled", data, f)
+            } else {
+                id = f.id
+            }
+        }
+
+        if (!f.hasOwnProperty("linked")) {
+            let linked = (f.move == DEPARTURE) ? this.getPreviousTransport(f) : this.getNextTransport(f)
+            if (linked) {
+                f.linked = linked
+                linked.linked = f // we  reverse-link the other transport
+                this.transports.set(linked.id, linked)
+                // console.log("Transport::updateOnFlightboard", "linked transports", data, f, linked)
+            }
+        }
+
+        if ([SCHEDULED, PLANNED, ACTUAL].indexOf(data.info) > -1) {
+            f[data.info] = time // data.info must be SCHEDULED, PLANNED, or ACTUAL
+        }
+        if (data.info == ACTUAL && data.move == ARRIVAL) {
+            f.note = "Arrived"
+        }
+        if (data.info == ACTUAL) { // if move completed, schedule removal from transportboard
+            f.removeAt = moment(time).add(data.move == ARRIVAL ? 30 : 10, "minutes")
+        }
+        this.transports.set(f.id, f)
+
+        if (f.hasOwnProperty("_key") && data.move == ARRIVAL) { // transport was just just created
+            const key = (" " + f._key).slice(1)
+            delete f._key
+            this.transports.set(f.id, f)
+            PubSub.publish(ROTATION_MSG, {
+                _key: key,
+                arrival: f
+            })
+        }
 
         PubSub.publish(TRANSPORTBOARD_UPDATE_MSG, data)
-
     }
 
 
