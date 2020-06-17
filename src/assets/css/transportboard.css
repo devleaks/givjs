@@ -1,0 +1,63 @@
+/* transportboard.css */
+@font-face {
+    font-family: "LED";
+    src: url("../fonts/advanced_led_board-7.woff") format("woff")
+}
+
+.transportboard {
+    background-color: #888;
+    padding: 6px;
+}
+
+.transportboard table {
+    border-spacing: 0px;
+    border-collapse: collapse;
+    background-color: #aaa;
+    width: 100%;
+}
+
+.transportboard th,
+.transportboard caption {
+    font-family: LED, Helvetica, Arial, sans-serif;
+    color: #080;
+}
+
+.transportboard caption {
+    margin-top: 40px;
+    margin-bottom: 10px;
+    text-transform: capitalize;
+    font-size: 120%;
+}
+
+.transportboard th {
+    text-transform: capitalize;
+    padding: 3px;
+    font-weight: normal;
+}
+
+.transportboard td {
+    font-family: LED, Helvetica, Arial, sans-serif;
+    font-size: 1em;
+    text-align: center;
+    padding: 0px;
+    color: #CECACB;
+}
+
+.transportboard td:nth-last-child(2) {
+    font-family: LED, Helvetica, Arial, sans-serif;
+    font-size: 0.80em;
+    text-transform: capitalize;
+    color: #CECACB;
+    text-align: left;
+}
+
+.transportboard td:nth-last-child(2).green {
+    color: rgb(0, 226, 0);
+}
+
+.transportboard td:nth-last-child(2).red {
+    color: rgb(226, 0, 0);
+}
+
+
+/**/

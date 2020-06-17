@@ -12,7 +12,7 @@ import { Tile } from "../Tile"
 import { Clock } from "../Clock"
 import moment from "moment"
 
-import { FLIGHTBOARD_MSG, SCHEDULED, PLANNED, ACTUAL, DEPARTURE } from "../Constant"
+import { FLIGHTBOARD_UPDATE_MSG, SCHEDULED, PLANNED, ACTUAL, DEPARTURE } from "../Constant"
 
 import { flipper } from "../../assets/js/flipper.js"
 
@@ -105,21 +105,9 @@ export class Flightboard extends Tile {
      * @return     {boolean}  { description_of_the_return_value }
      */
     update(msgtype, data) {
-        /*
-        function getTime(f) { // returns the most recent known time for flight
-            let t = f.hasOwnProperty(SCHEDULED) ? f[SCHEDULED] : false
-            if (f[ACTUAL]) {
-                t = f[ACTUAL]
-            } else if (f[PLANNED]) {
-                t = f[PLANNED]
-            }
-            return t
-        }
-        */
-        if (msgtype == FLIGHTBOARD_MSG && this.move != data.move) {
+        if (msgtype == FLIGHTBOARD_UPDATE_MSG && this.move != data.move) {
             return false
         }
-
 
         function createTD(text, classes = "") {
             let td = document.createElement("td")
@@ -259,13 +247,14 @@ export class Flightboard extends Tile {
 
         // add empty lines to the board
         if (farr.length < this.options.maxcount) {
+            const EMPTY = "."
             for (let i = farr.length; i < this.options.maxcount; i++) {
                 let tr = document.createElement("tr")
                 let clin = i < this.lastLength ? SOLARI : "" // simulate return to blank
-                tr.appendChild(createTD(".".repeat(7), clin))
-                tr.appendChild(createTD(".".repeat(3), clin))
-                tr.appendChild(createTD(".".repeat(5), clin))
-                tr.appendChild(createTD(".".repeat(5), clin))
+                tr.appendChild(createTD(EMPTY.repeat(7), clin))
+                tr.appendChild(createTD(EMPTY.repeat(3), clin))
+                tr.appendChild(createTD(EMPTY.repeat(5), clin))
+                tr.appendChild(createTD(EMPTY.repeat(5), clin))
                 tr.appendChild(createTD(""))
 
                 let td = document.createElement("td")
@@ -308,8 +297,8 @@ export class Flightboard extends Tile {
                     let s = new flipper(el);
                     s.start();
                 }
-            } else {
-                console.warn("Flightboard::update: no solari class")
+//            } else {
+//                console.warn("Flightboard::update: no solari class")
             }
         }
     }

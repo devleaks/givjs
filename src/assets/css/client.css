@@ -1,1 +1,18 @@
 /* client.css */
+/* Oscars Defaults */
+.client {
+    border-color: #db2004;
+}
+
+.client:hover {
+    color: #db2004;
+}
+
+.about.client {
+    background-image: url(../i/powered.png);
+}
+
+.la {
+    color: #0C64AF;
+    background-color: #EE850A;
+}

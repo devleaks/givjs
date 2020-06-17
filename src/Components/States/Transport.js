@@ -10,7 +10,7 @@ import { Subscriber } from "../Subscriber"
 import moment from "moment"
 import PubSub from "pubsub-js"
 
-import { FLIGHTBOARD_MSG, ROTATION_MSG, SCHEDULED, PLANNED, ACTUAL, DEPARTURE, ARRIVAL } from "../Constant"
+import { FLIGHTBOARD_MSG, FLIGHTBOARD_UPDATE_MSG, TRANSPORTBOARD_MSG, TRANSPORTBOARD_UPDATE_MSG, ROTATION_MSG, SCHEDULED, PLANNED, ACTUAL, DEPARTURE, ARRIVAL } from "../Constant"
 
 const UNSCHEDULED = "UNSCHEDULED"
 
@@ -65,6 +65,9 @@ export class Transport extends Subscriber {
         switch (msgtype) {
             case FLIGHTBOARD_MSG:
                 this.updateOnFlightboard(data)
+                break
+            case TRANSPORTBOARD_MSG:
+                this.updateOnTransportboard(data)
                 break
             default:
                 console.warn("Transport::listen: no listener", msgtype)
@@ -233,7 +236,19 @@ export class Transport extends Subscriber {
                 arrival: f
             })
         }
+
+        PubSub.publish(FLIGHTBOARD_UPDATE_MSG, data)
+
     }
+
+
+
+    updateOnTransportboard(data) {
+
+        PubSub.publish(TRANSPORTBOARD_UPDATE_MSG, data)
+
+    }
+
 
 
     /**
@@ -283,10 +298,12 @@ export class Transport extends Subscriber {
         //    if (value[local] == here) {
             if (value.move == move) {
                 if (value.hasOwnProperty(SCHEDULED)) {
-                    if (datefrom && value[SCHEDULED].isBefore(datefrom)) {
+                    if (datefrom && value[SCHEDULED].isSameOrBefore(datefrom)) {
                         transports.push(value)
                     } else if (!datefrom) {
                         transports.push(value)
+//                    } else {
+//                       console.log("Transport::getScheduledTransports", "too early", value, datefrom)
                     }
                 } else {
                     console.warn("Transport::getScheduledTransports", "no schedule", value, datefrom)

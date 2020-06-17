@@ -54,7 +54,7 @@ body {
 
 .footer {
     grid-area: footer;
-    background-color:  var(--heading-bg-color);
+    background-color: var(--heading-bg-color);
 }
 
 /* flexing header and footer*/

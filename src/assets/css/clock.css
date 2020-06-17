@@ -1,75 +1,75 @@
 /* clock.css */
 .clock {
-  border-radius: 100%;
-  background: var(--heading-bg-color);
-  font-family: "Montserrat";
-  border: 1px solid var(--font-color);
-  box-shadow: inset 2px 3px 8px 0 var(--inset-color);
+    border-radius: 100%;
+    background: var(--heading-bg-color);
+    font-family: "Montserrat";
+    border: 1px solid var(--font-color);
+    box-shadow: inset 2px 3px 8px 0 var(--inset-color);
 }
 
 .wrap {
-  overflow: hidden;
-  position: relative;
-  width: 100px;
-  height: 100px;
-  border-radius: 100%;
+    overflow: hidden;
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
 }
 
 .minute,
 .hour {
-  position: absolute;
-  height: 32px;
-  width: 6px;
-  margin: auto;
-  top: -32%;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background: var(--font-color);
-  transform-origin: bottom center;
-  transform: rotate(0deg);
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.4);
-  z-index: 1;
+    position: absolute;
+    height: 32px;
+    width: 6px;
+    margin: auto;
+    top: -32%;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: var(--font-color);
+    transform-origin: bottom center;
+    transform: rotate(0deg);
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.4);
+    z-index: 1;
 }
 
 .minute {
-  position: absolute;
-  height: 42px;
-  width: 4px;
-  top: -42%;
-  left: 0;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.4);
-  transform: rotate(90deg);
+    position: absolute;
+    height: 42px;
+    width: 4px;
+    top: -42%;
+    left: 0;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.4);
+    transform: rotate(90deg);
 }
 
 .second {
-  position: absolute;
-  height: 40px;
-  width: 2px;
-  margin: auto;
-  top: -40%;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  border-radius: 4px;
-  background: #db2004;
-  transform-origin: bottom center;
-  transform: rotate(180deg);
-  z-index: 1;
+    position: absolute;
+    height: 40px;
+    width: 2px;
+    margin: auto;
+    top: -40%;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    border-radius: 4px;
+    background: #db2004;
+    transform-origin: bottom center;
+    transform: rotate(180deg);
+    z-index: 1;
 }
 
 .dot {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 12px;
-  height: 12px;
-  border-radius: 100px;
-  background: var(--heading-bg-color);
-  border: 2px solid var(--font-color);
-  border-radius: 100px;
-  margin: auto;
-  z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: 100px;
+    background: var(--heading-bg-color);
+    border: 2px solid var(--font-color);
+    border-radius: 100px;
+    margin: auto;
+    z-index: 1;
 }

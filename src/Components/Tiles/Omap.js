@@ -21,6 +21,8 @@ import "leaflet-betterscale/L.Control.BetterScale.css"
 import "@ansur/leaflet-pulse-icon"
 import "@ansur/leaflet-pulse-icon/dist/L.Icon.Pulse.css"
 
+import "leaflet-easybutton"
+
 // newer libs
 // import as module
 import { Map as LeafletMap, TileLayer, LayerGroup, GeoJSON as GeoJSONLAyer, Marker, Circle, ImageOverlay, LatLng, LatLngBounds } from "leaflet"
@@ -52,7 +54,11 @@ const DEFAULTS = {
     layers: [],
 
     layerControl: {},
-    layerControlOptions: { useGrouped: true, groupCheckboxes: true, collapsed: false },
+    layerControlOptions: {
+        useGrouped: true,
+        groupCheckboxes: true,
+        collapsed: true
+    },
 
     betterScale: false,
 
@@ -113,19 +119,24 @@ export class Omap extends Tile {
             "ESRI World Imagery": Esri_WorldImagery
         };
 
+        // S W N E: 50.62250,5.41630,50.65655,5.47567
+        function oscarsAttributions() {
+            return "&copy; <a href='https://www.oscars-sa.eu/'>Oscars s.a.</a> <a href='https://www.oscars-sa.eu/'><img src='src/assets/i/powered2.svg' width='60' height='14'></a>"
+        }
+
         let airportOverlay = new ImageOverlay("src/data/EBLG_GMC01_v13.svg", new LatLngBounds(
             new LatLng(50.62250, 5.41630), // en bas à gauche
             new LatLng(50.65655, 5.47567)), { // en haut à droite 
             opacity: 0.8
         });
-
-        // S W N E: 50.62250,5.41630,50.65655,5.47567
+        airportOverlay.getAttribution = oscarsAttributions
 
         let airportNightOverlay = new ImageOverlay("src/data/EBLG_GMC01_v13-night.svg", new LatLngBounds(
             new LatLng(50.62250, 5.41630), // en bas à gauche
             new LatLng(50.65655, 5.47567)), { // en haut à droite 
             opacity: 1
         });
+        airportNightOverlay.getAttribution = oscarsAttributions
 
         const rabbit = {
             "delay": 15,
@@ -167,7 +178,11 @@ export class Omap extends Tile {
                     "<span style='color: #EE850A;''>Night</span>": night
                 }
             },
-            options: { groupCheckboxes: true, collapsed: false }
+            options: {
+                groupCheckboxes: true,
+                collapsed: true,
+                exclusiveGroups: ["<span style='color: #0C64AF;''><img src='src/data/eblg-logo.svg' width='14' height='14'>&nbsp;Liège Airport</span>"]
+            }
         }
 
         this.options.themes = {
@@ -181,7 +196,7 @@ export class Omap extends Tile {
             zoom: this.options.zoom,
             layers: this.options.layers,
             zoomSnap: 0.5,
-            attributionControl: false // will be displayed in sidebar
+            attributionControl: true
         })
 
         this.map.setView(this.options.center, this.options.zoom)
@@ -192,6 +207,30 @@ export class Omap extends Tile {
             this.options.layerControl.baseLayers,
             this.options.layerControl.overlays,
             this.options.layerControl.options ? this.options.layerControl.options : this.options.layerControlOptions).addTo(this.map)
+
+
+        // Easy button
+        let that = this
+        var stateChangingButton = L.easyButton({
+            states: [{
+                stateName: "zoom-to-area",
+                icon: "fa-map",
+                title: "Airport area",
+                onClick: function(btn, map) {
+                    map.setView(that.options.center, that.options.zoom_overview);
+                    btn.state("zoom-to-airport");
+                }
+            }, {
+                stateName: "zoom-to-airport", // name the state
+                icon: "fa-plane", // and define its properties
+                title: "Airport ground", // like its title
+                onClick: function(btn, map) { // and its callback
+                    map.setView(that.options.center, that.options.zoom);
+                    btn.state("zoom-to-area"); // change state on click!
+                }
+            }]
+        });
+        stateChangingButton.addTo(this.map);
 
 
         // decoration
@@ -327,7 +366,7 @@ export class Omap extends Tile {
     passivate() {
         let content = {}
 
-        this.layers.forEach( (n, l) => {
+        this.layers.forEach((n, l) => {
             content[n] = l.toGeoJSON()
         })
 

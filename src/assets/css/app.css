@@ -16,8 +16,10 @@
     --secondary-color: #db2004;
     --font-color: #ddd;
     --bg-color: #0a0a0a;
-    --heading-bg-color: #0a0a0a;   /* #0a0a0a is opposite of whitesmoke (#f5f5f5) */
-    --sidebar-bg-color: #222; /* rgba(40, 40, 40, 0.6); */
+    --heading-bg-color: #0a0a0a;
+    /* #0a0a0a is opposite of whitesmoke (#f5f5f5) */
+    --sidebar-bg-color: #222;
+    /* rgba(40, 40, 40, 0.6); */
     --sidebar-contour: "#000";
     --inset-color: rgba(255, 255, 255, 0.40);
     --translucent-bg: rgba(255, 255, 255, 0.10);
