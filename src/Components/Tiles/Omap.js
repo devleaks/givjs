@@ -121,17 +121,17 @@ export class Omap extends Tile {
 
         // S W N E: 50.62250,5.41630,50.65655,5.47567
         function oscarsAttributions() {
-            return "&copy; <a href='https://www.oscars-sa.eu/'>Oscars s.a.</a> <a href='https://www.oscars-sa.eu/'><img src='src/assets/i/powered2.svg' width='60' height='14'></a>"
+            return "<span style='color: #db2004;'>&copy;" + /* "2015-"+((new Date()).getFullYear())+ */ "&nbsp;</span><a href='https://www.oscars-sa.eu/' title='Awesome Geo Intelligent Platform Creator' style='color: #db2004;'>Powered by Oscars\' Geo Intelligent Platform</a>&nbsp;";
         }
 
-        let airportOverlay = new ImageOverlay("src/data/EBLG_GMC01_v13.svg", new LatLngBounds(
+        let airportOverlay = new ImageOverlay("src/data/eblg-day.svg", new LatLngBounds(
             new LatLng(50.62250, 5.41630), // en bas à gauche
             new LatLng(50.65655, 5.47567)), { // en haut à droite 
             opacity: 0.8
         });
         airportOverlay.getAttribution = oscarsAttributions
 
-        let airportNightOverlay = new ImageOverlay("src/data/EBLG_GMC01_v13-night.svg", new LatLngBounds(
+        let airportNightOverlay = new ImageOverlay("src/data/eblg-night.svg", new LatLngBounds(
             new LatLng(50.62250, 5.41630), // en bas à gauche
             new LatLng(50.65655, 5.47567)), { // en haut à droite 
             opacity: 1

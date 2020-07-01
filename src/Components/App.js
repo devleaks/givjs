@@ -96,8 +96,14 @@ export class App {
         this.omap.addLayer("APRONS", "Airport")
         this.omap.add("APRONS", parkings)
 
-        this.dashboard.register("stopped", new Stopped(MAP_MSG, [parkings], {}))
+        /* Parallels and meridian lines to match svg geoloc.
+        this.omap.addLayer("Lines", "Airport")
+        let lines = new FeatureCollection("src/data/lines.json")
+        this.omap.add("Lines", lines)
+        */
 
+
+        this.dashboard.register("stopped", new Stopped(MAP_MSG, [parkings], {}))
 
         this.dashboard.register("wire", new Wire("wire", WIRE_MSG, {}))
 

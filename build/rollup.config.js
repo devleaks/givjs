@@ -46,16 +46,16 @@ export default {
         image(),
         copy({
             targets: [
-                { src: "index.html", dest: "dist/" },
-                { src: ["assets/assets/i/favicon.ico"], dest: "dist/" },
+                { src: "index.html", dest: Paths.DIST },
+                { src: [Paths.SRC + "/assets/i/favicon.ico"], dest: Paths.DIST },
                 {
                     src: [
-                        "src/data/eblg-logo.svg",
-                        "src/data/eblg-parking-boxes.geojson",
-                        "src/data/EBLG_GMC01_v13.svg",
-                        "src/data/EBLG_GMC01_v13-night.svg"
+                        Paths.SRC + "/data/eblg-logo.svg",
+                        Paths.SRC + "/data/eblg-parking-boxes.geojson",
+                        Paths.SRC + "/data/EBLG_GMC01_v13.svg",
+                        Paths.SRC + "/data/EBLG_GMC01_v13-night.svg"
                     ],
-                    dest: "dist/src/data/"
+                    dest: Paths.DIST +"/src/data/"
                 }
             ]
         }),
@@ -77,13 +77,13 @@ export default {
         }),
         eslint({
             include: [
-                "src/**.js"
+                Paths.SRC + "/**.js"
             ]
         }),
         { // https://github.com/patarapolw/minimal-rollup-ts-pug-sass-template
             name: "emitPug",
             generateBundle() {
-                fs.writeFileSync(path.join(Paths.DIST, "index.html"), pugAPI.compileFile("src/index.pug")({
+                fs.writeFileSync(path.join(Paths.DIST, "index.html"), pugAPI.compileFile(Paths.SRC + "/index.pug")({
                     description: pkg.description,
                     title: pkg.name
                 }))

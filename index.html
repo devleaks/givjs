@@ -2,13 +2,12 @@
 <html>
 
 <head>
-    <title>Geo Intelligent Viewer JS 2020</title>
+    <title>Geo Intelligent Viewer</title>
     <meta charset="utf-8">
-    <meta name="description" content="Oscars' Geo Intelligent Viewer">
+    <meta name="description" content="Oscars' Geo Intelligent Viewer JS 2020">
     <meta name="keyword" content="oscars gip geo intelligent platform viewer">
     <meta name="author" content="oscars">
-    <link rel="icon" type="image/png" href="favicon.ico"><!-- Structure of the page-->
-    <!-- App-->
+    <link rel="icon" type="image/png" href="favicon.ico">
     <link rel="stylesheet" href="dist/app.css">
 </head>
 
@@ -17,6 +16,7 @@
         <div class="menu-icon"><i class="las la-bars"></i></div>
         <aside class="aside">
             <div class="aside_close-icon"><i class="las la-times"></i></div>
+            <div style="text-align: center;"><a href="" title="Oscars' Geo Intelligent Viewer" alt="Geo Intelligent Viewer"><img src="src/assets/i/givjs.svg" alt="Geo Intelligent Viewer" width="70%"></a></div>
             <div class="aside-card" id="side-info"></div>
             <div class="aside-card" id="wire"></div>
             <div class="aside-card" id="turnaround-gantts"></div>
@@ -25,30 +25,30 @@
         <main class="main">
             <div class="main_overview">
                 <div class="overview_card">
-                    <div class="overview_card-info"><i class="las la-plane la-4x"></i><i class="las la-parking la-4x"></i></div>
+                    <div class="overview_card-info"><i class="las la-plane la-4x" title="Planes parked"></i><i class="las la-parking la-4x"></i></div>
                     <div class="overview_card-icon" id="parking-occupancy"></div>
                 </div>
                 <div class="overview_card">
-                    <div class="overview_card-info"><i class="las la-plane-arrival la-4x"></i></div>
+                    <div class="overview_card-info"><i class="las la-plane-arrival la-4x" title="Landing planes next 6 hours"></i></div>
                     <div class="overview_card-icon" id="forecast-arrival"></div>
                 </div>
                 <div class="overview_card">
-                    <div class="overview_card-info"><i class="las la-plane-departure la-4x"></i></div>
+                    <div class="overview_card-info"><i class="las la-plane-departure la-4x" title="Departing planes next 6 hours"></i></div>
                     <div class="overview_card-icon" id="forecast-departure"></div>
                 </div>
                 <div class="overview_card">
-                    <div class="overview_card-info"><i class="las la-clock la-4x"></i></div>
+                    <div class="overview_card-info"><i class="las la-clock la-4x" title="Simulation time (or now if no simulation)"></i></div>
                     <div class="overview_card-icon">
                         <div id="clock"></div>
                         <div id="dark-toggle"></div>
                     </div>
                 </div>
                 <div class="overview_card">
-                    <div class="overview_card-info"><i class="las la-truck la-4x"></i></div>
+                    <div class="overview_card-info"><i class="las la-truck la-4x" title="Arriving trucks next 6 hours"></i></div>
                     <div class="overview_card-icon" id="forecast-transport-arrival"></div>
                 </div>
                 <div class="overview_card">
-                    <div class="overview_card-info"><i class="las la-truck la-4x" style="transform: scaleX(-1);"></i></div>
+                    <div class="overview_card-info"><i class="las la-truck la-4x" style="transform: scaleX(-1);" title="Departing trucks next 6 hours"></i></div>
                     <div class="overview_card-icon" id="forecast-transport-departure"></div>
                 </div>
             </div>
@@ -63,8 +63,8 @@
         <footer class="footer"></footer>
     </div>
     <!----
---    JAVASCRIPT (LAYOUT)
----->
+    --    JAVASCRIPT (LAYOUT)
+    ---->
     <script type="text/javascript">
     const menuIcon = document.querySelector(".menu-icon");
     const aside = document.querySelector(".aside");
@@ -85,20 +85,26 @@
     });
     </script>
     <!----
---    JAVASCRIPT (APP)
----->
+    --    JAVASCRIPT (APP)
+    ---->
     <script src="dist/app.js"></script>
 </body>
+
 <!----
 --    TEMPLATES
---
---><template id="template-clock">
+-->
+
+<template id="template-clock">
     <div class="clock">
         <div class="wrap"><span class="hour"></span><span class="minute"></span><span class="second"></span><span class="dot"></span></div>
     </div>
-</template><template id="template-wire">
+</template>
+
+<template id="template-wire">
     <ul class="wire"></ul>
-</template><template id="template-wire-el">
+</template>
+
+<template id="template-wire-el">
     <li class="wire-el"></li>
 </template>
 
