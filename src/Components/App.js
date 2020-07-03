@@ -12,9 +12,11 @@ import { Dashboard } from "./Dashboard"
 import { Omap } from "./Tiles/Omap"
 import { Wire } from "./Tiles/Wire"
 import { Flightboard } from "./Tiles/Flightboard"
-import { Transportboard } from "./Tiles/Transportboard"
+//import { Transportboard } from "./Tiles/Transportboard"
 
+// Information boards
 import { Footer } from "./Tiles/Footer"
+import { Solari } from "./Tiles/Solari"
 
 import { MovementForecastChart } from "./Tiles/Charts/MovementForecastChart"
 import { ParkingOccupancyChart } from "./Tiles/Charts/ParkingOccupancyChart"
@@ -35,7 +37,10 @@ import { FeatureCollection } from "./FeatureCollection"
 import { WS_URL, HOME, PARKINGS, APRONS_MAXCOUNT } from "./Config"
 import { DEPARTURE, ARRIVAL } from "./Constant"
 import { STOPPED, JUST_STOPPED, JUST_STARTED, MOVED } from "./Constant"
-import { CLOCK_MSG, SIMULATION_MSG, FOOTER_MSG, FLIGHTBOARD_MSG, FLIGHTBOARD_UPDATE_MSG, TRANSPORTBOARD_MSG, TRANSPORTBOARD_UPDATE_MSG, ROTATION_MSG, WIRE_MSG, MAP_MSG, PARKING_MSG, PARKING_UPDATE_MSG, DARK_MSG } from "./Constant"
+import { CLOCK_MSG, SIMULATION_MSG, FOOTER_MSG, SOLARI_MSG,
+         FLIGHTBOARD_MSG, FLIGHTBOARD_UPDATE_MSG,
+//       TRANSPORTBOARD_MSG, TRANSPORTBOARD_UPDATE_MSG,
+       ROTATION_MSG, WIRE_MSG, MAP_MSG, PARKING_MSG, PARKING_UPDATE_MSG, DARK_MSG } from "./Constant"
 
 
 /**
@@ -72,6 +77,9 @@ export class App {
         })
 
         let footer = new Footer(FOOTER_MSG, "Welcome") // just installs day/night toggle
+
+        // eslint-disable-next-line no-unused-vars
+        let solariBoard = new Solari("solariboard", SOLARI_MSG, ["WELCOME TO OSCARS'", "r GEO INTELLIGENT PLATFORM r VIEWER"], {})
 
         let clock = new Clock("clock", [CLOCK_MSG, SIMULATION_MSG])
         this.dashboard.register("datetime", clock)
@@ -110,8 +118,8 @@ export class App {
         let flights = new Transport(HOME, FLIGHTBOARD_MSG)
         this.dashboard.register("flightboard", flights)
 
-        let transports = new Transport(HOME, TRANSPORTBOARD_MSG)
-        this.dashboard.register("transportboard", transports)
+        //let transports = new Transport(HOME, TRANSPORTBOARD_MSG)
+        //this.dashboard.register("transportboard", transports)
 
         // flightboard and related charts gets updated every 15 minutes in simulation.
         const board_update = 15
@@ -119,14 +127,14 @@ export class App {
         this.dashboard.register("flightboard", new Flightboard("flightboard-arrival", [FLIGHTBOARD_UPDATE_MSG,board_update_message], ARRIVAL, flights, clock, {update_time: board_update}))
         this.dashboard.register("flightboard", new Flightboard("flightboard-departure", [FLIGHTBOARD_UPDATE_MSG,board_update_message], DEPARTURE, flights, clock, {update_time: board_update}))
 
-        this.dashboard.register("transportboard", new Transportboard("transportboard-arrival", [TRANSPORTBOARD_UPDATE_MSG,board_update_message], ARRIVAL, transports, clock, {update_time: board_update}))
-        this.dashboard.register("transportboard", new Transportboard("transportboard-departure", [TRANSPORTBOARD_UPDATE_MSG,board_update_message], DEPARTURE, transports, clock, {update_time: board_update}))
+        //this.dashboard.register("transportboard", new Transportboard("transportboard-arrival", [TRANSPORTBOARD_UPDATE_MSG,board_update_message], ARRIVAL, transports, clock, {update_time: board_update}))
+        //this.dashboard.register("transportboard", new Transportboard("transportboard-departure", [TRANSPORTBOARD_UPDATE_MSG,board_update_message], DEPARTURE, transports, clock, {update_time: board_update}))
 
         this.dashboard.register("flightboard", new MovementForecastChart("forecast-arrival", [FLIGHTBOARD_UPDATE_MSG,board_update_message], ARRIVAL, flights, clock, {update_time: board_update}))
         this.dashboard.register("flightboard", new MovementForecastChart("forecast-departure", [FLIGHTBOARD_UPDATE_MSG,board_update_message], DEPARTURE, flights, clock, {update_time: board_update}))
 
-        this.dashboard.register("transportboard", new MovementForecastChart("forecast-transport-arrival", [TRANSPORTBOARD_UPDATE_MSG,board_update_message], ARRIVAL, transports, clock, {update_time: board_update}))
-        this.dashboard.register("transportboard", new MovementForecastChart("forecast-transport-departure", [TRANSPORTBOARD_UPDATE_MSG,board_update_message], DEPARTURE, transports, clock, {update_time: board_update}))
+        //this.dashboard.register("transportboard", new MovementForecastChart("forecast-transport-arrival", [TRANSPORTBOARD_UPDATE_MSG,board_update_message], ARRIVAL, transports, clock, {update_time: board_update}))
+        //this.dashboard.register("transportboard", new MovementForecastChart("forecast-transport-departure", [TRANSPORTBOARD_UPDATE_MSG,board_update_message], DEPARTURE, transports, clock, {update_time: board_update}))
 
         let parkingOccupancy = new ParkingOccupancy(PARKING_MSG, parkings, { aprons_max: APRONS_MAXCOUNT, aprons_layer_name: "APRONS" })
         this.dashboard.register("parking", parkingOccupancy)

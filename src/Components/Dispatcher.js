@@ -97,6 +97,7 @@ export class Dispatcher {
             const msgtype = msg[this.options.TYPE]
             try {
                 PubSub.publish(msgtype, msg[this.options.PAYLOAD])
+                // console.log("Dispatcher::dispatch",msgtype, msg[this.options.PAYLOAD])
                 if (msg.hasOwnProperty(this.options.TIMESTAMP)) { // adjust simulation clock
                     PubSub.publish(CLOCK_MSG, msg[this.options.TIMESTAMP])
                 }

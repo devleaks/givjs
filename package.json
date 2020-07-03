@@ -41,8 +41,10 @@
     "moment": "^2.27.0",
     "mustache": "^4.0.1",
     "pubsub-js": "^1.8.0",
+    "stats.js": "^0.17.0",
     "svg-to-geojson": "^1.0.0",
-    "ws": "^7.3.0"
+    "ws": "^7.3.0",
+    "zepto": "^1.2.0"
   },
   "scripts": {
     "watch": "rollup -w -c ./build/rollup.watch.config.js",

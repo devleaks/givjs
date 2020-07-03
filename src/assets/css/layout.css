@@ -32,7 +32,7 @@ body {
     grid-template-columns: 1fr;
     grid-template-rows: 100px 1fr 100px;
     grid-template-areas:
-        /*  'header'*/
+        'header'
         'main'
         'footer';
 }
@@ -162,7 +162,7 @@ body {
     .grid-container {
         display: grid;
         grid-template-columns: 240px 1fr;
-        grid-template-rows: 50px 1fr 50px;
+        grid-template-rows: 270px 1fr 50px;
         grid-template-areas:
             'aside header'
             'aside main'
