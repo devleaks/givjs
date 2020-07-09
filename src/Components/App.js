@@ -90,6 +90,7 @@ export class App {
         let footer = new Footer(FOOTER_MSG, "Welcome") // just installs day/night toggle
 
         // eslint-disable-next-line no-unused-vars
+        /*
         let solariBoard = new Solari("solariboard", SOLARI_MSG, [
             "WELCOME TO OSCARS'",
             "GEO INTELLIGENT VIEWER",
@@ -98,8 +99,8 @@ export class App {
             preset: 'alphanum',
             width: 100,
             height: 6,
-            size: "XXS" */
-        })
+            size: "XXS" *
+        })*/
 
         let clock = new Clock("clock", [CLOCK_MSG, SIMULATION_MSG])
         this.dashboard.register("datetime", clock)

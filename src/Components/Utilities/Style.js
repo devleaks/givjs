@@ -17,9 +17,11 @@ import { Sparkline } from "../Tiles/Charts/Sparkline"
 
 import { HIDE_FEATURE, HIDE_STYLE, HIDE_TOUCHED, APRONS_COLORS, HASDATA } from "../Constant"
 
-// possible property names for rotation. Must be a number
-const ROTATION_PROPERTIES = ["heading", "bearing", "orientation", "orient"]
+// possible property names for rotation, speed, altitude. Must be a number, float preferably
 const ROTATION_PROPERTY = "_rotation"
+const HEADING_PROPERTIES = ["heading", "bearing", "orientation", "orient"]
+const SPEED_PROPERTIES = ["speed"]
+const ALTITUDE_PROPERTIES = ["alt", "altitude", "height"]
 
 const DEFAULTS = {
     markerSymbol: "map-marker",
@@ -92,20 +94,29 @@ function touch(feature) {
 }
 
 // Get rotation of feature if supplied. Add rotation offset for tilted icon
-function getRotation(feature) {
-    let rotation = 0.0
+function getHeading(feature) {
+    let heading = 0.0
     if (feature.hasOwnProperty("properties")) {
         let notdone = true
-        ROTATION_PROPERTIES.forEach(function(prop) {
+        HEADING_PROPERTIES.forEach(function(prop) {
             if (feature.properties.hasOwnProperty(prop) && notdone) { // has rotation
                 let r = parseFloat(feature.properties[prop])
                 if (!isNaN(r)) {
-                    rotation = r
+                    heading = r
                     notdone = false
                 }
             }
         })
+    } else {
+        console.warn("Style::getHeading", "feature has no heading properties", feature)
+    }
+    return heading
+}
 
+function getRotation(feature) {
+    let rotation = 0.0
+    if (feature.hasOwnProperty("properties")) {
+        rotation = getHeading(feature)
         if (feature.properties.hasOwnProperty("_style") && feature.properties._style.hasOwnProperty("markerRotationOffset")) { // has rotation offset = need to rotate icon
             let r = parseFloat(feature.properties._style.markerRotationOffset)
             if (!isNaN(r)) {
@@ -114,9 +125,59 @@ function getRotation(feature) {
         }
         // while(r > 360) { r -= 360 }
     } else {
-        console.warn("Style::getRotation", "feature has no rotation properties", ROTATION_PROPERTIES, feature)
+        console.warn("Style::getRotation", "feature has no rotation properties", feature)
     }
     return rotation
+}
+
+
+// Get rotation of feature if supplied. Add rotation offset for tilted icon
+function getSpeed(feature) {
+    let speed = 0.0
+    if (feature.hasOwnProperty("properties")) {
+        let notdone = true
+        SPEED_PROPERTIES.forEach(function(prop) {
+            if (feature.properties.hasOwnProperty(prop) && notdone) { // has rotation
+                let r = parseFloat(feature.properties[prop])
+                if (!isNaN(r)) {
+                    speed = r
+                    notdone = false
+                }
+            }
+        })
+    } else {
+        console.warn("Style::getSpeed", "feature has no speed properties", feature)
+    }
+    return speed
+}
+
+
+// Get rotation of feature if supplied. Add rotation offset for tilted icon
+function getAltitude(feature) {
+    let alt = 0.0
+    if (feature.hasOwnProperty("geometry")) {
+        if (feature.geometry.type == "Point") {
+            if (feature.geometry.coordinates.length > 2) { // has altitude in coordinates
+                alt = feature.geometry.coordinates[2]
+            } else {
+                if (feature.hasOwnProperty("properties")) {
+                    let notdone = true
+                    ALTITUDE_PROPERTIES.forEach(function(prop) {
+                        if (feature.properties.hasOwnProperty(prop) && notdone) { // has rotation
+                            let r = parseFloat(feature.properties[prop])
+                            if (!isNaN(r)) {
+                                alt = r
+                                notdone = false
+                            }
+                        }
+                    })
+                }
+            }
+        }
+    } else {
+        console.warn("Style::getSpeed", "feature has no altitude properties", feature)
+    }
+    return alt
 }
 
 
@@ -134,29 +195,38 @@ function getMarker(feature, latlng) {
 
     if (isPlane(feature)) {
         let name = feature.properties.hasOwnProperty("name") ? feature.properties.name : "PLANE"
-        let altitude = feature.properties.hasOwnProperty("altitude") ? feature.properties.altitude : "0"
-        let speed = feature.properties.hasOwnProperty("speed") ? feature.properties.speed : "0"
-        let heading = feature.properties.hasOwnProperty("heading") ? feature.properties.heading : "0"
-        marker = new Marker(latlng, {
-            icon: new DivIcon({
-                className: DEFAULTS.lDivIconClassname,
-                html: `<svg version="1.1" id="Calque_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-     width="49.215px" height="71.679px" viewBox="0.512 0 49.215 71.679" enable-background="new 0.512 0 49.215 71.679"
-     xml:space="preserve">
-<rect x="0.937" y="0.146" fill="#40A629" width="48.189" height="10.278"/>
-<polyline fill="none" stroke="#40A629" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
-    0.937,37.819 49.127,37.819 23.526,71.004 "/>
-<text transform="matrix(1 0 0 1 1.8972 18.532)" fill="#40A629" font-family="'Helvetica'" font-size="10">AL</text>
-<text transform="matrix(1 0 0 1 1.8972 26.8147)" fill="#40A629" font-family="'Helvetica'" font-size="10">SP</text>
-<text transform="matrix(1 0 0 1 1.8972 35.0999)" fill="#40A629" font-family="'Helvetica'" font-size="10">HD</text>
-<text transform="matrix(1 0 0 1 1.8972 8.9998)" fill="#FFFFFF" font-family="'Helvetica'" font-size="10">${ name }</text>
-<text transform="matrix(1 0 0 1 15.0715 18.532)" fill="#40A629" font-family="'Helvetica'" font-size="10">: ${ altitude }</text>
-<text transform="matrix(1 0 0 1 15.0715 26.8147)" fill="#40A629" font-family="'Helvetica'" font-size="10">: ${ speed }</text>
-<text transform="matrix(1 0 0 1 15.0715 35.0999)" fill="#40A629" font-family="'Helvetica'" font-size="10">: ${ heading }°</text>
+        let altitude = getAltitude(feature)
+        let speed = getSpeed(feature)
+        let heading = feature.properties.hasOwnProperty("heading") ? (feature.properties.heading ? feature.properties.heading : "0") : "0"
+        if (altitude > 0 || speed > 0) {
+            marker = new Marker(latlng, {
+                icon: new DivIcon({
+                    className: DEFAULTS.lDivIconClassname,
+                    html: `<svg version="1.1" id="Calque_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+     width="49.215px" height="71.679px" viewBox="0.512 0 49.215 71.679" enable-background="new 0.512 0 49.215 71.679" xml:space="preserve">
+    <rect x="0.937" y="0.146" fill="#40A629" width="48.189" height="10.278"/>
+    <polyline fill="none" stroke="#40A629" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="0.937,37.819 49.127,37.819 23.526,71.004 "/>
+    <text transform="matrix(1 0 0 1 1.8972 18.532)"   fill="#40A629" font-family="Helvetica" font-size="10">AL</text>
+    <text transform="matrix(1 0 0 1 1.8972 26.8147)"  fill="#40A629" font-family="Helvetica" font-size="10">SP</text>
+    <text transform="matrix(1 0 0 1 1.8972 35.0999)"  fill="#40A629" font-family="Helvetica" font-size="10">HD</text>
+    <text transform="matrix(1 0 0 1 1.8972 8.8500)"   fill="#FFFFFF" font-family="Helvetica" font-size="10">${ name }</text>
+    <text transform="matrix(1 0 0 1 15.0715 18.532)"  fill="#40A629" font-family="Helvetica" font-size="10">: ${ altitude }</text>
+    <text transform="matrix(1 0 0 1 15.0715 26.8147)" fill="#40A629" font-family="Helvetica" font-size="10">: ${ speed }</text>
+    <text transform="matrix(1 0 0 1 15.0715 35.0999)" fill="#40A629" font-family="Helvetica" font-size="10">: ${ heading }°</text>
 </svg>`,
-                iconAnchor: [23.526,71.004] // last point of polyline
+                    iconAnchor: [23.526, 71.004] // last point of polyline
+                })
             })
-        })
+        } else {
+            marker = new Marker(latlng, {
+                icon: getIcon(feature),
+                rotationAngle: feature.properties[ROTATION_PROPERTY]
+            })
+            if(! feature.properties.hasOwnProperty("_templates")) {
+                feature.properties._templates = {}
+            }
+            feature.properties._templates.tooltip = `<span style="font-weight: bolder;">${ name }</span><br/>AL: ${ altitude }<br/>SP: ${ speed } km/h</br/>HD: ${ heading }°`
+        }
     } else {
         marker = new Marker(latlng, {
             icon: getIcon(feature),

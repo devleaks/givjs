@@ -21,11 +21,7 @@
             <div class="aside-card" id="wire"></div>
             <div class="aside-card" id="turnaround-gantts"></div>
         </aside>
-        <header>
-            <div class="header">
-                <div id="solariboard" class="solariboard" />
-            </div>
-        </header>
+        <header class="header"></header>
         <main class="main">
             <div class="main_overview">
                 <div class="overview_card">
@@ -47,11 +43,21 @@
                         <div id="dark-toggle"></div>
                     </div>
                 </div>
+                <div class="overview_card">
+                    <div class="overview_card-info"><i class="las la-truck la-4x" title="Arriving trucks next 6 hours"></i></div>
+                    <div class="overview_card-icon" id="forecast-transport-arrival"></div>
+                </div>
+                <div class="overview_card">
+                    <div class="overview_card-info"><i class="las la-truck la-4x" style="transform: scaleX(-1);" title="Departing trucks next 6 hours"></i></div>
+                    <div class="overview_card-icon" id="forecast-transport-departure"></div>
+                </div>
             </div>
             <div class="main_cards">
                 <div class="card" id="map"></div>
                 <div class="card" id="flightboard-arrival"></div>
                 <div class="card" id="flightboard-departure"></div>
+                <div class="card" id="transportboard-arrival"></div>
+                <div class="card" id="transportboard-departure"></div>
             </div>
         </main>
         <footer class="footer"></footer>
@@ -83,17 +89,21 @@
     ---->
     <script src="dist/app.js"></script>
 </body>
+
 <!----
 --    TEMPLATES
 -->
+
 <template id="template-clock">
     <div class="clock">
         <div class="wrap"><span class="hour"></span><span class="minute"></span><span class="second"></span><span class="dot"></span></div>
     </div>
 </template>
+
 <template id="template-wire">
     <ul class="wire"></ul>
 </template>
+
 <template id="template-wire-el">
     <li class="wire-el"></li>
 </template>
