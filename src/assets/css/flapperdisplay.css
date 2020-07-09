@@ -407,3 +407,14 @@ LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISCING ELIT, SED DO EIUSMOD TEMPOR I
     padding: 0px;
     background-color: #602080;
 }
+
+/* how to group characters... *
+.flapper.XXS .digit:nth-child(5) {
+    margin-left: 6px;
+}*/
+
+.flapper.display span {
+    color: white;
+    font-size: smaller;
+    vertical-align: top;
+}

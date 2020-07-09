@@ -92,8 +92,8 @@ export class App {
         // eslint-disable-next-line no-unused-vars
         let solariBoard = new Solari("solariboard", SOLARI_MSG, [
             "WELCOME TO OSCARS'",
-            "GEO INTELLIGENT PLATFORM",
-            "roy VIEWER gbp"
+            "GEO INTELLIGENT VIEWER",
+            "roygbpw"
         ], { /*
             preset: 'alphanum',
             width: 100,

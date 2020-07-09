@@ -42,6 +42,8 @@ export class MovementForecastChart extends ApexTile {
      *   Installs the HTML code in the document
      */
     install() {
+        super.install()
+        
         this.chart = new ApexCharts(document.getElementById(this.elemid), {
             series: [{
                 name: this.move,

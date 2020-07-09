@@ -58,6 +58,7 @@ const DEFAULTS = {
     on_anim_start: null,
     on_anim_end: null,
     prependToId: "Flap",
+    colons: [],
     light: false
 }
 
@@ -96,6 +97,12 @@ class Flapper {
         for (let i = 0; i < this.options.width; i++) {
             this.digits[i] = new FlapDigit(null, this.options);
             this.$div.append(this.digits[i].$ele);
+            this.$div.append($("<span>").addClass("vestacolon"));
+
+            if(this.options.colons.indexOf(i) > -1) {
+                this.$div.append($("<span>").html(":"));
+                console.log("added span",i)
+            }
         }
 
         this.$div.on("digitAnimEnd", function(e) {

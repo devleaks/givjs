@@ -10,6 +10,8 @@ import "../../assets/css/chart.css"
 
 import { Tile } from "../Tile"
 
+const APEXTILE_CSS_CLASS = "apextile"
+
 /**
  * "Abstract" class for all charting tiles
  *
@@ -26,6 +28,17 @@ export class ApexTile extends Tile {
     constructor(elemid, message_type) {
         super(elemid, message_type)
     }
+
+
+    /**
+     * Installs the object.
+     */
+    install() {
+        super.install()
+        let el = document.getElementById(this.elemid)
+        el.classList.add(APEXTILE_CSS_CLASS)
+    }
+
 
     /**
      * Stores data for state restore

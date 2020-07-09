@@ -7,6 +7,8 @@
 
 import { Subscriber } from "./Subscriber"
 
+const TILE_CSS_CLASS = "tile"
+
 /**
  * A Tile is a HTML rendered "widget" that respond to messages sent to it.
  *
@@ -18,6 +20,16 @@ export class Tile extends Subscriber {
         super(message_type)
         this.elemid = elemid
     }
+
+
+    /**
+     * Installs the object.
+     */
+    install() {
+        let el = document.getElementById(this.elemid)
+        el.classList.add(TILE_CSS_CLASS)
+    }
+
 
     /**
      * Sample listener function
