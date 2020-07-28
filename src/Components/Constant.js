@@ -4,7 +4,6 @@
  * License: MIT
  */
 
-
 export const DEPARTURE = "departure"
 export const ARRIVAL = "arrival"
 
@@ -15,6 +14,8 @@ export const ACTUAL = "actual"
 export const BUSY = "busy"
 export const AVAILABLE = "available"
 
+export const APRONS_COLORS = ["#DDDDDD", "#008FFB", "#00E396", "#FEB019", "#DDDDDD", "#FF4560", "#775DD0"]
+
 
 // Feature properties
 export const HIDE_FEATURE = "_feature"
@@ -23,16 +24,12 @@ export const HIDE_STYLE = "_style"
 export const HIDE_TOUCHED = "_touched"
 export const HASDATA = "_data"
 
-export const APRONS_COLORS = ["#DDDDDD", "#008FFB", "#00E396", "#FEB019", "#DDDDDD", "#FF4560", "#775DD0"]
+export const HEADING_PROP = "heading"
+export const ALTITUDE_PROP = "alt"
+export const SPEED_PROP = "speed"
 
-// stopped messages
-export const STOPPED = "stopped"
-export const JUST_STOPPED = "just_stopped"
-export const JUST_STARTED = "just_started"
-export const MOVED = "moved"
-export const ROTATION_MSG = "rotation"
 
-// other messages
+// Messages
 export const FLIGHTBOARD_MSG = "flightboard"
 export const TRANSPORTBOARD_MSG = "transport"
 export const FLIGHTBOARD_UPDATE_MSG = "flightboard-update"
@@ -47,6 +44,17 @@ export const SOLARI_MSG = "solari"
 export const CLOCK_MSG = "clock"
 export const SIMULATION_MSG = "siminfo"
 
+// stopped messages
+export const STOPPED = "stopped"
+export const JUST_STOPPED = "just_stopped"
+export const JUST_STARTED = "just_started"
+export const MOVED = "moved"
+export const MOVING = "moving"
+
+export const ROTATION_MSG = "rotation"
+
+
+// Others
 export const CLOCK_TICKS = [ // minutes
     1,
     2,
@@ -59,7 +67,20 @@ export const CLOCK_TICKS = [ // minutes
     120
 ]
 
-//
+
+// User interface
 export const LOCALSTORAGE_DARK = "theme"
 export const DARK = "dark"
 export const LIGHT = "light"
+
+// HTML "areas"
+export const UI_HEADER = "header"
+export const UI_FOOTER = "footer"
+export const UI_SIDEBAR = "sidebar"
+
+export const UI_HIGHLIGHT = "highlight"
+export const UI_MAIN = "main"
+export const UI_STATUS = "status"
+
+export const UI_MAP = "map"
+

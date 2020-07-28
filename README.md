@@ -13,7 +13,26 @@ Idle points that first turn grey then disappear (fade away?)
 ## Message Format
 
 
+```JavScript
+export const FLIGHTBOARD_MSG = "flightboard"
+export const TRANSPORTBOARD_MSG = "transport"
+export const FLIGHTBOARD_UPDATE_MSG = "flightboard-update"
+export const TRANSPORTBOARD_UPDATE_MSG = "transport-update"
+export const PARKING_MSG = "parking"
+export const PARKING_UPDATE_MSG = "parking-update"
+export const MAP_MSG = "map"
+export const WIRE_MSG = "wire"
+export const DARK_MSG = "dark"
+export const FOOTER_MSG = "footer"
+export const SOLARI_MSG = "solari"
+export const CLOCK_MSG = "clock"
+export const SIMULATION_MSG = "siminfo"
+```
+
+
 ### FLIGHTBOARD_MSG
+
+Arrival and departure information from AODB.
 
 ```JavScript
 {
@@ -34,6 +53,8 @@ Idle points that first turn grey then disappear (fade away?)
 
 
 ### PARKING_MSG
+
+Arrival and departure information from movement observation.
 
 ```JavScript
 {
@@ -69,10 +90,6 @@ Idle points that first turn grey then disappear (fade away?)
         markerRotationOffset: 0
       },
       payload: '{"emit":true,"marker-color":"#ff2600","marker-size":"medium","marker-symbol":"","nojitter":[3.9250842233644656,50.59347822900452],"elapsed":30,"vertex":0,"sequence":1,"category":"e","speed":816.1439541760683,"bearing":73.8,"note":"en route","device":"ADAE0B"}'
-    },
-    geometry: {
-      type: 'Point',
-      coordinates: [ 3.9250842233644656, 50.59347822900452 ]
     }
   }
 }
@@ -118,6 +135,8 @@ Idle points that first turn grey then disappear (fade away?)
 
 ### SIMULATION_MSG
 
+Contains information about the current simulation to set some appearance accordingly (clock, etc.)
+
 ```JavScript
 {
   type: 'siminfo',
@@ -137,6 +156,7 @@ Idle points that first turn grey then disappear (fade away?)
 ```JavScript
 ```
 
+
 ### DARK_MSG
 
 ```JavScript
@@ -145,13 +165,15 @@ Idle points that first turn grey then disappear (fade away?)
 
 Word "light" or "dark".
 
+
 ### FOOTER_MSG
 
 ```JavScript
 "Footer innerHTML Text"
 ```
 
-HTML formatted message to display in footer.
+HTML formatted message to display in footer. (Watch out for XSS.)
+
 
 ### CLOCK_MSG
 
@@ -160,6 +182,7 @@ HTML formatted message to display in footer.
 ```
 
 Timestamp in ISO 8601 format.
+
 
 ### PARKING_UPDATE_MSG
 

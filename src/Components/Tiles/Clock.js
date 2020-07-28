@@ -8,15 +8,17 @@
 import PubSub from "pubsub-js"
 import moment from "moment"
 
-import { Subscriber } from "./Subscriber"
-import { deepExtend } from "./Utilities/Utils"
+import { Tile } from "../Tile"
+import { deepExtend } from "../Utilities/Utils"
 
 
-import { CLOCK_MSG, CLOCK_TICKS, SIMULATION_MSG } from "./Constant"
+import { CLOCK_MSG, CLOCK_TICKS, SIMULATION_MSG } from "../Constant"
 
-import "../assets/css/clock.css"
+import "../../assets/css/clock.css"
 
 const DEFAULTS = {
+    icon: "clock",
+    title: "Time",
     refresh: 1, //seconds
     inc: 1, // seconds
     log: false
@@ -29,7 +31,7 @@ const DEFAULTS = {
  *
  * @class      Clock (name)
  */
-export class Clock extends Subscriber {
+export class Clock extends Tile {
 
     /**
      * Constructs a new Clock instance.
@@ -43,8 +45,8 @@ export class Clock extends Subscriber {
      *  log: true|false Whether to log clock adjustments on browser console
      * }
      */
-    constructor(elemid, msgtype, options) {
-        super(msgtype)
+    constructor(areaid, elemid, msgtype, options) {
+        super(areaid, elemid, msgtype)
         this.options = deepExtend(DEFAULTS, options)
         this.elemid = elemid
         this.date = moment()
@@ -58,6 +60,7 @@ export class Clock extends Subscriber {
      * Installs the Clock object.
      */
     install() {
+        super.install()
         let el = document.getElementById(this.elemid)
         el.innerHTML = `
             <div class="clock">

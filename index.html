@@ -12,58 +12,58 @@
 </head>
 
 <body>
-    <div class="grid-container">
+        <!---
+        --    const TEMPL_ICON_PLACEHOLDER = "la-icon"
+        --    const TEMPL_ELEMID_PLACEHOLDER = "here"
+        ---->
+        <div class="grid-container">
         <div class="menu-icon"><i class="las la-bars"></i></div>
-        <aside class="aside">
+        <aside class="aside" id="sidebar">
             <div class="aside_close-icon"><i class="las la-times"></i></div>
             <div style="text-align: center;"><a href="" title="Oscars' Geo Intelligent Viewer" alt="Geo Intelligent Viewer"><img src="src/assets/i/givjs.svg" alt="Geo Intelligent Viewer" width="70%"></a></div>
-            <div class="aside-card" id="side-info"></div>
-            <div class="aside-card" id="wire"></div>
-            <div class="aside-card" id="turnaround-gantts"></div>
+            <template id="sidebar-elem">
+                <div class="aside-card here"></div>
+            </template>
+            <template id="template-wire">
+                <ul class="wire"></ul>
+            </template>
+            <template id="template-wire-el">
+                <li class="wire-el"></li>
+            </template>
         </aside>
         <header class="header"></header>
-        <main class="main">
-            <div class="main_overview">
-                <div class="overview_card">
-                    <div class="overview_card-info"><i class="las la-plane la-4x" title="Planes parked"></i><i class="las la-parking la-4x"></i></div>
-                    <div class="overview_card-icon" id="parking-occupancy"></div>
-                </div>
-                <div class="overview_card">
-                    <div class="overview_card-info"><i class="las la-plane-arrival la-4x" title="Landing planes next 6 hours"></i></div>
-                    <div class="overview_card-icon" id="forecast-arrival"></div>
-                </div>
-                <div class="overview_card">
-                    <div class="overview_card-info"><i class="las la-plane-departure la-4x" title="Departing planes next 6 hours"></i></div>
-                    <div class="overview_card-icon" id="forecast-departure"></div>
-                </div>
-                <div class="overview_card">
-                    <div class="overview_card-info"><i class="las la-clock la-4x" title="Simulation time (or now if no simulation)"></i></div>
-                    <div class="overview_card-icon">
-                        <div id="clock"></div>
-                        <div id="dark-toggle"></div>
-                    </div>
-                </div>
-                <div class="overview_card">
-                    <div class="overview_card-info"><i class="las la-truck la-4x" title="Arriving trucks next 6 hours"></i></div>
-                    <div class="overview_card-icon" id="forecast-transport-arrival"></div>
-                </div>
-                <div class="overview_card">
-                    <div class="overview_card-info"><i class="las la-truck la-4x" style="transform: scaleX(-1);" title="Departing trucks next 6 hours"></i></div>
-                    <div class="overview_card-icon" id="forecast-transport-departure"></div>
-                </div>
+        <template id="template-clock">
+            <div class="clock">
+                <div class="wrap"><span class="hour"></span><span class="minute"></span><span class="second"></span><span class="dot"></span></div>
             </div>
-            <div class="main_cards">
-                <div class="card" id="map"></div>
-                <div class="card" id="flightboard-arrival"></div>
-                <div class="card" id="flightboard-departure"></div>
-                <div class="card" id="transportboard-arrival"></div>
-                <div class="card" id="transportboard-departure"></div>
+        </template>
+        <main class="main">
+            <div class="main_overview" id="highlight">
+                <template id="highlight-elem">
+                    <div class="overview_card">
+                        <div class="overview_card-icon"><i class="las la-icon la-4x" title="Title"></i></div>
+                        <div class="overview_card-content here"></div>
+                    </div>
+                </template>
+            </div>
+            <div class="main_cards" id="main">
+                <template id="main-elem">
+                    <div class="card here"></div>
+                </template>
+            </div>
+            <div class="main_overview" id="status">
+                <template id="status-elem">
+                    <div class="overview_card">
+                        <div class="overview_card-icon"><i class="las la-icon la-4x" title="Title"></i></div>
+                        <div class="overview_card-content here"></div>
+                    </div>
+                </template>
             </div>
         </main>
         <footer class="footer"></footer>
     </div>
     <!----
-    --    JAVASCRIPT (LAYOUT)
+    --    JAVASCRIPT (LAYOUT HELPER)
     ---->
     <script type="text/javascript">
     const menuIcon = document.querySelector(".menu-icon");
@@ -85,27 +85,8 @@
     });
     </script>
     <!----
-    --    JAVASCRIPT (APP)
-    ---->
+      --    JAVASCRIPT (APP)
+      ---->
     <script src="dist/app.js"></script>
 </body>
-
-<!----
---    TEMPLATES
--->
-
-<template id="template-clock">
-    <div class="clock">
-        <div class="wrap"><span class="hour"></span><span class="minute"></span><span class="second"></span><span class="dot"></span></div>
-    </div>
-</template>
-
-<template id="template-wire">
-    <ul class="wire"></ul>
-</template>
-
-<template id="template-wire-el">
-    <li class="wire-el"></li>
-</template>
-
 </html>

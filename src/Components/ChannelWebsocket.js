@@ -57,7 +57,7 @@ export class ChannelWebsocket extends Channel {
             try {
                 that.dispatcher.dispatch(evt.data)
             } catch (e) {
-                console.error("ChannelWebsocket::install cannot send message", e)
+                console.error("ChannelWebsocket::install cannot dispatch message", e)
             }
         }
     }

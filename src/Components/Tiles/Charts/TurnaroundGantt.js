@@ -34,6 +34,7 @@ export class TurnaroundGantt extends ApexTile {
     /*  installs the HTML code in the document
      */
     install() {
+        super.install()
         // prepare wire element
         let hook = document.getElementById(this.elemid)
         let newel = document.createElement("ul")

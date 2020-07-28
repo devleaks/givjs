@@ -39,6 +39,7 @@ body {
 
 .header {
     grid-area: header;
+    display: flex;
     background-color: var(--heading-bg-color);
     padding: 10px;
 }

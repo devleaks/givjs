@@ -97,6 +97,12 @@ export class Stopped extends Subscriber {
     places(feature) {
         let pos = []
 
+        /*
+        return this.areas.reduce( (acc, fc) => {
+            return acc.concat( fc.contains(feature.geometry) )
+        }, [])
+        */
+
         this.areas.forEach((fc) => {
             let areas = fc.contains(feature.geometry)
             pos = pos.concat(areas)

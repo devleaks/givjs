@@ -195,6 +195,7 @@ function getMarker(feature, latlng) {
 
     if (isPlane(feature)) {
         let name = feature.properties.hasOwnProperty("name") ? feature.properties.name : "PLANE"
+        let flight = feature.properties.hasOwnProperty("flight") ? feature.properties.flight : "-----"
         let altitude = getAltitude(feature)
         let speed = getSpeed(feature)
         let heading = feature.properties.hasOwnProperty("heading") ? (feature.properties.heading ? feature.properties.heading : "0") : "0"
@@ -225,7 +226,8 @@ function getMarker(feature, latlng) {
             if(! feature.properties.hasOwnProperty("_templates")) {
                 feature.properties._templates = {}
             }
-            feature.properties._templates.tooltip = `<span style="font-weight: bolder;">${ name }</span><br/>AL: ${ altitude }<br/>SP: ${ speed } km/h</br/>HD: ${ heading }°`
+            // alt or speed is 0, heading is not always relevant...
+            feature.properties._templates.tooltip = `<span style="font-weight: bolder;">${ name }</span><br/><span style="font-weight: bolder;">${ flight }</span>`
         }
     } else {
         marker = new Marker(latlng, {

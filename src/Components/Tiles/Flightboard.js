@@ -9,7 +9,7 @@ import "../../assets/css/flightboard.css"
 
 import { deepExtend } from "../Utilities/Utils"
 import { Tile } from "../Tile"
-import { Clock } from "../Clock"
+import { Clock } from "./Clock"
 import moment from "moment"
 
 import { FLIGHTBOARD_UPDATE_MSG, SCHEDULED, PLANNED, ACTUAL, DEPARTURE } from "../Constant"
@@ -22,6 +22,8 @@ import { flipper } from "../../assets/js/flipper.js"
 const DEFAULTS = {
     elemid: "flightboard",
     msgtype: "flightboard",
+    icon: "plane",
+    title: "Flightboard",
     maxcount: 12,
     solari: true,
     announce_delay: 15,  // min. After, announce flight is delayed.
@@ -55,8 +57,8 @@ export class Flightboard extends Tile {
      * @param      {<type>}  clock         The clock
      * @param      {<type>}  options       The options
      */
-    constructor(elemid, message_type, move, transport, clock, options) {
-        super(elemid, message_type)
+    constructor(areaid, elemid, message_type, move, transport, clock, options) {
+        super(areaid, elemid, message_type)
         this.options = deepExtend(DEFAULTS, options)
         this.move = move
         this.flights = transport
@@ -70,16 +72,17 @@ export class Flightboard extends Tile {
      * Installs the Flightboard.
      */
     install() {
+        super.install()
         // let elhtml = document.getElementById("template-"+this.elemid)
         // let html == elhtml.innerHTML
         let html = `
-            <div id='${ this.elemid }' class="flightboard">
+            <div class="flightboard">
                 <table>
-                    <caption>${ this.move }</caption>
+                    <caption>${ this.options.title }</caption>
                     <thead>
                         <tr>
                             <th>Flight</th>
-                            <th>${ this.move == "arrival" ? "From" : "To "}</th>
+                            <th>${ this.move == DEPARTURE ? "To" : "From" }</th>
                             <th>Time</th>
                             <th>Estimated</th>
                             <th>Remarks</th>

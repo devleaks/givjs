@@ -9,6 +9,9 @@ import PubSub from "pubsub-js"
 import { deepExtend } from "./Utilities/Utils"
 
 import { ChannelWebsocket } from "./ChannelWebsocket"
+
+// import { ChannelMQTT } from "./ChannelMQTT"
+
 import { CLOCK_MSG } from "./Constant"
 
 PubSub.immediateExceptions = true;
@@ -52,6 +55,12 @@ export class Dispatcher {
                         channelConnector = new ChannelWebsocket(this, channelOptions)
                         console.log("Dispatcher::installed", channel, channelOptions)
                         break
+                    /*
+                    case "mqtt":
+                        channelConnector = new ChannelMQTT(this, channelOptions)
+                        console.log("Dispatcher::installed", channel, channelOptions)
+                        break
+                    */
                     default:
                         console.warn("Dispatcher::install", "no connector for channel", channel)
                         break
@@ -70,9 +79,9 @@ export class Dispatcher {
      * @param      {Object}  data    The data
     *  expected data format:
         {
-            type: "map",            // <== destination of message
-            timestamp: "",          // <== ISO 8861 formatted (original) date/time of message
-            payload: {              // <== payload sent to destination
+            type: "map",            // <== destination of message (or message "type")
+            timestamp: "",          // <== ISO 8861 formatted (original) date/time of emission of message
+            payload: {              // <== payload sent to destination (variable, depends on message type.)
                 type: "Feature",
                 geometry: {},
                 properties: {},

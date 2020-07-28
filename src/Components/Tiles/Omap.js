@@ -47,6 +47,9 @@ const DEFAULTS = {
     elemid: "map",
     msgtype: "map",
 
+    icon: "map",
+    title: "EBLG",
+
     center: [50.64, 5.445],
     zoom: 15,
     zoom_overview: 8,
@@ -75,17 +78,26 @@ const DEFAULTS = {
  */
 export class Omap extends Tile {
 
-    constructor(elemid, message_type, options) {
-        super(elemid, message_type)
+    constructor(areaid, elemid, message_type, options) {
+        super(areaid, elemid, message_type)
         this.options = deepExtend(DEFAULTS, options)
         this.layers = new Map()
         this.install()
+    }
+
+    get icon() {
+        return this.options.icon
+    }
+
+    get icon() {
+        return this.options.title
     }
 
     /**
      *  installs the HTML code in the document
      */
     install() {
+        super.install()
         let OpenStreetMap_France = new TileLayer("https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png", {
             maxZoom: 20,
             attribution: "&copy; Openstreetmap France | &copy; <a href='https://www.openstreetmap.org/copyright0'>OpenStreetMap</a> contributors"

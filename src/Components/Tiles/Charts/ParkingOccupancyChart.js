@@ -8,7 +8,7 @@
 import { deepExtend } from "../../Utilities/Utils"
 import { ApexTile } from "../ApexTile"
 
-import { BUSY, APRONS_COLORS } from "../../Constant"
+import { APRONS_COLORS } from "../../Constant"
 
 import ApexCharts from "apexcharts"
 
@@ -17,13 +17,15 @@ import ApexCharts from "apexcharts"
  */
 const DEFAULTS = {
     elemid: "ParkingOccupancyChart",
-    msgtype: "parking"
+    msgtype: "parking",
+    icon: "parking",
+    title: "Parkings",
 }
 
 export class ParkingOccupancyChart extends ApexTile {
 
-    constructor(elemid, message_type, options) {
-        super(elemid, message_type)
+    constructor(areaid, elemid, message_type, options) {
+        super(areaid, elemid, message_type, options)
         this.options = deepExtend(DEFAULTS, options)
         this.install()
     }
@@ -32,6 +34,7 @@ export class ParkingOccupancyChart extends ApexTile {
     /*  installs the HTML code in the document
      */
     install() {
+        super.install()
         let data = Array(6).fill(0)
         this.chart = new ApexCharts(document.getElementById(this.elemid), {
             series: data,

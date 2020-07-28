@@ -25,8 +25,8 @@ export class ApexTile extends Tile {
      * @param      {<type>}  elemid        The elemid
      * @param      {<type>}  message_type  The message type
      */
-    constructor(elemid, message_type) {
-        super(elemid, message_type)
+    constructor(areaid, elemid, message_type, options) {
+        super(areaid, elemid, message_type, options)
     }
 
 
@@ -36,7 +36,9 @@ export class ApexTile extends Tile {
     install() {
         super.install()
         let el = document.getElementById(this.elemid)
-        el.classList.add(APEXTILE_CSS_CLASS)
+        if (el) {
+            el.classList.add(APEXTILE_CSS_CLASS)
+        }
     }
 
 
@@ -45,8 +47,9 @@ export class ApexTile extends Tile {
      * (Nothing to store, data is in Transport)
      */
     passivate() {
-      console.error("ApexTile::passivate", "You did not implement passivate for your class.")
-      return null
+        super.passivate()
+        console.error("ApexTile::passivate", "You did not implement passivate for your class.")
+        return null
     }
 
 

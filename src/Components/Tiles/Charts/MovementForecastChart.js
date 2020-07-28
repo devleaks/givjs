@@ -11,7 +11,7 @@ import ApexCharts from "apexcharts"
 import { deepExtend } from "../../Utilities/Utils"
 import { ApexTile } from "../ApexTile"
 import { Transport } from "../../States/Transport"
-import { Clock } from "../../Clock"
+import { Clock } from "../Clock"
 
 import { FLIGHTBOARD_MSG, ACTUAL } from "../../Constant"
 
@@ -23,17 +23,20 @@ const DEFAULTS = {
     elemid: "movementforecast",
     msgtype: "flightboard",
     maxcount: 6,
+    title: "Movement Forecast",
+    icon: "plane",
     flights_ahead: 360 // mins
 }
 
 export class MovementForecastChart extends ApexTile {
 
-    constructor(elemid, message_type, move, transport, clock, options) {
-        super(elemid, message_type)
+    constructor(areaid, elemid, message_type, move, transport, clock, options) {
+        super(areaid, elemid, message_type)
         this.options = deepExtend(DEFAULTS, options)
         this.move = move
         this.flights = transport
         this.clock = clock
+        console.log("MovementForecastChart::constructor",this.icon)
         this.install()
     }
 

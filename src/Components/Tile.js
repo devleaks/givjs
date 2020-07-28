@@ -6,19 +6,39 @@
 
 
 import { Subscriber } from "./Subscriber"
+import { deepExtend } from "./Utilities/Utils"
 
 const TILE_CSS_CLASS = "tile"
+const TEMPLATE_PREFIX = ""
+const TEMPLATE_SUFFIX = "-elem"
+
+
+const DEFAULT_ICON = "icons"
+const DEFAULT_TITLE = "Dashboard"
+
+const TEMPL_ICON_PLACEHOLDER = "la-icon"
+const TEMPL_ELEMID_PLACEHOLDER = "here"
 
 /**
  * A Tile is a HTML rendered "widget" that respond to messages sent to it.
  *
  * @class      Tile (name)
  */
+
+const DEFAULTS = {
+    elemid: "tileid",
+    messages: "message_type",
+    icon: "icons",
+    title: "Tile"
+}
+
 export class Tile extends Subscriber {
 
-    constructor(elemid, message_type) {
+    constructor(areaid, elemid, message_type, options) {
         super(message_type)
         this.elemid = elemid
+        this.areaid = areaid
+        this.options = deepExtend(DEFAULTS, options)
     }
 
 
@@ -26,8 +46,38 @@ export class Tile extends Subscriber {
      * Installs the object.
      */
     install() {
-        let el = document.getElementById(this.elemid)
-        el.classList.add(TILE_CSS_CLASS)
+        let area = document.getElementById(this.areaid)
+        if (area) {
+            let tn = TEMPLATE_PREFIX + this.areaid + TEMPLATE_SUFFIX
+            let template = document.querySelector("template#" + tn)
+            if (template) {
+                var clone = template.content.cloneNode(true)
+                let el = clone.querySelector("." + TEMPL_ELEMID_PLACEHOLDER)
+                if (el) {
+                    el.setAttribute("id", this.elemid)
+                    el.classList.remove(TEMPL_ELEMID_PLACEHOLDER)
+
+                    let icon = this.icon
+                    if (icon) {
+                        let els = clone.querySelectorAll("." + TEMPL_ICON_PLACEHOLDER)
+                        els.forEach((e) => {
+                            e.classList.remove(TEMPL_ICON_PLACEHOLDER)
+                            e.classList.add("la-" + icon)
+                            e.setAttribute("title", this.options.title)
+                        })
+                    }
+
+                    area.appendChild(clone)
+                    console.log("Tile::install: added with template", tn, this.areaid, this.elemid)
+                }
+            } else {
+                let el = document.createElement("div")
+                el.setAttribute("id", this.elemid)
+                el.classList.add(TILE_CSS_CLASS)
+                area.appendChild(el)
+                console.log("Tile::install: added", this.areaid, this.elemid)
+            }
+        }
     }
 
 
@@ -37,20 +87,28 @@ export class Tile extends Subscriber {
      * @param      {String}  msgtype  The message type
      * @param      {Object}  msg      The message, a JavaScript string or object.
      */
-    listener(msgtype, msg) {
-        switch(msgtype) {
-            case MSG1:
-                updateOnMsg1(msg)
-                break
-            default:
-                console.warn("Tile::listener: No handler found for message type", msgtype)
-                break
+    listener(msgtype, payload) {
+        if (Array.isArray(this.message_type)) {
+            switch (msgtype) {
+                case "MSG":
+                    this.updateOnMsg(payload)
+                    break
+                default:
+                    console.warn("Tile::listener: No handler found for message type", msgtype)
+                    break
+            }
+        } else {
+            this.update(payload)
         }
     }
 
 
-    updateOnMsg1(data) {
-        console.log("Tile::updateOnMsg1",data)
+    update(data) {
+        console.log("Tile::update", data)
+    }
+
+    updateOnMsg(data) {
+        console.log("Tile::updateOnMsg", data)
     }
 
 
@@ -59,6 +117,18 @@ export class Tile extends Subscriber {
      */
     passivate() {
         console.log("Tile::passivate")
+    }
+
+
+    /**
+     * Some tile info for display and rendering
+     */
+    get icon() {
+        return this.options.hasOwnProperty("icon") ? this.options.icon : DEFAULT_ICON
+    }
+
+    get title() {
+        return this.options.hasOwnProperty("title") ? this.options.title : DEFAULT_TITLE
     }
 
 }

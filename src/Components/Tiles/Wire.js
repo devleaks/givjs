@@ -56,8 +56,8 @@ const BOOTSTRAP_COLORS = [
  */
 export class Wire extends Tile {
 
-    constructor(elemid, message_type, options) {
-        super(elemid, message_type)
+    constructor(areaid, elemid, message_type, options) {
+        super(areaid, elemid, message_type)
         this.options = deepExtend(DEFAULTS, options)
         this.install()
     }
@@ -66,6 +66,7 @@ export class Wire extends Tile {
      * installs the HTML code in the document
      */
     install() {
+        super.install()
         let hook = document.querySelector("#" + this.elemid)
         let newel = document.createElement("ul")
         hook.appendChild(newel)

@@ -64,7 +64,9 @@ export class Dark {
         button.appendChild(input)
         button.appendChild(span)
         let el = document.getElementById(this.elemid)
-        el.appendChild(button)
+        if(el) {
+            el.appendChild(button)
+        }
 
         // set it for now
         document.documentElement.setAttribute("data-theme", this.dark)

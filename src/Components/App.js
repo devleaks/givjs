@@ -5,6 +5,7 @@
  */
 import "../assets/css/app.css" // load it first as its sets css variables (colors)
 import "../assets/css/layout.css"
+import "../assets/css/layout-custom.css"
 
 import { Dashboard } from "./Dashboard"
 
@@ -16,7 +17,7 @@ import { Flightboard } from "./Tiles/Flightboard"
 
 // Information boards
 import { Footer } from "./Tiles/Footer"
-import { Solari } from "./Tiles/Solari"
+// import { Solari } from "./Tiles/Solari"
 
 import { MovementForecastChart } from "./Tiles/Charts/MovementForecastChart"
 import { ParkingOccupancyChart } from "./Tiles/Charts/ParkingOccupancyChart"
@@ -30,21 +31,21 @@ import { ParkingOccupancy } from "./States/ParkingOccupancy"
 import { Stopped } from "./Pipelines/Stopped"
 
 import { Dark } from "./Dark"
-import { Clock } from "./Clock"
+import { Clock } from "./Tiles/Clock"
 import { FeatureCollection } from "./FeatureCollection"
 
 // Shared constant
-import { WS_URL, HOME, PARKINGS, APRONS_MAXCOUNT } from "./Config"
+import { WS_URL, HOME, PARKINGS, APRONS_MAXCOUNT, MQTT } from "./Config"
 import { DEPARTURE, ARRIVAL } from "./Constant"
 import { STOPPED, JUST_STOPPED, JUST_STARTED, MOVED } from "./Constant"
 import {
     CLOCK_MSG,
     SIMULATION_MSG,
     FOOTER_MSG,
-    SOLARI_MSG,
+    //SOLARI_MSG,
     FLIGHTBOARD_MSG,
     FLIGHTBOARD_UPDATE_MSG,
-    //       TRANSPORTBOARD_MSG, TRANSPORTBOARD_UPDATE_MSG,
+    //TRANSPORTBOARD_MSG, TRANSPORTBOARD_UPDATE_MSG,
     ROTATION_MSG,
     WIRE_MSG,
     MAP_MSG,
@@ -80,9 +81,10 @@ export class App {
         this.dashboard = new Dashboard({
             dispatcher: {
                 channels: {
-                    websocket: {
+                    /*websocket: {
                         websocket: WS_URL
-                    }
+                    },*/
+                    mqtt: MQTT
                 }
             }
         })
@@ -102,10 +104,10 @@ export class App {
             size: "XXS" *
         })*/
 
-        let clock = new Clock("clock", [CLOCK_MSG, SIMULATION_MSG])
+        let clock = new Clock("highlight", "clock", [CLOCK_MSG, SIMULATION_MSG])
         this.dashboard.register("datetime", clock)
 
-        this.omap = new Omap("map", [MAP_MSG, DARK_MSG], {
+        this.omap = new Omap("main", "map", [MAP_MSG, DARK_MSG], {
             center: [50.64, 5.445],
             zoom: 14,
             zoom_overview: 8
@@ -134,7 +136,7 @@ export class App {
 
         this.dashboard.register("stopped", new Stopped(MAP_MSG, [parkings], {}))
 
-        this.dashboard.register("wire", new Wire("wire", WIRE_MSG, {}))
+        this.dashboard.register("wire", new Wire("sidebar", "wire", WIRE_MSG, {}))
 
         let flights = new Transport(HOME, FLIGHTBOARD_MSG)
         this.dashboard.register("flightboard", flights)
@@ -145,28 +147,28 @@ export class App {
         // flightboard and related charts gets updated every 15 minutes in simulation.
         const board_update = 15
         const board_update_message = Clock.clock_message(board_update)
-        this.dashboard.register("flightboard", new Flightboard("flightboard-arrival", [FLIGHTBOARD_UPDATE_MSG, board_update_message], ARRIVAL, flights, clock, { update_time: board_update }))
-        this.dashboard.register("flightboard", new Flightboard("flightboard-departure", [FLIGHTBOARD_UPDATE_MSG, board_update_message], DEPARTURE, flights, clock, { update_time: board_update }))
+        this.dashboard.register("flightboard", new Flightboard("main", "flightboard-arrival", [FLIGHTBOARD_UPDATE_MSG, board_update_message], ARRIVAL, flights, clock, { update_time: board_update, title: "Arrival", icon: "plane-arrival" }))
+        this.dashboard.register("flightboard", new Flightboard("main", "flightboard-departure", [FLIGHTBOARD_UPDATE_MSG, board_update_message], DEPARTURE, flights, clock, { update_time: board_update, title: "Departure", icon: "plane-departure" }))
 
         //this.dashboard.register("transportboard", new Transportboard("transportboard-arrival", [TRANSPORTBOARD_UPDATE_MSG,board_update_message], ARRIVAL, transports, clock, {update_time: board_update}))
         //this.dashboard.register("transportboard", new Transportboard("transportboard-departure", [TRANSPORTBOARD_UPDATE_MSG,board_update_message], DEPARTURE, transports, clock, {update_time: board_update}))
 
-        this.dashboard.register("flightboard", new MovementForecastChart("forecast-arrival", [FLIGHTBOARD_UPDATE_MSG, board_update_message], ARRIVAL, flights, clock, { update_time: board_update }))
-        this.dashboard.register("flightboard", new MovementForecastChart("forecast-departure", [FLIGHTBOARD_UPDATE_MSG, board_update_message], DEPARTURE, flights, clock, { update_time: board_update }))
+        this.dashboard.register("flightboard", new MovementForecastChart("highlight", "forecast-arrival", [FLIGHTBOARD_UPDATE_MSG, board_update_message], ARRIVAL, flights, clock, { update_time: board_update, title: "Arrival", icon: "plane-arrival" }))
+        this.dashboard.register("flightboard", new MovementForecastChart("highlight", "forecast-departure", [FLIGHTBOARD_UPDATE_MSG, board_update_message], DEPARTURE, flights, clock, { update_time: board_update, title: "Departure", icon: "plane-departure" }))
 
         //this.dashboard.register("transportboard", new MovementForecastChart("forecast-transport-arrival", [TRANSPORTBOARD_UPDATE_MSG,board_update_message], ARRIVAL, transports, clock, {update_time: board_update}))
         //this.dashboard.register("transportboard", new MovementForecastChart("forecast-transport-departure", [TRANSPORTBOARD_UPDATE_MSG,board_update_message], DEPARTURE, transports, clock, {update_time: board_update}))
 
         let parkingOccupancy = new ParkingOccupancy(PARKING_MSG, parkings, { aprons_max: APRONS_MAXCOUNT, aprons_layer_name: "APRONS" })
         this.dashboard.register("parking", parkingOccupancy)
-        this.dashboard.register("parking", new ParkingOccupancyChart("parking-occupancy", PARKING_UPDATE_MSG))
+        this.dashboard.register("parking", new ParkingOccupancyChart("highlight", "parking-occupancy", PARKING_UPDATE_MSG))
 
 
         let rotations = new Rotation([ROTATION_MSG, STOPPED, JUST_STOPPED, JUST_STARTED, MOVED], flights, parkings)
 
         this.dashboard.register([ROTATION_MSG, STOPPED, JUST_STOPPED, JUST_STARTED, MOVED], rotations)
 
-        this.dashboard.register("stopped", new TurnaroundGantt("turnaround-gantts", "ROTATION_UPDATED", parkings, rotations))
+        this.dashboard.register("stopped", new TurnaroundGantt("sidebar", "turnaround-gantts", "ROTATION_UPDATED", parkings, rotations))
 
         // eslint-disable-next-line no-unused-vars
         let dark = new Dark("dark-toggle") // just installs day/night toggle
