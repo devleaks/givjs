@@ -5,8 +5,8 @@
  */
 
 
-import { Subscriber } from "./Subscriber"
-import { deepExtend } from "./Utilities/Utils"
+import { Subscriber } from "../Subscriber"
+import { deepExtend } from "../Utilities/Utils"
 
 const TILE_CSS_CLASS = "tile"
 const TEMPLATE_PREFIX = ""
@@ -36,8 +36,10 @@ export class Tile extends Subscriber {
 
     constructor(areaid, elemid, message_type, options) {
         super(message_type)
-        this.elemid = elemid
+
         this.areaid = areaid
+        this.elemid = elemid
+
         this.options = deepExtend(DEFAULTS, options)
     }
 
@@ -49,7 +51,7 @@ export class Tile extends Subscriber {
         let area = document.getElementById(this.areaid)
         if (area) {
             let tn = TEMPLATE_PREFIX + this.areaid + TEMPLATE_SUFFIX
-            let template = document.querySelector("template#" + tn)
+            let template = document.querySelector("template#" + tn) // should be "area-name template#templ-id"
             if (template) {
                 var clone = template.content.cloneNode(true)
                 let el = clone.querySelector("." + TEMPL_ELEMID_PLACEHOLDER)
@@ -68,15 +70,17 @@ export class Tile extends Subscriber {
                     }
 
                     area.appendChild(clone)
-                    console.log("Tile::install: added with template", tn, this.areaid, this.elemid)
+                    // console.log("Tile::install: added with template", tn, this.areaid, this.elemid)
                 }
             } else {
                 let el = document.createElement("div")
                 el.setAttribute("id", this.elemid)
                 el.classList.add(TILE_CSS_CLASS)
                 area.appendChild(el)
-                console.log("Tile::install: added", this.areaid, this.elemid)
+                // console.log("Tile::install: added", this.areaid, this.elemid)
             }
+        } else {
+            console.warn("Tile::install", "element not found", this.areaid)
         }
     }
 

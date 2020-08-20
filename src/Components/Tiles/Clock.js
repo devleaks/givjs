@@ -8,7 +8,7 @@
 import PubSub from "pubsub-js"
 import moment from "moment"
 
-import { Tile } from "../Tile"
+import { Tile } from "./Tile"
 import { deepExtend } from "../Utilities/Utils"
 
 

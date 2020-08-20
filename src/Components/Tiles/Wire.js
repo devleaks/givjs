@@ -8,7 +8,7 @@
 import "../../assets/css/wire.css"
 
 import { deepExtend } from "../Utilities/Utils"
-import { Tile } from "../Tile"
+import { Tile } from "./Tile"
 
 import { showJson } from "../Utilities/Display"
 

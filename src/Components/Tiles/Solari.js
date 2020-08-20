@@ -4,7 +4,7 @@
  * License: MIT
  */
 
-import { Tile } from "../Tile"
+import { Tile } from "./Tile"
 import { FlapperDisplay, VESTABOARD_PRESET } from "../Utilities/FlapperDisplay"
 
 import { deepExtend } from "../Utilities/Utils"

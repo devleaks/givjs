@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Geo Intelligent Viewer</title>
+    <meta charset="utf-8">
+    <meta name="description" content="Oscars' Geo Intelligent Viewer JS 2020">
+    <meta name="keyword" content="oscars gip geo intelligent platform viewer">
+    <meta name="author" content="oscars">
+    <link rel="icon" type="image/png" href="favicon.ico">
+    <link rel="stylesheet" href="dist/app.css">
+</head>
+
+<body>
+        <!---
+        --    const TEMPL_ICON_PLACEHOLDER = "la-icon"
+        --    const TEMPL_ELEMID_PLACEHOLDER = "here"
+        ---->
+        <div class="grid-container">
+        <div class="menu-icon"><i class="las la-bars"></i></div>
+        <aside class="aside" id="sidebar">
+            <div class="aside_close-icon"><i class="las la-times"></i></div>
+            <div style="text-align: center;"><a href="" title="Oscars' Geo Intelligent Viewer" alt="Geo Intelligent Viewer"><img src="src/assets/i/givjs.svg" alt="Geo Intelligent Viewer" width="70%"></a></div>
+            <template id="sidebar-elem">
+                <div class="aside-card here"></div>
+            </template>
+            <template id="template-wire">
+                <ul class="wire"></ul>
+            </template>
+            <template id="template-wire-el">
+                <li class="wire-el"></li>
+            </template>
+        </aside>
+        <header class="header"></header>
+        <template id="template-clock">
+            <div class="clock">
+                <div class="wrap"><span class="hour"></span><span class="minute"></span><span class="second"></span><span class="dot"></span></div>
+            </div>
+        </template>
+        <main class="main">
+            <div class="main_overview" id="highlight">
+                <template id="highlight-elem">
+                    <div class="overview_card">
+                        <div class="overview_card-icon"><i class="las la-icon la-4x" title="Title"></i></div>
+                        <div class="overview_card-content here"></div>
+                    </div>
+                </template>
+            </div>
+            <div class="main_cards" id="main">
+                <template id="main-elem">
+                    <div class="card here"></div>
+                </template>
+            </div>
+            <div class="main_overview" id="status">
+                <template id="status-elem">
+                    <div class="overview_card">
+                        <div class="overview_card-icon"><i class="las la-icon la-4x" title="Title"></i></div>
+                        <div class="overview_card-content here"></div>
+                    </div>
+                </template>
+            </div>
+        </main>
+        <footer class="footer"></footer>
+    </div>
+    <!----
+    --    JAVASCRIPT (LAYOUT HELPER)
+    ---->
+    <script type="text/javascript">
+    const menuIcon = document.querySelector(".menu-icon");
+    const aside = document.querySelector(".aside");
+    const asideClose = document.querySelector(".aside_close-icon");
+
+    function toggle(el, className) {
+        if (el.classList.contains(className)) {
+            el.classList.remove(className);
+        } else {
+            el.classList.add(className);
+        }
+    }
+    menuIcon.addEventListener("click", function() {
+        toggle(aside, "active");
+    });
+    asideClose.addEventListener("click", function() {
+        toggle(aside, "active");
+    });
+    </script>
+    <!----
+      --    JAVASCRIPT (APP)
+      ---->
+    <script src="dist/app.js"></script>
+</body>
+</html>

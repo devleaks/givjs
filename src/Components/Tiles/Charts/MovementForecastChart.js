@@ -9,7 +9,7 @@ import moment from "moment"
 import ApexCharts from "apexcharts"
 
 import { deepExtend } from "../../Utilities/Utils"
-import { ApexTile } from "../ApexTile"
+import { ApexTile } from "./ApexTile"
 import { Transport } from "../../States/Transport"
 import { Clock } from "../Clock"
 
@@ -31,12 +31,11 @@ const DEFAULTS = {
 export class MovementForecastChart extends ApexTile {
 
     constructor(areaid, elemid, message_type, move, transport, clock, options) {
-        super(areaid, elemid, message_type)
-        this.options = deepExtend(DEFAULTS, options)
+        super(areaid, elemid, message_type, options)
+
         this.move = move
         this.flights = transport
         this.clock = clock
-        console.log("MovementForecastChart::constructor",this.icon)
         this.install()
     }
 

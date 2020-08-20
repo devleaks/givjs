@@ -8,7 +8,7 @@
 import "../../assets/css/transportboard.css"
 
 import { deepExtend } from "../Utilities/Utils"
-import { Tile } from "../Tile"
+import { Tile } from "./Tile"
 import { Clock } from "../Clock"
 import moment from "moment"
 

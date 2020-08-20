@@ -32,12 +32,15 @@ import { Stopped } from "./Pipelines/Stopped"
 
 import { Dark } from "./Dark"
 import { Clock } from "./Tiles/Clock"
-import { FeatureCollection } from "./FeatureCollection"
+import { FeatureCollection } from "./Utilities/FeatureCollection"
 
 // Shared constant
-import { WS_URL, HOME, PARKINGS, APRONS_MAXCOUNT, MQTT } from "./Config"
+import { WS_CONFIG, HOME, PARKINGS, APRONS_MAXCOUNT } from "./Config"
+
 import { DEPARTURE, ARRIVAL } from "./Constant"
 import { STOPPED, JUST_STOPPED, JUST_STARTED, MOVED } from "./Constant"
+
+// Messages
 import {
     CLOCK_MSG,
     SIMULATION_MSG,
@@ -81,10 +84,7 @@ export class App {
         this.dashboard = new Dashboard({
             dispatcher: {
                 channels: {
-                    /*websocket: {
-                        websocket: WS_URL
-                    },*/
-                    mqtt: MQTT
+                    websocket: WS_CONFIG
                 }
             }
         })

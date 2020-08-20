@@ -6,7 +6,7 @@
 
 
 import { booleanPointInPolygon, booleanWithin } from "@turf/turf"
-import { deepExtend } from "./Utilities/Utils"
+import { deepExtend } from "../Utilities/Utils"
 
 /**
  * Class to materialize a GeoJSON FeatureCollection (extensively used inside this application).

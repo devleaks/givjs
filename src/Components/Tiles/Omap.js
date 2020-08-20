@@ -32,7 +32,7 @@ import "leaflet-rotatedmarker"
 import { AntPath } from "leaflet-ant-path"
 
 import { deepExtend } from "../Utilities/Utils"
-import { Tile } from "../Tile"
+import { Tile } from "./Tile"
 
 import { getFeatureLayerName } from "../Utilities/GeoJSON"
 import { style, onEachFeature, pointToLayer, getFeatureLayer } from "../Utilities/Style"

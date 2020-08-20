@@ -9,7 +9,7 @@ import moment from "moment"
 import ApexCharts from "apexcharts"
 
 import { deepExtend } from "../../Utilities/Utils"
-import { ApexTile } from "../ApexTile"
+import { ApexTile } from "./ApexTile"
 import { Transport } from "../../States/Transport"
 
 import "../../../assets/css/turnaround-gantts.css"
@@ -22,9 +22,9 @@ const DEFAULTS = {
 
 export class TurnaroundGantt extends ApexTile {
 
-    constructor(elemid, message_type, parkings, rotations, options) {
-        super(elemid, message_type)
-        this.options = deepExtend(DEFAULTS, options)
+    constructor(areaid, elemid, message_type, parkings, rotations, options) {
+        super(areaid, elemid, message_type, options)
+
         this.parkings = parkings
         this.rotations = rotations
         this.charts = new Map()

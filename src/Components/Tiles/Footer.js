@@ -6,7 +6,7 @@
 
 
 import moment from "moment"
-import { Tile } from "../Tile"
+import { Tile } from "./Tile"
 
 import "../../assets/css/footer.css"
 

@@ -7,7 +7,7 @@
 
 /*  GeoJSON Utility Functions
  */
-const LAYERNAME_PROPERTIES = ["layer", "layerName", "group_name"]
+const LAYERNAME_PROPERTIES = ["layer", "layerName", "class", "group_name"]
 
 const VALID_GEOMETRY_TYPES = [
     "Point",

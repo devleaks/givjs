@@ -6,7 +6,7 @@
 
 
 import { deepExtend } from "../../Utilities/Utils"
-import { ApexTile } from "../ApexTile"
+import { ApexTile } from "./ApexTile"
 
 import { APRONS_COLORS } from "../../Constant"
 
@@ -26,7 +26,7 @@ export class ParkingOccupancyChart extends ApexTile {
 
     constructor(areaid, elemid, message_type, options) {
         super(areaid, elemid, message_type, options)
-        this.options = deepExtend(DEFAULTS, options)
+
         this.install()
     }
 
