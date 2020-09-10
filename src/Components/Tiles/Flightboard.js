@@ -53,15 +53,15 @@ export class Flightboard extends Tile {
      * @param      {<type>}  elemid        The elemid
      * @param      {<type>}  message_type  The message type
      * @param      {<type>}  move          The move
-     * @param      {<type>}  transport     The transport
+     * @param      {<type>}  movement     The movement
      * @param      {<type>}  clock         The clock
      * @param      {<type>}  options       The options
      */
-    constructor(areaid, elemid, message_type, move, transport, clock, options) {
+    constructor(areaid, elemid, message_type, move, movement, clock, options) {
         super(areaid, elemid, message_type)
         this.options = deepExtend(DEFAULTS, options)
         this.move = move
-        this.flights = transport
+        this.flights = movement
         this.clock = clock
         this.lastLength = 0
         this.install()
@@ -139,7 +139,7 @@ export class Flightboard extends Tile {
         let farr = []
         let that = this
         let maxahead = moment(ts).add(this.options.flights_ahead, "minutes")
-        let flights = this.flights.getScheduledTransports(this.move, maxahead)
+        let flights = this.flights.getScheduledMovements(this.move, maxahead)
 
         flights.forEach(f => {
             let flight = that.flights.get(f)
@@ -283,9 +283,6 @@ export class Flightboard extends Tile {
             }
         })
 
-        /*$('.scrolling').textMarquee({
-            mode: "loop"
-        })*/
         let table = document.querySelector("#" + this.elemid + " table")
         let oldtbody = document.querySelector("#" + this.elemid + " tbody")
         table.replaceChild(tbody, oldtbody)

@@ -9,8 +9,7 @@ import PubSub from "pubsub-js"
 import { deepExtend } from "./Utilities/Utils"
 
 import { ChannelWebsocket } from "./ChannelWebsocket"
-
-// import { ChannelMQTT } from "./ChannelMQTT"
+import { ChannelMQTT } from "./ChannelMQTT"
 
 import { CLOCK_MSG } from "./Constant"
 
@@ -47,27 +46,27 @@ export class Dispatcher {
 
     install() {
         for (let channel in this.options.channels) {
-            if (this.options.channels.hasOwnProperty(channel)) {
-                let channelOptions = this.options.channels[channel]
-                let channelConnector = false
-                switch (channel) {
-                    case "websocket":
-                        channelConnector = new ChannelWebsocket(this, channelOptions)
-                        console.log("Dispatcher::installed", channel, channelOptions)
-                        break
-                    /*
-                    case "mqtt":
-                        channelConnector = new ChannelMQTT(this, channelOptions)
-                        console.log("Dispatcher::installed", channel, channelOptions)
-                        break
-                    */
-                    default:
-                        console.warn("Dispatcher::install", "no connector for channel", channel)
-                        break
-                }
-                if (channelConnector !== false) {
-                    this.channels.set(channel, channelConnector)
-                }
+            let channelOptions = this.options.channels[channel]
+            let channelConnector = false
+            switch (channel) {
+
+                case "websocket":
+                    channelConnector = new ChannelWebsocket(this, channelOptions)
+                    console.log("Dispatcher::installed", channel, channelOptions)
+                    break
+
+                case "mqtt":
+                    channelConnector = new ChannelMQTT(this, channelOptions)
+                    console.log("Dispatcher::installed", channel, channelOptions)
+                    break
+
+                default:
+                    console.warn("Dispatcher::install", "no connector for channel", channel)
+                    break
+
+            }
+            if (channelConnector !== false) {
+                this.channels.set(channel, channelConnector)
             }
         }
     }

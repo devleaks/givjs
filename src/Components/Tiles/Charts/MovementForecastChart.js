@@ -10,7 +10,7 @@ import ApexCharts from "apexcharts"
 
 import { deepExtend } from "../../Utilities/Utils"
 import { ApexTile } from "./ApexTile"
-import { Transport } from "../../States/Transport"
+import { Movement } from "../../States/Movement"
 import { Clock } from "../Clock"
 
 import { FLIGHTBOARD_MSG, ACTUAL } from "../../Constant"
@@ -30,11 +30,11 @@ const DEFAULTS = {
 
 export class MovementForecastChart extends ApexTile {
 
-    constructor(areaid, elemid, message_type, move, transport, clock, options) {
+    constructor(areaid, elemid, message_type, move, movement, clock, options) {
         super(areaid, elemid, message_type, options)
 
         this.move = move
-        this.flights = transport
+        this.flights = movement
         this.clock = clock
         this.install()
     }
@@ -103,11 +103,11 @@ export class MovementForecastChart extends ApexTile {
 
         let maxahead = moment(ts).add(this.options.flights_ahead, "minutes")
         let hours = Array(this.options.maxcount).fill(0)
-        let flights = this.flights.getScheduledTransports(this.move, maxahead)
+        let flights = this.flights.getScheduledMovements(this.move, maxahead)
 
         flights.forEach(f => {
             if (!f.hasOwnProperty(ACTUAL)) { // if not arrived/departed
-                const t = Transport.getTime(f)
+                const t = Movement.getTime(f)
                 const i = Math.floor(moment.duration(t.diff(ts)).asHours())
                 if (i > -1 && i < this.options.maxcount) {
                     hours[i]++

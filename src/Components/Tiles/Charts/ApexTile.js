@@ -44,7 +44,7 @@ export class ApexTile extends Tile {
 
     /**
      * Stores data for state restore
-     * (Nothing to store, data is in Transport)
+     * (Nothing to store, data is in Movement)
      */
     passivate() {
         super.passivate()

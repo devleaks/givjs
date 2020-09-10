@@ -10,14 +10,14 @@ import { Subscriber } from "../Subscriber"
 import moment from "moment"
 import PubSub from "pubsub-js"
 
-import { FLIGHTBOARD_MSG, FLIGHTBOARD_UPDATE_MSG, TRANSPORTBOARD_MSG, TRANSPORTBOARD_UPDATE_MSG, ROTATION_MSG, SCHEDULED, PLANNED, ACTUAL, DEPARTURE, ARRIVAL } from "../Constant"
+import { FLIGHTBOARD_MSG, FLIGHTBOARD_UPDATE_MSG, MOVEMENTBOARD_MSG, MOVEMENTBOARD_UPDATE_MSG, ROTATION_MSG, SCHEDULED, PLANNED, ACTUAL, DEPARTURE, ARRIVAL } from "../Constant"
 
 const UNSCHEDULED = "UNSCHEDULED"
 
 /**
- * This class describes a transport.
+ * This class describes a movement.
  * 
- * Transport record:
+ * Movement record:
  * 
  * "SN123-2020-05-10T12:34:56.789+02:00": {
         name: "SN123",
@@ -28,12 +28,12 @@ const UNSCHEDULED = "UNSCHEDULED"
         actual: moment()
     }
  *
- * @class      Transport (name)
+ * @class      Movement (name)
  */
-export class Transport extends Subscriber {
+export class Movement extends Subscriber {
 
     /**
-     * Creates a new Transport object
+     * Creates a new Movement object
      *
      * @param      {<type>}  base     The base
      * @param      {<type>}  msgtype  The msgtype
@@ -41,14 +41,14 @@ export class Transport extends Subscriber {
     constructor(base, msgtype) {
         super(msgtype)
         this.base = base
-        this.transports = new Map()
+        this.movements = new Map()
 
         this.install()
     }
 
 
     /**
-     * Installs the transport.
+     * Installs the movement.
      */
     install() {
         this.listen(this.update.bind(this))
@@ -66,56 +66,56 @@ export class Transport extends Subscriber {
             case FLIGHTBOARD_MSG:
                 this.updateOnFlightboard(data)
                 break
-            case TRANSPORTBOARD_MSG:
-                this.updateOnTransportboard(data)
+            case MOVEMENTBOARD_MSG:
+                this.updateOnMovementboard(data)
                 break
             default:
-                console.warn("Transport::listen: no listener", msgtype)
+                console.warn("Movement::listen: no listener", msgtype)
                 break
         }
     }
 
 
     /**
-     * Creates a new transport identifier composed from the transport id and its scheduled date/time in ISO8601 format.
+     * Creates a new movement identifier composed from the movement id and its scheduled date/time in ISO8601 format.
      *
-     * @param      {<type>}  transport  The transport
+     * @param      {<type>}  movement  The movement
      * @return     {<type>}  { description_of_the_return_value }
      */
-    static mkTransportId(name, time) {
+    static mkMovementId(name, time) {
         return "T::" + name + "|" + time
     }
 
 
     /**
-     * Get a transport record for a supplied transport
+     * Get a movement record for a supplied movement
      *
      * @type       {<type>}
      */
-    get(transport) {
+    get(movement) {
         let tr = false
-        if (transport.hasOwnProperty(SCHEDULED) && transport.scheduled !== false) {
-            let id = Transport.mkTransportId(transport.name, transport.scheduled.toISOString(true))
-            tr = this.transports.get(id)
+        if (movement.hasOwnProperty(SCHEDULED) && movement.scheduled !== false) {
+            let id = Movement.mkMovementId(movement.name, movement.scheduled.toISOString(true))
+            tr = this.movements.get(id)
         } else {
-            let id = Transport.mkTransportId(transport.name, UNSCHEDULED)
-            tr = this.transports.get(id)
+            let id = Movement.mkMovementId(movement.name, UNSCHEDULED)
+            tr = this.movements.get(id)
         }
         return tr
     }
 
 
     /**
-     * Finds a transport scheduled around that time (24h). Will NOT work if the same transport is scheduled DAILY with the same transport number.
+     * Finds a movement scheduled around that time (24h). Will NOT work if the same movement is scheduled DAILY with the same movement number.
      *
      * @param      {<type>}  name    The name
      * @param      {<type>}  time    The time
      */
-    findTransportOnParking(move, parking, time, margin = 24) {
+    findMovementOnParking(move, parking, time, margin = 24) {
         let found = false
-        this.transports.forEach((value) => {
+        this.movements.forEach((value) => {
             if (!found && value.move == move && value.parking == parking) {
-                let tt = Transport.getTime(value)
+                let tt = Movement.getTime(value)
                 let duration = Math.floor(moment.duration(tt.diff(time)).asHours())
                 if (Math.abs(duration) <= margin) {
                     found = value
@@ -126,23 +126,23 @@ export class Transport extends Subscriber {
     }
 
     /**
-     * Finds a transport scheduled around that time (24h). Will NOT work if the same transport is scheduled DAILY with the same transport number.
+     * Finds a movement scheduled around that time (24h). Will NOT work if the same movement is scheduled DAILY with the same movement number.
      *
      * @param      {<type>}  name    The name
      * @param      {<type>}  time    The time
      */
-    findTransport(move, name, time, margin = 24) {
+    findMovement(move, name, time, margin = 24) {
         let found = false
-        this.transports.forEach((value) => {
+        this.movements.forEach((value) => {
             if (!found && value.name == name && value.move == move) {
-                let tt = Transport.getTime(value)
+                let tt = Movement.getTime(value)
                 let duration = Math.floor(moment.duration(tt.diff(time)).asHours())
                 if (Math.abs(duration) <= margin) {
                     found = value
                 }
             }
         })
-        console.assert(found, "Transport::findTransport", "not found", found, name, time)
+        console.assert(found, "Movement::findMovement", "not found", found, name, time)
         return found
     }
 
@@ -168,8 +168,8 @@ export class Transport extends Subscriber {
 
         if (data.info == SCHEDULED) { // may be a new flight?
             let timekey = time.toISOString(true)
-            id = Transport.mkTransportId(data.flight, timekey)
-            f = this.transports.get(id)
+            id = Movement.mkMovementId(data.flight, timekey)
+            f = this.movements.get(id)
             if (!f) { // new flight
                 f = {
                     _key: timekey,
@@ -185,9 +185,9 @@ export class Transport extends Subscriber {
                 }
             }
         } else { // tries to find it...
-            f = this.findTransport(data.move, data.flight, time)
+            f = this.findMovement(data.move, data.flight, time)
             if (!f) { // we received PLANNED or ACTUAL but flight was not seen before. We create it with UNSCHEDULED keyword
-                id = Transport.mkTransportId(data.name, UNSCHEDULED)
+                id = Movement.mkMovementId(data.name, UNSCHEDULED)
                 f = {
                     _key: UNSCHEDULED,
                     id: id,
@@ -200,19 +200,19 @@ export class Transport extends Subscriber {
                     from: (data.move == DEPARTURE) ? this.base : data.airport,
                     move: (data.move == DEPARTURE) ? DEPARTURE : ARRIVAL
                 }
-                console.warn("Transport::updateOnFlightboard", "unscheduled", data, f)
+                console.warn("Movement::updateOnFlightboard", "unscheduled", data, f)
             } else {
                 id = f.id
             }
         }
 
         if (!f.hasOwnProperty("linked")) {
-            let linked = (f.move == DEPARTURE) ? this.getPreviousTransport(f) : this.getNextTransport(f)
+            let linked = (f.move == DEPARTURE) ? this.getPreviousMovement(f) : this.getNextMovement(f)
             if (linked) {
                 f.linked = linked
-                linked.linked = f // we  reverse-link the other transport
-                this.transports.set(linked.id, linked)
-                // console.log("Transport::updateOnFlightboard", "linked flights", data, f, linked)
+                linked.linked = f // we  reverse-link the other movement
+                this.movements.set(linked.id, linked)
+                // console.log("Movement::updateOnFlightboard", "linked flights", data, f, linked)
             }
         }
 
@@ -225,12 +225,12 @@ export class Transport extends Subscriber {
         if (data.info == ACTUAL) { // if move completed, schedule removal from flightboard
             f.removeAt = moment(time).add(data.move == ARRIVAL ? 30 : 10, "minutes")
         }
-        this.transports.set(f.id, f)
+        this.movements.set(f.id, f)
 
-        if (f.hasOwnProperty("_key") && data.move == ARRIVAL) { // transport was just just created
+        if (f.hasOwnProperty("_key") && data.move == ARRIVAL) { // movement was just just created
             const key = (" " + f._key).slice(1)
             delete f._key
-            this.transports.set(f.id, f)
+            this.movements.set(f.id, f)
             PubSub.publish(ROTATION_MSG, {
                 _key: key,
                 arrival: f
@@ -243,16 +243,16 @@ export class Transport extends Subscriber {
 
 
 
-    updateOnTransportboard(data) {
+    updateOnMovementboard(data) {
         let time = moment(data.date + " " + data.time, data.info == SCHEDULED ? "YYYY-MM-DD HH:mm" : "DD/MM HH:mm")
         let f = false
         let id
 
-        if (data.info == SCHEDULED) { // may be a new transport?
+        if (data.info == SCHEDULED) { // may be a new movement?
             let timekey = time.toISOString(true)
-            id = Transport.mkTransportId(data.name, timekey)
-            f = this.transports.get(id)
-            if (!f) { // new transport
+            id = Movement.mkMovementId(data.name, timekey)
+            f = this.movements.get(id)
+            if (!f) { // new movement
                 f = {
                     _key: timekey,
                     id: id,
@@ -260,16 +260,16 @@ export class Transport extends Subscriber {
                     parking: data.parking,
                     destination: data.destination,
                     isnew: true,
-                    type: "transport",
+                    type: "movement",
                     to:   (data.move == DEPARTURE) ? data.destination : this.base,
                     from: (data.move == DEPARTURE) ? this.base : data.destination,
                     move: (data.move == DEPARTURE) ? DEPARTURE : ARRIVAL
                 }
             }
         } else { // tries to find it...
-            f = this.findTransport(data.move, data.name, time)
-            if (!f) { // we received PLANNED or ACTUAL but transport was not seen before. We create it with UNSCHEDULED keyword
-                id = Transport.mkTransportId(data.name, UNSCHEDULED)
+            f = this.findMovement(data.move, data.name, time)
+            if (!f) { // we received PLANNED or ACTUAL but movement was not seen before. We create it with UNSCHEDULED keyword
+                id = Movement.mkMovementId(data.name, UNSCHEDULED)
                 f = {
                     _key: UNSCHEDULED,
                     id: id,
@@ -277,24 +277,24 @@ export class Transport extends Subscriber {
                     parking: data.parking,
                     destination: data.destination,
                     isnew: true,
-                    type: "transport",
+                    type: "movement",
                     to:   (data.move == DEPARTURE) ? data.destination : this.base,
                     from: (data.move == DEPARTURE) ? this.base : data.destination,
                     move: (data.move == DEPARTURE) ? DEPARTURE : ARRIVAL
                 }
-                console.warn("Transport::updateOnTransportboard", "unscheduled", data, f)
+                console.warn("Movement::updateOnMovementboard", "unscheduled", data, f)
             } else {
                 id = f.id
             }
         }
 
         if (!f.hasOwnProperty("linked")) {
-            let linked = (f.move == DEPARTURE) ? this.getPreviousTransport(f) : this.getNextTransport(f)
+            let linked = (f.move == DEPARTURE) ? this.getPreviousMovement(f) : this.getNextMovement(f)
             if (linked) {
                 f.linked = linked
-                linked.linked = f // we  reverse-link the other transport
-                this.transports.set(linked.id, linked)
-                // console.log("Transport::updateOnFlightboard", "linked transports", data, f, linked)
+                linked.linked = f // we  reverse-link the other movement
+                this.movements.set(linked.id, linked)
+                // console.log("Movement::updateOnFlightboard", "linked movements", data, f, linked)
             }
         }
 
@@ -304,35 +304,35 @@ export class Transport extends Subscriber {
         if (data.info == ACTUAL && data.move == ARRIVAL) {
             f.note = "Arrived"
         }
-        if (data.info == ACTUAL) { // if move completed, schedule removal from transportboard
+        if (data.info == ACTUAL) { // if move completed, schedule removal from movementboard
             f.removeAt = moment(time).add(data.move == ARRIVAL ? 30 : 10, "minutes")
         }
-        this.transports.set(f.id, f)
+        this.movements.set(f.id, f)
 
-        if (f.hasOwnProperty("_key") && data.move == ARRIVAL) { // transport was just just created
+        if (f.hasOwnProperty("_key") && data.move == ARRIVAL) { // movement was just just created
             const key = (" " + f._key).slice(1)
             delete f._key
-            this.transports.set(f.id, f)
+            this.movements.set(f.id, f)
             PubSub.publish(ROTATION_MSG, {
                 _key: key,
                 arrival: f
             })
         }
 
-        PubSub.publish(TRANSPORTBOARD_UPDATE_MSG, data)
+        PubSub.publish(MOVEMENTBOARD_UPDATE_MSG, data)
     }
 
 
 
     /**
-     * Get next departure transport from same parking space if known
+     * Get next departure movement from same parking space if known
      *
-     * @param      {<type>}  transport  The transport
-     * @return     {Array}   The next transport.
+     * @param      {<type>}  movement  The movement
+     * @return     {Array}   The next movement.
      */
-    getNextTransport(arrival) {
+    getNextMovement(arrival) {
         let here = this.base
-        let trarr = [ ...this.transports.values() ]
+        let trarr = [ ...this.movements.values() ]
         let departing = trarr.filter((f) => ((f.parking == arrival.parking) && (f.from = here) && (f.scheduled.isAfter(arrival.scheduled))))
         departing = departing.sort((a, b) => a.scheduled.isBefore(b.scheduled))
         return departing[0]
@@ -340,14 +340,14 @@ export class Transport extends Subscriber {
 
 
     /**
-     * Get previous arrival transport from same parking space if known
+     * Get previous arrival movement from same parking space if known
      *
-     * @param      {<type>}  transport  The transport
-     * @return     {Array}   The next transport.
+     * @param      {<type>}  movement  The movement
+     * @return     {Array}   The next movement.
      */
-    getPreviousTransport(departure) {
+    getPreviousMovement(departure) {
         let here = this.base
-        let trarr = [ ...this.transports.values() ]
+        let trarr = [ ...this.movements.values() ]
         let arriving = trarr.filter((f) => ((f.parking == departure.parking) && (f.to = here) && (f.scheduled.isBefore(departure.scheduled))))
         arriving = arriving.sort((a, b) => a.scheduled.isAfter(b.scheduled))
         return arriving[0]
@@ -355,57 +355,57 @@ export class Transport extends Subscriber {
 
 
     /**
-     * Filter Transport Map() and returns array of transport data
+     * Filter Movement Map() and returns array of movement data
      *
      * @param      {<type>}  move      The move
      * @param      {<type>}  datefrom  The datefrom
      * @param      {<type>}  maxcount  The maxcount
-     * @return     {<type>}  The scheduled transports.
+     * @return     {<type>}  The scheduled movements.
      */
-    getScheduledTransports(move, datefrom, maxcount) {
+    getScheduledMovements(move, datefrom, maxcount) {
         //let local = (move == ARRIVAL) ? "to" : "from"
         //let here = this.base
-        let transports = []
+        let movements = []
         // eslint-disable-next-line no-unused-vars
-        this.transports.forEach((value, key, map) => {
+        this.movements.forEach((value, key, map) => {
         //    if (value[local] == here) {
             if (value.move == move) {
                 if (value.hasOwnProperty(SCHEDULED)) {
                     if (datefrom && value[SCHEDULED].isSameOrBefore(datefrom)) {
-                        transports.push(value)
+                        movements.push(value)
                     } else if (!datefrom) {
-                        transports.push(value)
+                        movements.push(value)
 //                    } else {
-//                       console.log("Transport::getScheduledTransports", "too early", value, datefrom)
+//                       console.log("Movement::getScheduledMovements", "too early", value, datefrom)
                     }
                 } else {
-                    console.warn("Transport::getScheduledTransports", "no schedule", value, datefrom)
+                    console.warn("Movement::getScheduledMovements", "no schedule", value, datefrom)
                 }
             }
         })
-        transports = transports.sort((a, b) => a.scheduled.isBefore(b.scheduled))
-        return transports.slice(0, maxcount)
+        movements = movements.sort((a, b) => a.scheduled.isBefore(b.scheduled))
+        return movements.slice(0, maxcount)
     }
 
 
     /**
-     * Gets the "most recent" time of the transport (actual, or planned, or scheduled)
+     * Gets the "most recent" time of the movement (actual, or planned, or scheduled)
      *
-     * @param      {<type>}   transport  The transport
+     * @param      {<type>}   movement  The movement
      * @return     {boolean}  The time.
      */
-    static getTime(transport) {
+    static getTime(movement) {
         let t = false
-        if (!t && transport.hasOwnProperty(ACTUAL)) {
-            t = transport[ACTUAL]
+        if (!t && movement.hasOwnProperty(ACTUAL)) {
+            t = movement[ACTUAL]
         }
-        if (!t && transport.hasOwnProperty(PLANNED)) {
-            t = transport[PLANNED]
+        if (!t && movement.hasOwnProperty(PLANNED)) {
+            t = movement[PLANNED]
         }
-        if (!t && transport.hasOwnProperty(SCHEDULED)) {
-            t = transport[SCHEDULED]
+        if (!t && movement.hasOwnProperty(SCHEDULED)) {
+            t = movement[SCHEDULED]
         }
-        console.assert(t, "Transport::getTime", "has no time", transport)
+        console.assert(t, "Movement::getTime", "has no time", movement)
         return t
     }
 
@@ -416,9 +416,9 @@ export class Transport extends Subscriber {
     passivate() {
         let content = {
             base: this.base,
-            transports: this.transports
+            movements: this.movements
         }
-        localStorage.setItem("transports", JSON.stringify(content))
+        localStorage.setItem("movements", JSON.stringify(content))
     }
 
 }

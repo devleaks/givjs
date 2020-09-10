@@ -7,6 +7,7 @@
 
 import { deepExtend } from "./Utilities/Utils"
 import { Channel } from "./Channel"
+
 import * as mqtt from "../assets/js/mqtt.min.js"
 
 const DEFAULTS = {
@@ -42,18 +43,23 @@ export class ChannelMQTT extends Channel {
      * Installs the ChannelMQTT.
      */
     install() {
-        let client = mqtt.connect(this.options.url)
-        let that = this
-        console.log("ChannelMQTT::installing...", this.options)
+        const client = mqtt.connect(this.options.uri)
 
-        this.options.topics.forEach( (t) => {
-            client.on(t, function(topic, message) {
-                console.log("ChannelMQTT::on", topic, message)
-                that.dispatcher.dispatch(message)
-            })
-            console.log("ChannelMQTT::listerner", t)
+        this.options.topics.forEach((topic) => {
+            client.subscribe(topic)
+            // console.log("ChannelMQTT::listerner added for topic ", topic)
         })
+
+        client.on("message", (topic, payload) => {
+            // console.log("ChannelMQTT::onMessage", topic, payload.toString());
+            try {
+                this.dispatcher.dispatch(payload.toString())
+            } catch (e) {
+                console.error("ChannelMQTT::onMessage: cannot dispatch message", e)
+            }
+        });
 
         console.log("ChannelMQTT::install: listening", new Date(), this.options.topics)
     }
+
 }

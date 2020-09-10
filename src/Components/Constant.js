@@ -31,9 +31,9 @@ export const SPEED_PROP = "speed"
 
 // Messages
 export const FLIGHTBOARD_MSG = "flightboard"
-export const TRANSPORTBOARD_MSG = "transport"
+export const MOVEMENTBOARD_MSG = "movement"
 export const FLIGHTBOARD_UPDATE_MSG = "flightboard-update"
-export const TRANSPORTBOARD_UPDATE_MSG = "transport-update"
+export const MOVEMENTBOARD_UPDATE_MSG = "movement-update"
 export const PARKING_MSG = "parking"
 export const PARKING_UPDATE_MSG = "parking-update"
 export const MAP_MSG = "map"

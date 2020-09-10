@@ -13,8 +13,11 @@ export const WS_CONFIG = {
     websocket: "ws://localhost:8051"
 }
 
-export const MQTT = {
+export const MQTT_CONFIG = {
+    host: "localhost",
+    port: "8502",
     url: "mqtt://localhost/",
+    uri: "ws://localhost:8052/ws",
     topics: ["map", "flightboard", "aodb"]
 }
 

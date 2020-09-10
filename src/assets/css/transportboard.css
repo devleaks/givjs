@@ -1,41 +1,41 @@
-/* transportboard.css */
+/* movementboard.css */
 @font-face {
     font-family: "LED";
     src: url("../fonts/advanced_led_board-7.woff") format("woff")
 }
 
-.transportboard {
+.movementboard {
     background-color: #888;
     padding: 6px;
 }
 
-.transportboard table {
+.movementboard table {
     border-spacing: 0px;
     border-collapse: collapse;
     background-color: #aaa;
     width: 100%;
 }
 
-.transportboard th,
-.transportboard caption {
+.movementboard th,
+.movementboard caption {
     font-family: LED, Helvetica, Arial, sans-serif;
     color: #080;
 }
 
-.transportboard caption {
+.movementboard caption {
     margin-top: 40px;
     margin-bottom: 10px;
     text-transform: capitalize;
     font-size: 120%;
 }
 
-.transportboard th {
+.movementboard th {
     text-transform: capitalize;
     padding: 3px;
     font-weight: normal;
 }
 
-.transportboard td {
+.movementboard td {
     font-family: LED, Helvetica, Arial, sans-serif;
     font-size: 1em;
     text-align: center;
@@ -43,7 +43,7 @@
     color: #CECACB;
 }
 
-.transportboard td:last-child() {
+.movementboard td:last-child() {
     font-family: LED, Helvetica, Arial, sans-serif;
     font-size: 0.80em;
     text-transform: capitalize;
@@ -51,11 +51,11 @@
     text-align: left;
 }
 
-.transportboard td:last-child().green {
+.movementboard td:last-child().green {
     color: rgb(0, 226, 0);
 }
 
-.transportboard td:last-child().red {
+.movementboard td:last-child().red {
     color: rgb(226, 0, 0);
 }
 

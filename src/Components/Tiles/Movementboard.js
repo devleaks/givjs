@@ -5,52 +5,52 @@
  */
 
 
-import "../../assets/css/transportboard.css"
+import "../../assets/css/movementboard.css"
 
 import { deepExtend } from "../Utilities/Utils"
 import { Tile } from "./Tile"
 import { Clock } from "../Clock"
 import moment from "moment"
 
-import { TRANSPORTBOARD_MSG, SCHEDULED, PLANNED, ACTUAL, DEPARTURE } from "../Constant"
+import { MOVEMENTBOARD_MSG, SCHEDULED, PLANNED, ACTUAL, DEPARTURE } from "../Constant"
 
 
 /**
  *  DEFAULT VALUES
  */
 const DEFAULTS = {
-    elemid: "transportboard",
-    msgtype: "transportboard",
+    elemid: "movementboard",
+    msgtype: "movementboard",
     maxcount: 12,
-    announce_delay: 15, // min. After, announce transport is delayed.
+    announce_delay: 15, // min. After, announce movement is delayed.
     announce_boarding: 40,
     announce_lastcall: 20,
     update_time: 15,
-    transports_ahead: 360 // min
+    movements_ahead: 360 // min
 }
 
 /**
- * Display an HTML table as a Transportboard.
+ * Display an HTML table as a Movementboard.
  *
- * @class      Transportboard (name)
+ * @class      Movementboard (name)
  */
-export class Transportboard extends Tile {
+export class Movementboard extends Tile {
 
     /**
-     * Constructs a new Transportboard instance.
+     * Constructs a new Movementboard instance.
      *
      * @param      {<type>}  elemid        The elemid
      * @param      {<type>}  message_type  The message type
      * @param      {<type>}  move          The move
-     * @param      {<type>}  transport     The transport
+     * @param      {<type>}  movement     The movement
      * @param      {<type>}  clock         The clock
      * @param      {<type>}  options       The options
      */
-    constructor(elemid, message_type, move, transport, clock, options) {
+    constructor(elemid, message_type, move, movement, clock, options) {
         super(elemid, message_type)
         this.options = deepExtend(DEFAULTS, options)
         this.move = move
-        this.transports = transport
+        this.movements = movement
         this.clock = clock
         this.lastLength = 0
         this.install()
@@ -58,18 +58,18 @@ export class Transportboard extends Tile {
 
 
     /**
-     * Installs the Transportboard.
+     * Installs the Movementboard.
      */
     install() {
         // let elhtml = document.getElementById("template-"+this.elemid)
         // let html == elhtml.innerHTML
         let html = `
-            <div id='${ this.elemid }' class="transportboard">
+            <div id='${ this.elemid }' class="movementboard">
                 <table>
                     <caption>${ this.move }</caption>
                     <thead>
                         <tr>
-                            <th>Transport</th>
+                            <th>Movement</th>
                             <th>${ this.move == "arrival" ? "From" : "To "}</th>
                             <th>Time</th>
                             <th>Estimated</th>
@@ -89,14 +89,14 @@ export class Transportboard extends Tile {
 
 
     /**
-     * Listerner function for msgtype Transportboard events.
+     * Listerner function for msgtype Movementboard events.
      *
      * @param      {<type>}   msgtype  The msgtype
      * @param      {<type>}   data     The data
      * @return     {boolean}  { description_of_the_return_value }
      */
     update(msgtype, data) {
-        if (msgtype == TRANSPORTBOARD_MSG && this.move != data.move) {
+        if (msgtype == MOVEMENTBOARD_MSG && this.move != data.move) {
             return false
         }
 
@@ -115,33 +115,33 @@ export class Transportboard extends Tile {
         let ts = this.clock.time
         if (msgtype == Clock.clock_message(this.options.update_time)) {
             ts = moment(data, moment.ISO_8601)
-            // console.log("Transportboard::update_time: Updating for",data)
+            // console.log("Movementboard::update_time: Updating for",data)
         }
 
-        // sort transports to show most maxcount relevant transports for move
+        // sort movements to show most maxcount relevant movements for move
         // 1. Recently arrived
         // 2. Arriving soon
         // 3. Arriving later
         // Remove arrived more than 30min earlier
         let farr = []
         let that = this
-        let maxahead = moment(ts).add(this.options.transports_ahead, "minutes")
-        let transports = this.transports.getScheduledTransports(this.move, maxahead)
+        let maxahead = moment(ts).add(this.options.movements_ahead, "minutes")
+        let movements = this.movements.getScheduledMovements(this.move, maxahead)
 
-        transports.forEach(f => {
-            let transport = that.transports.get(f)
-            if (transport) {
-                let showtransport = true
-                if (transport.hasOwnProperty("removeAt")) {
-                    if (transport.removeAt.isBefore(ts)) {
-                        showtransport = false
+        movements.forEach(f => {
+            let movement = that.movements.get(f)
+            if (movement) {
+                let showmovement = true
+                if (movement.hasOwnProperty("removeAt")) {
+                    if (movement.removeAt.isBefore(ts)) {
+                        showmovement = false
                     }
                 }
-                if (showtransport) {
-                    farr.push(transport)
+                if (showmovement) {
+                    farr.push(movement)
                 }
             } else {
-                console.warn("Transportboard::update", "cannot find transport", f)
+                console.warn("Movementboard::update", "cannot find movement", f)
             }
         })
 
@@ -152,41 +152,41 @@ export class Transportboard extends Tile {
         // build table
         let tbody = document.createElement("tbody")
         for (let i = 0; i < farr.length; i++) {
-            let transport = farr[i]
+            let movement = farr[i]
 
             if (true
                 /*(count++ < maxcount)
                 &&
-                ((!transport.hasOwnProperty('removeAt')) ||
-                    (transport.hasOwnProperty('removeAt') && transport.removeAt.isBefore(ts)))*/
+                ((!movement.hasOwnProperty('removeAt')) ||
+                    (movement.hasOwnProperty('removeAt') && movement.removeAt.isBefore(ts)))*/
             ) {
                 let t = false
                 let scolor = ""
-                if (transport.hasOwnProperty(ACTUAL)) {
-                    t = transport[ACTUAL]
-                    if (transport.hasOwnProperty(SCHEDULED)) {
-                        let diff = moment.duration(transport[ACTUAL].diff(transport[SCHEDULED])).asMinutes()
+                if (movement.hasOwnProperty(ACTUAL)) {
+                    t = movement[ACTUAL]
+                    if (movement.hasOwnProperty(SCHEDULED)) {
+                        let diff = moment.duration(movement[ACTUAL].diff(movement[SCHEDULED])).asMinutes()
                         if (diff > this.options.announce_delay) {
-                            transport.note = (this.move == DEPARTURE ? "Delayed +" : "Arrived +") + diff + " min"
+                            movement.note = (this.move == DEPARTURE ? "Delayed +" : "Arrived +") + diff + " min"
                             scolor = "red"
                         }
                     }
-                } else if (transport.hasOwnProperty(PLANNED)) {
-                    t = transport[PLANNED]
-                    if (transport.hasOwnProperty(SCHEDULED)) {
-                        let diff = moment.duration(transport[PLANNED].diff(transport[SCHEDULED])).asMinutes()
+                } else if (movement.hasOwnProperty(PLANNED)) {
+                    t = movement[PLANNED]
+                    if (movement.hasOwnProperty(SCHEDULED)) {
+                        let diff = moment.duration(movement[PLANNED].diff(movement[SCHEDULED])).asMinutes()
                         if (diff > this.options.announce_delay) {
-                            transport.note = "Delayed" // "Delayed "+diff+" min"
+                            movement.note = "Delayed" // "Delayed "+diff+" min"
                         }
                     }
                 }
 
                 let tr = document.createElement("tr")
-                tr.appendChild(createTD(transport.name))
-                tr.appendChild(createTD(transport.destination))
-                tr.appendChild(createTD(transport.hasOwnProperty(SCHEDULED) ? transport[SCHEDULED].format("HH:mm") : ""))
+                tr.appendChild(createTD(movement.name))
+                tr.appendChild(createTD(movement.destination))
+                tr.appendChild(createTD(movement.hasOwnProperty(SCHEDULED) ? movement[SCHEDULED].format("HH:mm") : ""))
                 tr.appendChild(createTD(t ? t.format("HH:mm") : ""))
-                tr.appendChild(createTD(transport.note ? transport.note : "", scolor))
+                tr.appendChild(createTD(movement.note ? movement.note : "", scolor))
                 tbody.appendChild(tr)
             }
         }

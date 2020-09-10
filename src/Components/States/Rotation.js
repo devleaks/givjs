@@ -62,12 +62,12 @@ export class Rotation extends Subscriber {
      * Constructs a new rotation instance.
      *
      * @param      {<type>}  msgtype     Message types handled by this Subscriber
-     * @param      {<type>}  transports  The transport containing all transports
+     * @param      {<type>}  movements  The movement containing all movements
      * @param      {<type>}  parkings    The parkings containing rotation rendez-vous point
      */
-    constructor(msgtype, transports, parkings) {
+    constructor(msgtype, movements, parkings) {
         super(msgtype)
-        this.transports = transports
+        this.movements = movements
         this.parkings = parkings
         this.rotations = new Map()
         this.install()
@@ -114,7 +114,7 @@ export class Rotation extends Subscriber {
 
 
     /**
-     * Geneates unique rotation identifier, with parking, and time of arrival of scheduled transport
+     * Geneates unique rotation identifier, with parking, and time of arrival of scheduled movement
      *
      * @param      {<type>}  rotation  The rotation
      * @return     {string}  { description_of_the_return_value }
@@ -125,7 +125,7 @@ export class Rotation extends Subscriber {
 
 
     /**
-     * Finds a transport scheduled around that time (24h). Will NOT work if the same transport is scheduled DAILY with the same transport number.
+     * Finds a movement scheduled around that time (24h). Will NOT work if the same movement is scheduled DAILY with the same movement number.
      *
      * @param      {<type>}  name    The name
      * @param      {<type>}  time    The time
@@ -222,7 +222,7 @@ export class Rotation extends Subscriber {
         }
 
         if(!r.arrival) {
-            let arrt = this.transports.findTransportOnParking(ARRIVAL, r.parking, time)
+            let arrt = this.movements.findMovementOnParking(ARRIVAL, r.parking, time)
             if(arrt) {
                 r.arrival = arrt
                 console.log("Rotation::updateOnStopped","found arrival",r.id,arrt)
@@ -230,7 +230,7 @@ export class Rotation extends Subscriber {
         }
 
         if(!r.departure) {
-            let dept = this.transports.findTransportOnParking(DEPARTURE, r.parking, time)
+            let dept = this.movements.findMovementOnParking(DEPARTURE, r.parking, time)
             if(dept) {
                 r.departure = dept
                 console.log("Rotation::updateOnStopped","found departure",r.id,dept)
@@ -241,12 +241,12 @@ export class Rotation extends Subscriber {
         if (!r.departure) {
             if (r.arrival) {
                 console.log("Rotation::update", "service has arrival", r, stopped)
-                r.departure = this.transports.getNextTransport(r.arrival.name)
+                r.departure = this.movements.getNextMovement(r.arrival.name)
                 if (r.departure) {
                     console.log("Rotation::update", "service has departure", r, stopped)
                 }
             } else {
-                console.log("Rotation::update", "service has no transport assigned", r, stopped)
+                console.log("Rotation::update", "service has no movement assigned", r, stopped)
             }
         }
         */
