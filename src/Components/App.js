@@ -84,7 +84,7 @@ export class App {
         this.dashboard = new Dashboard({
             dispatcher: {
                 channels: {
-                    // websocket: WS_CONFIG,
+                    websocket: WS_CONFIG,
                     mqtt: MQTT_CONFIG
                 }
             }

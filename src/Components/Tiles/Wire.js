@@ -71,6 +71,7 @@ export class Wire extends Tile {
         let newel = document.createElement("ul")
         hook.appendChild(newel)
         this.listen(this.update.bind(this))
+        console.log("wire installed")
     }
 
     /**
@@ -91,6 +92,7 @@ export class Wire extends Tile {
      */
     update(msg, data) {
         // add wire
+        console.log("wire received", msg, data)
         let hook = document.querySelector("#" + this.elemid + " ul")
         let newel = document.createElement("li")
         newel.innerHTML = data.subject

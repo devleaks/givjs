@@ -70,7 +70,9 @@ export class Clock extends Tile {
                 <span class="second"></span>
                 <span class="dot"></span>
               </div>
-            </div>`
+            </div>
+            <div id="dark-toggle"></div>
+            `
 
         this.listen(this.update.bind(this))
     }

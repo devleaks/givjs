@@ -45,10 +45,15 @@ export class ChannelMQTT extends Channel {
     install() {
         const client = mqtt.connect(this.options.uri)
 
-        this.options.topics.forEach((topic) => {
-            client.subscribe(topic)
-            // console.log("ChannelMQTT::listerner added for topic ", topic)
-        })
+        if (this.options.topics) {
+            this.options.topics.forEach((topic) => {
+                client.subscribe(topic)
+                // console.log("ChannelMQTT::listerner added for topic ", topic)
+            })
+        } else { // subscribe to all
+            client.subscribe("#")
+                // console.log("ChannelMQTT::listerner added for all topics")
+        }
 
         client.on("message", (topic, payload) => {
             // console.log("ChannelMQTT::onMessage", topic, payload.toString());
