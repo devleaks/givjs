@@ -32,7 +32,7 @@ export class MovementForecastChart extends ApexTile {
 
     constructor(areaid, elemid, message_type, move, movement, clock, options) {
         super(areaid, elemid, message_type, options)
-
+        this.options = deepExtend(DEFAULTS, options)
         this.move = move
         this.flights = movement
         this.clock = clock
@@ -114,6 +114,7 @@ export class MovementForecastChart extends ApexTile {
                 }
             }
         })
+
         this.chart.updateSeries([{
             name: this.move,
             data: hours

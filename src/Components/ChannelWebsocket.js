@@ -54,7 +54,7 @@ export class ChannelWebsocket extends Channel {
 
         }
         ws.onmessage = function(evt) {
-            console.log("ChannelWebsocket::onmessage", evt)
+            // console.log("ChannelWebsocket::onmessage", evt)
             try {
                 that.dispatcher.dispatch(evt.data)
             } catch (e) {
