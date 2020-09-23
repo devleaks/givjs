@@ -8,6 +8,8 @@
 import { deepExtend } from "./Utilities/Utils"
 import { Channel } from "./Channel"
 
+// Form https://github.com/mqttjs/MQTT.js
+// https://unpkg.com/mqtt/dist/mqtt.min.js
 import * as mqtt from "../assets/js/mqtt.min.js"
 
 const DEFAULTS = {
@@ -43,24 +45,37 @@ export class ChannelMQTT extends Channel {
      * Installs the ChannelMQTT.
      */
     install() {
-        const client = mqtt.connect(this.options.uri)
+        const that = this
+        const client = mqtt.connect(that.options.uri, { reconnectPeriod: that.options.reconnect_retry * 1000 })
 
-        if (this.options.topics) {
-            this.options.topics.forEach((topic) => {
-                client.subscribe(topic)
-                // console.log("ChannelMQTT::listerner added for topic ", topic)
-            })
-        } else { // subscribe to all
-            client.subscribe("#")
-                // console.log("ChannelMQTT::listerner added for all topics")
-        }
+        client.on("connect", function() {
+            console.log("ChannelMQTT::install: connected", that.options.uri)
+            if (this.options.topics) {
+                this.options.topics.forEach((topic) => {
+                    client.subscribe(topic)
+                    console.log("ChannelMQTT::install: listerner added for topic ", topic)
+                })
+            } else { // subscribe to all
+                client.subscribe("#")
+                console.log("ChannelMQTT::install: listerner added for all topics")
+            }
+        })
+
+
+        client.on("close", function() {
+            console.log("ChannelMQTT::install: Socket is closed. Reconnect will be attempted in " + that.options.reconnect_retry + " seconds.", that.options.uri)
+        })
+
+        client.on("error", function(error) {
+            console.log("ChannelMQTT::install: error", that.options.uri, error)
+        })
 
         client.on("message", (topic, payload) => {
             // console.log("ChannelMQTT::onMessage", topic, payload.toString());
             try {
                 this.dispatcher.dispatch(payload.toString())
             } catch (e) {
-                console.error("ChannelMQTT::onMessage: cannot dispatch message", e)
+                console.error("ChannelMQTT::install: onMessage: cannot dispatch message", e)
             }
         });
 
