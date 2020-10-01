@@ -175,7 +175,7 @@ function getAltitude(feature) {
             }
         }
     } else {
-        console.warn("Style::getSpeed", "feature has no altitude properties", feature)
+        console.warn("Style::getAltitude", "feature has no altitude properties", feature)
     }
     return alt
 }
@@ -200,20 +200,22 @@ function getMarker(feature, latlng) {
         let speed = getSpeed(feature)
         let heading = feature.properties.hasOwnProperty("heading") ? (feature.properties.heading ? feature.properties.heading : "0") : "0"
         if (altitude > 0 || speed > 0) {
+            const natocolor = "#000000"
+            const inversecolor = "#FFFFFF"
             marker = new Marker(latlng, {
                 icon: new DivIcon({
                     className: DEFAULTS.lDivIconClassname,
                     html: `<svg version="1.1" id="Calque_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
      width="49.215px" height="71.679px" viewBox="0.512 0 49.215 71.679" enable-background="new 0.512 0 49.215 71.679" xml:space="preserve">
-    <rect x="0.937" y="0.146" fill="#40A629" width="48.189" height="10.278"/>
-    <polyline fill="none" stroke="#40A629" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="0.937,37.819 49.127,37.819 23.526,71.004 "/>
-    <text transform="matrix(1 0 0 1 1.8972 18.532)"   fill="#40A629" font-family="Helvetica" font-size="10">AL</text>
-    <text transform="matrix(1 0 0 1 1.8972 26.8147)"  fill="#40A629" font-family="Helvetica" font-size="10">SP</text>
-    <text transform="matrix(1 0 0 1 1.8972 35.0999)"  fill="#40A629" font-family="Helvetica" font-size="10">HD</text>
-    <text transform="matrix(1 0 0 1 1.8972 8.8500)"   fill="#FFFFFF" font-family="Helvetica" font-size="10">${ name }</text>
-    <text transform="matrix(1 0 0 1 15.0715 18.532)"  fill="#40A629" font-family="Helvetica" font-size="10">: ${ altitude }</text>
-    <text transform="matrix(1 0 0 1 15.0715 26.8147)" fill="#40A629" font-family="Helvetica" font-size="10">: ${ speed }</text>
-    <text transform="matrix(1 0 0 1 15.0715 35.0999)" fill="#40A629" font-family="Helvetica" font-size="10">: ${ heading }°</text>
+    <rect x="0.937" y="0.146" fill="${natocolor}" width="48.189" height="10.278"/>
+    <polyline fill="none" stroke="${natocolor}" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="0.937,37.819 49.127,37.819 23.526,71.004 "/>
+    <text transform="matrix(1 0 0 1 1.8972 18.532)"   fill="${natocolor}" font-family="Helvetica" font-size="10">AL</text>
+    <text transform="matrix(1 0 0 1 1.8972 26.8147)"  fill="${natocolor}" font-family="Helvetica" font-size="10">SP</text>
+    <text transform="matrix(1 0 0 1 1.8972 35.0999)"  fill="${natocolor}" font-family="Helvetica" font-size="10">HD</text>
+    <text transform="matrix(1 0 0 1 1.8972 8.8500)"   fill="${inversecolor}" font-family="Helvetica" font-size="10">${ name }</text>
+    <text transform="matrix(1 0 0 1 15.0715 18.532)"  fill="${natocolor}" font-family="Helvetica" font-size="10">: ${ altitude }</text>
+    <text transform="matrix(1 0 0 1 15.0715 26.8147)" fill="${natocolor}" font-family="Helvetica" font-size="10">: ${ speed }</text>
+    <text transform="matrix(1 0 0 1 15.0715 35.0999)" fill="${natocolor}" font-family="Helvetica" font-size="10">: ${ heading }°</text>
 </svg>`,
                     iconAnchor: [23.526, 71.004] // last point of polyline
                 })
