@@ -55,6 +55,20 @@ export const ROTATION_MSG = "rotation"
 
 
 // Others
+export const BOOTSTRAP_COLORS = [
+    "primary",
+    "secondary",
+    "success",
+    "danger",
+    "warning",
+    "info",
+    "accent",
+    "muted",
+    "light",
+    "dark",
+    "default"
+]
+
 export const CLOCK_TICKS = [ // minutes
     1,
     2,

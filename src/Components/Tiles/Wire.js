@@ -12,6 +12,10 @@ import { Tile } from "./Tile"
 
 import { showJson } from "../Utilities/Display"
 
+import PubSub from "pubsub-js"
+
+import { WIRE_MSG } from "../Constant"
+
 /**
  *  DEFAULT VALUES
  */
@@ -34,20 +38,6 @@ const DEFAULTS = {
     ignoreTags: ["default", "unknown"],
     filterNewMessage: false
 }
-
-const BOOTSTRAP_COLORS = [
-    "primary",
-    "secondary",
-    "success",
-    "danger",
-    "warning",
-    "info",
-    "accent",
-    "muted",
-    "light",
-    "dark",
-    "default"
-]
 
 /**
  * Class that implement a list of messages (wire-elements) to display.
@@ -77,11 +67,11 @@ export class Wire extends Tile {
     /**
      * Wire message handler
      *
-     * @param      {String}  msg     The message's type
+     * @param      {String}  msg     The message"s type
      * @param      {Object}  data    The message
      * {
-            source: 'aodb',
-            type: 'flightboard',
+            source: "aodb",
+            type: "flightboard",
             subject: move + " " + payload.flight + (payload.move == "departure" ? " to " : " from ") + payload.airport,
             body: msgtype + " " + payload.time,
             created_at: objcsv.timestamp,
@@ -116,4 +106,18 @@ export class Wire extends Tile {
         formatter.openAtDepth(0) // all closed. See https://github.com/mohsen1/json-formatter-js
     }
 
+}
+
+
+export function sendToWire(subject, body, timestamp) {
+    PubSub.publish(WIRE_MSG, {
+        source: "viewer",
+        type: "info",
+        subject: subject,
+        body: body,
+        created_at: timestamp,
+        priority: 3,
+        icon: "la-info-circle",
+        "icon-color": "info" // bootstrap color code name
+    })
 }
