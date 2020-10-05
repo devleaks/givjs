@@ -48,14 +48,15 @@ export default {
             targets: [
                 { src: "index.html", dest: Paths.DIST },
                 { src: [Paths.SRC + "/assets/i/favicon.ico"], dest: Paths.DIST },
+                { src: [Paths.SRC + "/assets/i/givjs.svg"], dest: Paths.DIST + "/src/assets/i" },
                 {
                     src: [
                         Paths.SRC + "/data/eblg-logo.svg",
                         Paths.SRC + "/data/eblg-parking-boxes.geojson",
-                        Paths.SRC + "/data/EBLG_GMC01_v13.svg",
-                        Paths.SRC + "/data/EBLG_GMC01_v13-night.svg"
+                        Paths.SRC + "/data/eblg-day.svg",
+                        Paths.SRC + "/data/eblg-night.svg"
                     ],
-                    dest: Paths.DIST +"/src/data/"
+                    dest: Paths.DIST +"/src/data/" // because path is hardcoded relative to site root :-|.
                 }
             ]
         }),

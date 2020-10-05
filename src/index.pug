@@ -1,96 +1,77 @@
 doctype html
 html
   head
-    title Geo Intelligent Viewer JS 2020
-    meta(charset="utf-8")
-    meta(name="description" content="Oscars' Geo Intelligent Viewer")
-    meta(name="keyword" content="oscars gip geo intelligent platform viewer")
-    meta(name="author" content="oscars")
-    link(rel="icon" type="image/png" href="favicon.ico")
-    // Structure of the page
-    // App
-    link(rel="stylesheet" href="app.css")
-  body
-    .grid-container
-      .menu-icon
-        i.las.la-bars
-      aside.aside
-        .aside_close-icon
-          i.las.la-times
-        #side-info.aside-card
-        #wire.aside-card
-        #turnaround-gantts.aside-card
-      main.main
-        .main_overview
+  title Geo Intelligent Viewer
+  meta(charset='utf-8')
+  meta(name='description' content="Oscars' Geo Intelligent Viewer JS 2020")
+  meta(name='keyword' content='oscars gip geo intelligent platform viewer')
+  meta(name='author' content='oscars')
+  link(rel='icon' type='image/png' href='favicon.ico')
+  link(rel="stylesheet" href="app.css")
+body
+  .grid-container
+    .menu-icon
+      i.las.la-bars
+    aside#sidebar.aside
+      .aside_close-icon
+        i.las.la-times
+      div(style='text-align: center;')
+        a(href='' title="Oscars' Geo Intelligent Viewer" alt='Geo Intelligent Viewer')
+          img(src='src/assets/i/givjs.svg' alt='Geo Intelligent Viewer' width='70%')
+      template#sidebar-elem
+        .aside-card.here
+      template#template-wire
+        ul.wire
+      template#template-wire-el
+        li.wire-el
+    header.header
+    template#template-clock
+      .clock
+        .wrap
+          span.hour
+          span.minute
+          span.second
+          span.dot
+    main.main
+      #highlight.main_overview
+        template#highlight-elem
           .overview_card
-            .overview_card-info
-              i.las.la-plane.la-4x
-              i.las.la-parking.la-4x
-            #parking-occupancy.overview_card-icon
-          .overview_card
-            .overview_card-info
-              i.las.la-plane-arrival.la-4x
-            #forecast-arrival.overview_card-icon
-          .overview_card
-            .overview_card-info
-              i.las.la-plane-departure.la-4x
-            #forecast-departure.overview_card-icon
-          .overview_card
-            .overview_card-info
-              i.las.la-clock.la-4x
             .overview_card-icon
-              #clock
-              #dark-toggle
-        .main_cards
-          #map.card
-          #flightboard-arrival.card
-          #flightboard-departure.card
-      footer.footer
-  
-    //
-      --
-      --    JAVASCRIPT (LAYOUT)
-      --
-    script(type="text/javascript").
-      const menuIcon = document.querySelector(".menu-icon");
-      const aside = document.querySelector(".aside");
-      const asideClose = document.querySelector(".aside_close-icon");
-      function toggle(el, className) {
-      if (el.classList.contains(className)) {
-      el.classList.remove(className);
-      } else {
-      el.classList.add(className);
-      }
-      }
-      menuIcon.addEventListener("click", function() {
-      toggle(aside, "active");
-      });
-      asideClose.addEventListener("click", function() {
-      toggle(aside, "active");
-      });
-  
-    //
-      --
-      --    JAVASCRIPT (APP)
-      --
-    script(src="app.js")
-  
+              i.las.la-icon.la-4x(title='Title')
+            .overview_card-content.here
+      #main.main_cards
+        template#main-elem
+          .card.here
+      #status.main_overview
+        template#status-elem
+          .overview_card
+            .overview_card-icon
+              i.las.la-icon.la-4x(title='Title')
+            .overview_card-content.here
+    footer.footer
   //
     --
-    --    TEMPLATES
+    --    JAVASCRIPT (LAYOUT HELPER)
     --
-  
-  template#template-clock
-    .clock
-      .wrap
-        span.hour
-        span.minute
-        span.second
-        span.dot
-  
-  template#template-wire
-    ul.wire
-  
-  template#template-wire-el
-    li.wire-el
-
+  script(type='text/javascript').
+    const menuIcon = document.querySelector(".menu-icon");
+    const aside = document.querySelector(".aside");
+    const asideClose = document.querySelector(".aside_close-icon");
+    function toggle(el, className) {
+    if (el.classList.contains(className)) {
+    el.classList.remove(className);
+    } else {
+    el.classList.add(className);
+    }
+    }
+    menuIcon.addEventListener("click", function() {
+    toggle(aside, "active");
+    });
+    asideClose.addEventListener("click", function() {
+    toggle(aside, "active");
+    });
+  //
+    --
+    --    JAVASCRIPT (APP)
+    --
+  script(src='app.js')
