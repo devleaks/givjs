@@ -109,15 +109,25 @@ export class Wire extends Tile {
 }
 
 
-export function sendToWire(subject, body, timestamp) {
-    PubSub.publish(WIRE_MSG, {
-        source: "viewer",
-        type: "info",
-        subject: subject,
-        body: body,
-        created_at: timestamp,
-        priority: 3,
-        icon: "la-info-circle",
-        "icon-color": "info" // bootstrap color code name
-    })
+const MAXLEVEL = 5
+let WIRE_LEVEL = MAXLEVEL
+
+export function setWireLevel(l) {
+    const lv = parseInt(l)
+    WIRE_LEVEL = (lv >= 0 && lv <= MAXLEVEL) ? lv : WIRE_LEVEL
+}
+
+export function sendToWire(subject, body, timestamp, level = 0) {
+    if (level <= WIRE_LEVEL) {
+        PubSub.publish(WIRE_MSG, {
+            source: "viewer",
+            type: "info",
+            subject: subject,
+            body: body,
+            created_at: timestamp,
+            priority: 3,
+            icon: "la-info-circle",
+            "icon-color": "info" // bootstrap color code name
+        })
+    }
 }
